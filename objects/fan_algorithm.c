@@ -105,9 +105,9 @@ const char *fanObjPath [6] ={"/org/openbmc/sensors/speed/fan0",
 const char *gIntPath = "org.openbmc.SensorValue";
 
 
-double g_Kp = 0.7;
-double g_Ki = -0.025;
-double g_Kd = 1.0;
+double g_Kp = 0.45;
+double g_Ki = -0.017;
+double g_Kd = 0.3;
 int g_CPUVariable = 80;
 int g_DIMMVariable = 75;
 
@@ -257,7 +257,9 @@ int OpenLoop (int sensorreading)
 	float paramC= 0;
 	int Low_Amb = 20;
 	int Up_Amb = 40;
-	
+
+	sensorreading=sensorreading-1;
+		
 	if (sensorreading >= Up_Amb) {
 		speed = 100;
 //		printf("## Ambient >=%dC, the Fan duty is %d \n",Up_Amb,speed);
