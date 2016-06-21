@@ -15,7 +15,9 @@ GDBUS_APPS = bmcctl \
 	     rstbutton
 
 SUBDIRS = $(GDBUS_APPS) \
+	  fan_algorithm \
 	  hacks \
+	  info \
 	  ledctl \
 	  libopenbmc_intf \
 	  pychassisctl \
