@@ -193,7 +193,8 @@ int CloseLoop (int cpureading,int dimmreading)
 	static int DIMM_integral_error = 0;
 	static int DIMM_differential_error = 0;
 	static int DIMM_last_error = 0;
-		
+	int CPU_Warning=85;
+	int	DIMM_Warning=85;
 	//CPU closeloop
 	CPU_tracking_error = cpureading - g_CPUVariable;
 	Interal_CPU_Err[intergral_i] = CPU_tracking_error;
@@ -244,6 +245,9 @@ int CloseLoop (int cpureading,int dimmreading)
 	else
 		Closeloopspeed = CPU_PWM_speed;
 
+	if((cpureading>=CPU_Warning)||(dimmreading>=DIMM_Warning))
+		Closeloopspeed = 100;
+
 	if(intergral_i == g_Sampling_N)
 		intergral_i = 0;
 }
@@ -256,7 +260,7 @@ int OpenLoop (int sensorreading)
 	float paramB= 2; 
 	float paramC= 0;
 	int Low_Amb = 20;
-	int Up_Amb = 40;
+	int Up_Amb = 38;
 
 	sensorreading=sensorreading-1;
 		
@@ -357,6 +361,7 @@ int Fan_control_algorithm(void)
 					}
 				}
 //				fprintf(stderr, "CPU0 core %d temperature is %d\n",i ,CPU0_core_temperature[i]);
+
 				if(CPU0_core_temperature[i] > HighestCPUtemp)
 					HighestCPUtemp = CPU0_core_temperature[i];
 
@@ -384,6 +389,7 @@ int Fan_control_algorithm(void)
 					}
 				}
 //				fprintf(stderr, "CPU1 core %d temperature is %d\n",i ,CPU1_core_temperature[i]);
+
 				if(CPU1_core_temperature[i] > HighestCPUtemp )
 					HighestCPUtemp = CPU1_core_temperature[i];
 
@@ -412,7 +418,8 @@ int Fan_control_algorithm(void)
 			}
 			sd_bus_error_free(&bus_error);
 			response = sd_bus_message_unref(response);
-//			fprintf(stderr, "Highest ambient inlet temperature = [%d]\n", HighestCPUtemp);
+
+//			fprintf(stderr, "Highest ambient inlet temperature = [%d]\n", Ambient_reading);
 
 			if (HighestCPUtemp > 0 && Ambient_reading > 0) {
 				for(i=0; i<NUM_DIMM; i++) {
@@ -434,7 +441,9 @@ int Fan_control_algorithm(void)
 							DIMM_temperature[i] = 0;
 						}
 					}
+					
 //					fprintf(stderr, "DIMM %d temperature is %d\n", i, DIMM_temperature[i]);
+
 					if(DIMM_temperature[i] > HighestDIMMtemp )
 						HighestDIMMtemp = DIMM_temperature[i];
 					sd_bus_error_free(&bus_error);
