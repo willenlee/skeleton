@@ -9,6 +9,7 @@
 
 #define NUM_DIMM	32
 #define NUM_FAN		12
+#define NUM_FAN_MODULE	6
 #define NUM_CPU_CORE	12
 #define NUM_PWM		6
 
@@ -306,6 +307,8 @@ int Fan_control_algorithm(void)
 	int Ambient_reading = 0;
 	int Fan_tach[NUM_FAN], FinalFanSpeed = 255;
 	int Power_state = 0, fan_led_port0 = 0xFF, fan_led_port1 = 0xFF;
+	char fan_presence[NUM_FAN_MODULE] = {0};
+	char string[128] = {0};
 	
 	do {
 		/* Connect to the user bus this time */
@@ -511,6 +514,8 @@ int Fan_control_algorithm(void)
 						fan_led_port0 |= PORT0_FAN_LED_BLUE_MASK << offset; //turn off blue led
 //						fprintf(stderr,"i=%d,offset=%d,fan_led_port0=%02X\n",i,offset,fan_led_port0);
 					}
+				} else {
+					fan_presence[i/2] = 1;
 				}
 			}
 		} else {//Power_state == 0
@@ -540,6 +545,23 @@ int Fan_control_algorithm(void)
 			sd_bus_error_free(&bus_error);
 			response = sd_bus_message_unref(response);
 		}
+
+		for(i=0; i<NUM_FAN_MODULE; i++) {
+			sprintf(string, "/org/openbmc/inventory/system/chassis/fan%d", i);
+			rc = sd_bus_call_method(bus,				   // On the System Bus
+						"org.openbmc.Inventory",
+						string,
+						"org.openbmc.InventoryItem",
+						"setPresent",
+						&bus_error,
+						&response,
+						"s",
+						(fan_presence[i] == 1 ? "True" : "False"));
+			if(rc < 0)
+				fprintf(stderr, "Failed to update fan presence via dbus: %s\n", bus_error.message);
+			sd_bus_error_free(&bus_error);
+			response = sd_bus_message_unref(response);
+		}
 	
 finish:
 		sd_bus_error_free(&bus_error);
@@ -548,6 +570,7 @@ finish:
 		HighestCPUtemp = 0;
 		HighestDIMMtemp = 0;
 		Ambient_reading = 0;
+		memset(fan_presence, 0, sizeof(fan_presence));
 		sleep(1);
 	}
 	bus = sd_bus_flush_close_unref(bus);
