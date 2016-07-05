@@ -226,18 +226,18 @@ APPS = {
 		'monitor_process' : False,
 		'process_name'    : 'discover_system_state.py',
 	},
-    'info' : {
+	'info' : {
                 'system_state'    : 'BMC_STARTING2',
                 'start_process'   : True,
                 'monitor_process' : True,
-                'process_name'    : 'info',
-        },
-    'fan_algorithm' : {
+                'process_name'    : 'info.exe',
+	},
+	'fan_algorithm' : {
                 'system_state'    : 'BMC_READY',
                 'start_process'   : True,
                 'monitor_process' : True,
-                'process_name'    : 'fan_algorithm',
-    },
+                'process_name'    : 'fan_algorithm.exe',
+	},
 	'bmc_control' : {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,

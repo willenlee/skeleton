@@ -182,7 +182,6 @@ int send_esel_to_dbus(const char *desc, const char *sev, const char *details, ui
 	uint16_t value = 0;
 	int ret = 0;
 
-	fprintf(stderr,"Add SEL due to Thermal Trip\n");
 	ret = sd_bus_open_system(&mbus);
 	if (ret < 0) {
 		fprintf(stderr, "Failed to connect to system bus: %s\n", strerror(-ret));
