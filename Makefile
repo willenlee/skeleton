@@ -8,8 +8,6 @@ GDBUS_APPS = bmcctl \
 	     pciedetect \
 	     pwrbutton \
 	     rstbutton
-	     fan_algorithm \
-	     info
 
 SUBDIRS = hacks \
 	  ledctl \
@@ -24,7 +22,9 @@ SUBDIRS = hacks \
 	  pysensormgr \
 	  pystatemgr \
 	  pysystemmgr \
-	  pytools
+	  pytools \
+	  fan_algorithm \
+	  info
 
 REVERSE_SUBDIRS = $(shell echo $(SUBDIRS) $(GDBUS_APPS) | tr ' ' '\n' | tac |tr '\n' ' ')
 
