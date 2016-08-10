@@ -68,9 +68,6 @@ def getVersion():
 			parts = line.rstrip('\n').split('=')
 			if (parts[0] == "VERSION_ID"):
 				version = parts[1]
-				if (len(version.split('.')) == 3):
-					aux = str.upper(hex(int(version.split('.')[2].split('-')[0])>>8)[2:])
-					version = version.replace(version.split('.')[2].split('-')[0]+'-', aux+'-')
 	return version
 
 
