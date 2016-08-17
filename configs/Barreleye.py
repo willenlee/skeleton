@@ -230,6 +230,7 @@ APPS = {
 		'start_process'   : True,
 		'monitor_process' : False,
 		'process_name'    : 'discover_system_state.py',
+		'args'            : ['--rand','10'],
 	},
 	'bmc_control' : {
 		'system_state'    : 'BMC_STARTING',

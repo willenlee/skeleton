@@ -5,7 +5,8 @@ import gobject
 import dbus
 import dbus.service
 import dbus.mainloop.glib
-
+import random
+import time
 
 dbus_objects = {
 	'power' : { 
@@ -71,6 +72,10 @@ else:
 	if (power_policy == "ALWAYS_POWER_ON" or
 	   (power_policy == "RESTORE_LAST_STATE" and 
 	    system_state =="HOST_POWERED_ON")):
+		if (len(sys.argv) >= 3 and sys.argv[1] == '--rand' and int(sys.argv[2]) > 0):
+			delay_time = random.randrange(0,int(sys.argv[2]))
+			print "Random power on after "+str(delay_time)+" seconds"
+			time.sleep(delay_time)
 		chassis_intf.powerOn()
 
 
