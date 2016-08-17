@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import dbus
-
+import random
+import time
 
 dbus_objects = {
     'power': {
@@ -88,7 +89,11 @@ else:
     if (power_policy == "ALWAYS_POWER_ON" or
        (power_policy == "RESTORE_LAST_STATE" and
             system_last_state == "HOST_POWERED_ON")):
-        setProperty(bus, dbus_objects, 'host', 'RequestedHostTransition',
-                    'xyz.openbmc_project.State.Host.Transition.On')
+        if (len(sys.argv) >= 3 and sys.argv[1] == '--rand' and int(sys.argv[2]) > 0):
+            delay_time = random.randrange(0,int(sys.argv[2]))
+            print "Random power on after "+str(delay_time)+" seconds"
+            time.sleep(delay_time)
+            setProperty(bus, dbus_objects, 'host', 'RequestedHostTransition',
+                        'xyz.openbmc_project.State.Host.Transition.On')
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
