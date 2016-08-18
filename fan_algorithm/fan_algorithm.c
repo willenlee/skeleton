@@ -307,7 +307,7 @@ int Fan_control_algorithm(void)
 	int Ambient_reading = 0;
 	int Fan_tach[NUM_FAN], FinalFanSpeed = 255;
 	int Power_state = 0, fan_led_port0 = 0xFF, fan_led_port1 = 0xFF;
-	char fan_presence[NUM_FAN_MODULE] = {0};
+	char fan_presence[NUM_FAN_MODULE] = {0}, fan_presence_previous[NUM_FAN_MODULE] = {0};
 	char string[128] = {0};
 	
 	do {
@@ -547,6 +547,9 @@ int Fan_control_algorithm(void)
 		}
 
 		for(i=0; i<NUM_FAN_MODULE; i++) {
+			if (fan_presence[i] == fan_presence_previous[i])
+				continue;
+
 			sprintf(string, "/org/openbmc/inventory/system/chassis/fan%d", i);
 			rc = sd_bus_call_method(bus,				   // On the System Bus
 						"org.openbmc.Inventory",
@@ -570,6 +573,7 @@ finish:
 		HighestCPUtemp = 0;
 		HighestDIMMtemp = 0;
 		Ambient_reading = 0;
+		memcpy(fan_presence_previous, fan_presence, sizeof(fan_presence));
 		memset(fan_presence, 0, sizeof(fan_presence));
 		sleep(1);
 	}
