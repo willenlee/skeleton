@@ -64,6 +64,11 @@ ENTER_STATE_CALLBACK = {
 
 	},
 	'BMC_READY' : {
+		'setOff' : {
+			'bus_name'   : 'org.openbmc.control.led',
+			'obj_name'   : '/org/openbmc/control/led/beep',
+			'interface_name' : 'org.openbmc.Led',
+		},
 		'setBlinkSlow' : {
 			'bus_name'   : 'org.openbmc.control.led',
 			'obj_name'   : '/org/openbmc/control/led/heartbeat',
