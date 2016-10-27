@@ -26,18 +26,18 @@ SYSTEM_STATES = [
 
 EXIT_STATE_DEPEND = {
 	'BASE_APPS' : {
-		'/org/openbmc/sensors': 0,
+#		'/org/openbmc/sensors': 0,
 	},
 	'BMC_STARTING' : {
-		'/org/openbmc/control/power0' : 0,
-		'/org/openbmc/control/host0' : 0,
-		'/org/openbmc/control/flash/bios' : 0,
-		'/org/openbmc/sensors/speed/fan5': 0,
-		'/org/openbmc/inventory/system/chassis/io_board' : 0,
+#		'/org/openbmc/control/power0' : 0,
+#		'/org/openbmc/control/host0' : 0,
+#		'/org/openbmc/control/flash/bios' : 0,
+#		'/org/openbmc/sensors/speed/fan5': 0,
+#		'/org/openbmc/inventory/system/chassis/io_board' : 0,
 	},
 	'BMC_STARTING2' : {
-		'/org/openbmc/control/fans' : 0,
-		'/org/openbmc/control/chassis0': 0,
+#		'/org/openbmc/control/fans' : 0,
+#		'/org/openbmc/control/chassis0': 0,
 	},
 }
 
