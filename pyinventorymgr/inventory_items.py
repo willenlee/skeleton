@@ -53,6 +53,19 @@ class InventoryItem(DbusProperties):
 		in_signature='s', out_signature='')
 	def setPresent(self,present):
 		self.Set(INTF_NAME,'present',present)
+		if (present == "True"):
+			self.Set(INTF_NAME,'present',present)
+		else:
+			data = FRUS[self.name.replace(System.INVENTORY_ROOT,"<inventory_root>")]
+			if (data.has_key('present') == False):
+				data['present'] = 'False'
+			if (data.has_key('fault') == False):
+				data['fault'] = 'False'
+			if (data.has_key('version') == False):
+				data['version'] = ''
+			self.properties[INTF_NAME] = {}
+			self.SetMultiple(INTF_NAME,data)
+
 		PropertyCacher.save(self.name, INTF_NAME, self.properties)
 
 	@dbus.service.method(INTF_NAME,
