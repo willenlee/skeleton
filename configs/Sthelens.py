@@ -277,7 +277,54 @@ def convertGpio(name):
 	return base+offset
 
 HWMON_CONFIG = {
-
+	'11-0048' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP1','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-0049' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP2','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004a' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP3','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004b' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP4','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004c' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP5','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004d' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP6','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004e' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP7','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
+	'11-004f' :  {
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/TMP8','poll_interval' : 5000,'scale' : 1000,'units' : 'C',
+					'critical_upper' : 40, 'critical_lower' : -100, 'warning_upper' : 36, 'warning_lower' : -99, 'emergency_enabled' : True },
+		}
+	},
 }
 
 # Miscellaneous non-poll sensor with system specific properties.
