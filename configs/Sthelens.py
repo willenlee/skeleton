@@ -26,7 +26,7 @@ SYSTEM_STATES = [
 
 EXIT_STATE_DEPEND = {
 	'BASE_APPS' : {
-#		'/org/openbmc/sensors': 0,
+		'/org/openbmc/sensors': 0,
 	},
 	'BMC_STARTING' : {
 #		'/org/openbmc/control/power0' : 0,
