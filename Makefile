@@ -7,7 +7,8 @@ GDBUS_APPS = bmcctl \
 	     op-pwrctl \
 	     pciedetect \
 	     pwrbutton \
-	     rstbutton
+	     rstbutton \
+	     idbutton
 
 SUBDIRS = hacks \
 	  ledctl \

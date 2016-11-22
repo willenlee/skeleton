@@ -244,6 +244,12 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'control_bmc.exe',
 	},
+	'id_button' : {
+		'system_state'    : 'BMC_STARTING',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'button_id.exe',
+	},
 }
 
 CACHED_INTERFACES = {
@@ -266,7 +272,9 @@ ID_LOOKUP = {
 	}
 }
 
-#GPIO_CONFIG = {}
+GPIO_CONFIG = {}
+GPIO_CONFIG['POWER_BUTTON'] = { 'gpio_pin': 'F1', 'direction': 'both' }
+GPIO_CONFIG['IDBTN']       = { 'gpio_pin': 'F3', 'direction': 'both' }
 
 def convertGpio(name):
 	name = name.upper()
