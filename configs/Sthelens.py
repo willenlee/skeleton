@@ -250,6 +250,12 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'button_id.exe',
 	},
+	'cable_led' : {
+		'system_state'    : 'BMC_STARTING',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'cable_led.exe',
+	},
 }
 
 CACHED_INTERFACES = {
