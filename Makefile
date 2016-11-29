@@ -13,6 +13,7 @@ GDBUS_APPS = bmcctl \
 
 SUBDIRS = hacks \
 	  ledctl \
+	  fanctl \
 	  libopenbmc_intf \
 	  pychassisctl \
 	  pydownloadmgr \
