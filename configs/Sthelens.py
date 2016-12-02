@@ -33,11 +33,11 @@ EXIT_STATE_DEPEND = {
 #		'/org/openbmc/control/host0' : 0,
 #		'/org/openbmc/control/flash/bios' : 0,
 #		'/org/openbmc/sensors/speed/fan5': 0,
-#		'/org/openbmc/inventory/system/chassis/io_board' : 0,
+		'/org/openbmc/inventory/system/chassis/io_board' : 0,
 	},
 	'BMC_STARTING2' : {
 #		'/org/openbmc/control/fans' : 0,
-#		'/org/openbmc/control/chassis0': 0,
+		'/org/openbmc/control/chassis0': 0,
 	},
 }
 
@@ -256,6 +256,19 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'cable_led.exe',
 	},
+	'netman' : {
+		'system_state'    : 'BMC_STARTING2',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'netman.py',
+	},
+	'sync_mac' : {
+		'system_state'    : 'BMC_READY',
+		'start_process'   : True,
+		'monitor_process' : False,
+		'process_name'    : 'sync_inventory_items.py',
+		'args'            : ['-t','DAUGHTER_CARD','-n','io_board','-p','Custom Field 2','-s','mac'],
+	},
 }
 
 CACHED_INTERFACES = {
@@ -279,12 +292,15 @@ FRU_INSTANCES = {
         	'<inventory_root>/system/chassis/motherboard/apss'     : { 'fru_type' : 'MAIN_PLANAR', 'is_fru' : False, },
 	
 	        '<inventory_root>/system/chassis/motherboard/bmc' : { 'fru_type' : 'BMC','is_fru' : False, 'manufacturer' : 'ASPEED' },
+	        '<inventory_root>/system/chassis/io_board' : { 'fru_type' : 'DAUGHTER_CARD','is_fru' : True,'Custom Field 2': '00:00:00:00:00:00',},
 }
 
 ID_LOOKUP = {
 	'FRU' : {
+		0x40 : '<inventory_root>/system/chassis/io_board',
 	},
 	'FRU_STR' : {
+		'BOARD_100'  : '<inventory_root>/system/chassis/io_board',
 	},
 	'SENSOR' : {
 	},
