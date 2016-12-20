@@ -268,6 +268,11 @@ APPS = {
 		'monitor_process' : False,
 		'process_name'    : 'sync_inventory_items.py',
 		'args'            : ['-t','DAUGHTER_CARD','-n','io_board','-p','Custom Field 2','-s','mac'],
+	'fan_ctl' : {
+		'system_state'    : 'BMC_STARTING',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'fan_generic_obj.exe',
 	},
 }
 
