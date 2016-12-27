@@ -208,11 +208,11 @@ class SystemManager(DbusProperties,DbusObjectManager):
 
 
 	@dbus.service.method(DBUS_NAME,
-		in_signature='s', out_signature='sis')
+		in_signature='s', out_signature='siss')
 	def gpioInit(self,name):
 		gpio_path = ''
 		gpio_num = -1
-		r = ['',gpio_num,'']
+		r = ['',gpio_num,'','']
 		if (System.GPIO_CONFIG.has_key(name) == False):
 			# TODO: Error handling
 			print "ERROR: "+name+" not found in GPIO config table"
@@ -227,9 +227,14 @@ class SystemManager(DbusProperties,DbusObjectManager):
 					gpio_num = System.convertGpio(gpio['gpio_pin'])
 				else:
 					print "ERROR: SystemManager - GPIO lookup failed for "+name
+
+				if not (System.GPIO_CONFIG[name].has_key('inverse')):
+					print "Inverse:"+name+" not in config table, set inverse to default no"
+					System.GPIO_CONFIG[name]['inverse'] = 'no'
+					gpio['inverse'] = 'no'
 		
 			if (gpio_num != -1):
-				r = [obmc.enums.GPIO_DEV, gpio_num, gpio['direction']]
+				r = [obmc.enums.GPIO_DEV, gpio_num, gpio['direction'], gpio['inverse']]
 		return r
 
 		

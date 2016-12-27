@@ -6,12 +6,13 @@
 #include <stdbool.h>
 
 typedef struct {
-  gchar* name;
-  gchar* dev;
-  uint16_t num;
-  gchar* direction;
-  int fd;
-  bool irq_inited;
+	gchar* name;
+	gchar* dev;
+	uint16_t num;
+	gchar* direction;
+	gchar* inverse;
+	int fd;
+	bool irq_inited;
 } GPIO;
 
 
