@@ -17,19 +17,23 @@ typedef enum {
 } EM_PWM_IDX;
 
 typedef enum {
-	EM_PWM_CMD_EN = 0, //set pwm enable
+	EM_FAN_CMD_EN = 0, //set pwm & tach enable
 	EM_PWM_CMD_FALLING, //set pwm duty falling
 	EM_PWM_CMD_RISING, //set pwm duty rising
 	EM_PWM_CMD_TYPE, //set pwm type (M/N/O)
+	EM_TACH_CMD_RPM, //set fan tach rpm
+	EM_TACH_CMD_SOURCE, //set fan tach source
 } EM_PWM_NODE_CMD;
 
 #define FAN_DBUS_OBJ_ROOT "/org/openbmc/control/fan"
-#define FAN_DBUS_OBJ_SUBDIR "fan"
+#define FAN_DBUS_OBJ_FORMAT "fan%d"
+#define FAN_TACH_DBUS_OBJ_FORMAT "fan_tacho%d"
 #define FAN_DBUS "org.openbmc.control.fan"
 #define FAN_INTFERFACE "org.openbmc.Fan"
 
 #define PWM_MAX_UNIT (255)
 #define MAX_FAN_NUM (6)
+#define MAX_PATH_LEN 70
 #define SYS_PWM_PATH "/sys/devices/platform/ast_pwm_tacho.0/"
 
 static EM_PWM_IDX g_fan_map_pwm_tab[] = {
@@ -42,10 +46,12 @@ static EM_PWM_IDX g_fan_map_pwm_tab[] = {
 };
 
 static char g_pwm_cmd_map_sys_tab[][20] = {
-	"_en",  //EM_PWM_CMD_EN --> "pwmX_en", X :mean pwm index eg: "pwm0_en"
+	"_en",  //EM_FAN_CMD_EN --> "pwmX_en", X :mean pwm index eg: "pwm0_en"
 	"_falling",  //EM_PWM_CMD_FALLING --> "pwmX_falling", X :mean pwm index eg: "pwm0_falling"
 	"_rising",  //EM_PWM_CMD_RISING --> "pwmX_rising", X :mean pwm index eg: "pwm0_rising"
 	"_type",  //EM_PWM_CMD_TYPE --> "pwmX_type", X :mean pwm index eg: "pwm0_type"
+	"_rpm",  //EM_TACH_CMD_RPM --> "tachoX_rpm", X :mean pwm index eg: "tacho0_rpm"
+	"_source",  //EM_TACH_CMD_SOURCE --> "tachoX_source", X :mean pwm index eg: "tacho0_source"
 };
 
 /*
@@ -53,7 +59,7 @@ static char g_pwm_cmd_map_sys_tab[][20] = {
  * Router function for any FAN operations that come via dbus
  *----------------------------------------------------------------
  */
-char *
+static char *
 get_fan_name(const char *dbus_path)
 {
 	char *fan_name = NULL;
@@ -66,18 +72,17 @@ get_fan_name(const char *dbus_path)
 
 }
 
-int
-get_fan_index(const char *fan_name)
+static int
+get_fan_index(char *fan_name, char *format_s)
 {
 	int fan_index;
-	char format_s[20];
-	sprintf(format_s, "%s%%d", FAN_DBUS_OBJ_SUBDIR);
 	sscanf(fan_name, format_s, &fan_index);
 	return fan_index;
 }
 
+
 static void
-sys_pwm_write(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd, int write_value)
+sys_pwm_write(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd, int write_value, char*prefix)
 {
 	char sys_pwm_path[100];
 	char sys_cmd[100];
@@ -88,13 +93,13 @@ sys_pwm_write(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd, int write_value)
 	else if (write_value < 0)
 		write_value = 0;
 
-	rc = sprintf(sys_pwm_path , "%spwm%d%s", SYS_PWM_PATH, pwm_idex, g_pwm_cmd_map_sys_tab[pwm_cmd]);
+	rc = sprintf(sys_pwm_path , "%s%s%d%s", SYS_PWM_PATH, prefix, pwm_idex, g_pwm_cmd_map_sys_tab[pwm_cmd]);
 	sprintf(sys_cmd, "echo %d > %s", write_value, sys_pwm_path);
 	system(sys_cmd);
 }
 
 static int
-sys_pwm_read(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd)
+sys_pwm_read(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd, char*prefix)
 {
 	char sys_pwm_path[100];
 	FILE *fp;
@@ -102,17 +107,23 @@ sys_pwm_read(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd)
 	char buf[100] = {0};
 	int ret_len;
 
-	sprintf(sys_pwm_path , "%spwm%d%s", SYS_PWM_PATH, pwm_idex, g_pwm_cmd_map_sys_tab[pwm_cmd]);
+	sprintf(sys_pwm_path , "%s%s%d%s", SYS_PWM_PATH, prefix, pwm_idex, g_pwm_cmd_map_sys_tab[pwm_cmd]);
 
 	fp = fopen(sys_pwm_path,"r");
 	if(fp == NULL) {
 		fprintf(stderr,"Error:[%s] opening:[%s]\n",strerror(errno),sys_pwm_path);
 		return -1;
 	}
-
 	ret_len = fread(buf, 1, 100, fp);
-	sscanf(buf, "%x", &retValue);
-
+	switch (pwm_cmd) {
+	case EM_PWM_CMD_FALLING:
+	case EM_PWM_CMD_RISING:
+		sscanf(buf, "%x", &retValue);
+		break;
+	default:
+		sscanf(buf, "%d", &retValue);
+		break;
+	}
 	fclose(fp);
 
 	return retValue;
@@ -145,21 +156,26 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
 		return sd_bus_reply_method_return(msg, "i", rc);
 	}
 
-	int fan_index = get_fan_index(fan_name);
-	int pwm_idex = g_fan_map_pwm_tab[fan_index];
-
 	/* Route the user action to appropriate handlers. */
 	if(strcmp(fan_function, "getValue") == 0) {
-		//int pwm_falling =  sys_pwm_read(pwm_idex, EM_PWM_CMD_FALLING);
-		int pwm_rising =  sys_pwm_read(pwm_idex, EM_PWM_CMD_RISING);
-		return sd_bus_reply_method_return(msg, "i", pwm_rising);
+		if (strncmp(fan_name, "fan_tacho", strlen("fan_tacho")) == 0) {
+			int fan_index = get_fan_index(fan_name, FAN_TACH_DBUS_OBJ_FORMAT);
+			int tach_reading =  sys_pwm_read(fan_index, EM_TACH_CMD_RPM, "tacho");
+			return sd_bus_reply_method_return(msg, "i", tach_reading);
+		} else {
+			int fan_index = get_fan_index(fan_name, FAN_DBUS_OBJ_FORMAT);
+			int pwm_idex = g_fan_map_pwm_tab[fan_index];
+			int pwm_reading =  sys_pwm_read(pwm_idex, EM_PWM_CMD_FALLING, "pwm");
+			return sd_bus_reply_method_return(msg, "i", pwm_reading);
+		}
 	} else if(strcmp(fan_function, "setValue") == 0) {
 		int fan_speed = 0;
-
+		int fan_index = get_fan_index(fan_name, FAN_DBUS_OBJ_FORMAT);
+		int pwm_idex = g_fan_map_pwm_tab[fan_index];
 		/* Extract values into 'ss' ( string, string) */
 		rc = sd_bus_message_read(msg, "i", &fan_speed);
-		sys_pwm_write(pwm_idex, EM_PWM_CMD_FALLING, 0x00);
-		sys_pwm_write(pwm_idex, EM_PWM_CMD_RISING, fan_speed);
+		sys_pwm_write(pwm_idex, EM_PWM_CMD_FALLING, fan_speed, "pwm");
+		sys_pwm_write(pwm_idex, EM_PWM_CMD_RISING, 0x00, "pwm");
 	} else {
 		fprintf(stderr,"Invalid FAN function:[%s]\n",fan_function);
 	}
@@ -179,10 +195,87 @@ static const sd_bus_vtable fan_control_vtable[] = {
 	SD_BUS_VTABLE_END,
 };
 
+
+static int get_dbus_fan_parameters(sd_bus *bus , char *request_param , int *reponse_len, char reponse_data[50][200])
+{
+	sd_bus_error bus_error = SD_BUS_ERROR_NULL;
+	sd_bus_message *response = NULL;
+	int rc = 0;
+	const char*  response_param;
+
+	*reponse_len = 0; //clear reponse_len
+
+	rc = sd_bus_call_method(bus,
+				"org.openbmc.managers.System",
+				"/org/openbmc/managers/System",
+				"org.openbmc.managers.System",
+				"getFanControlParams",
+				&bus_error,
+				&response,
+				"s", request_param);
+	if(rc < 0) {
+		printf("%s, %d response message:[%s]\n", __FUNCTION__, __LINE__, strerror(-rc));
+	} else {
+		rc = sd_bus_message_read(response, "s", &response_param);
+		if (rc < 0 ) {
+			fprintf(stderr, "Failed to parse response message:[%s]\n", strerror(-rc));
+			return rc;
+		}
+
+		int stard_idx = 0, end_idx = 0;
+		int str_len = 0;
+		while (response_param[end_idx]!=0) {
+			if (response_param[end_idx] == ';') { // ';' means to indentify every data token
+				if (stard_idx < end_idx) {
+					str_len = end_idx - stard_idx;
+					if (str_len < MAX_PATH_LEN) {
+						memcpy(reponse_data[*reponse_len], response_param+stard_idx, str_len);
+						reponse_data[*reponse_len][str_len] = '\0';
+						*reponse_len=*reponse_len+1;
+					} else
+						printf("Error:%s[%d], parse string exceds length:%d, str_len:%d\n", __FUNCTION__, __LINE__, MAX_PATH_LEN, str_len);
+				}
+				stard_idx=end_idx+1;
+			}
+			end_idx++;
+		}
+	}
+	sd_bus_error_free(&bus_error);
+	response = sd_bus_message_unref(response);
+	return rc;
+}
+
+static int
+register_fan_services(sd_bus *bus_type, sd_bus_slot *fan_slot, char *fan_object)
+{
+	int rc = -1;
+	/* Install the object */
+	rc = sd_bus_add_object_vtable(bus_type,
+				      &fan_slot,
+				      fan_object, /* object path */
+				      FAN_INTFERFACE, /* interface name */
+				      fan_control_vtable,
+				      NULL);
+
+	if(rc < 0) {
+		fprintf(stderr, "Failed to add object to dbus: %s\n", strerror(-rc));
+		return rc;
+	}
+
+	rc = sd_bus_emit_object_added(bus_type, fan_object);
+	if(rc < 0) {
+		fprintf(stderr, "Failed to emit InterfacesAdded "
+			"signal: %s\n", strerror(-rc));
+		return rc;
+	}
+
+	return rc;
+}
+
 int
 start_fan_services()
 {
-	static const char *fan_dbus_root = FAN_DBUS_OBJ_ROOT;
+	const char *fan_dbus_root = FAN_DBUS_OBJ_ROOT;
 	/* Generic error reporter. */
 	int rc = -1;
 	int num_fans = 0;
@@ -208,44 +301,35 @@ start_fan_services()
 		return rc;
 	}
 
-	/* Fully qualified Dbus object for a particular Fan */
-	char fan_object[128] = {0};
-	int len = 0;
+	int reponse_len = 0;
+	char reponse_data[50][200];
+	int i;
+	int fan_index;
+	get_dbus_fan_parameters(bus_type, "FAN_INPUT_OBJ", &reponse_len, reponse_data);
+	for (i = 0; i<reponse_len; i++) {
+		if (i%2 == 0) {
+			register_fan_services(bus_type, fan_slot, reponse_data[i]);
+			//Enable fan tach
+			char *fan_name = NULL;
+			fan_name = strrchr(reponse_data[i], '/');
+			if(fan_name) {
+				fan_name++;
+			} else
+				continue;
 
-	num_fans = 0;
-	/* For each fan present, announce the service on dbus. */
-	while(num_fans < MAX_FAN_NUM) {
-		memset(fan_object, 0x0, sizeof(fan_object));
-		len = snprintf(fan_object, sizeof(fan_object), "%s%s%s%d",
-			       fan_dbus_root, "/" ,FAN_DBUS_OBJ_SUBDIR ,num_fans);
+			fan_index = get_fan_index(fan_name, FAN_TACH_DBUS_OBJ_FORMAT);
+			sys_pwm_write(fan_index, EM_FAN_CMD_EN, 1, "tacho");
+		} else {
+			int pwm_source;
+			sscanf(reponse_data[i], "pwm%d", &pwm_source);
+			sys_pwm_write(fan_index, EM_TACH_CMD_SOURCE, pwm_source, "tacho");
 
-		if(len >= sizeof(fan_object)) {
-			fprintf(stderr, "Error. FAN object is too long:[%d]\n",len);
-			rc = -1;
-			break;
 		}
-
-		/* Install the object */
-		rc = sd_bus_add_object_vtable(bus_type,
-					      &fan_slot,
-					      fan_object, /* object path */
-					      FAN_INTFERFACE, /* interface name */
-					      fan_control_vtable,
-					      NULL);
-
-		if(rc < 0) {
-			fprintf(stderr, "Failed to add object to dbus: %s\n", strerror(-rc));
-			break;
-		}
-
-		rc = sd_bus_emit_object_added(bus_type, fan_object);
-		if(rc < 0) {
-			fprintf(stderr, "Failed to emit InterfacesAdded "
-				"signal: %s\n", strerror(-rc));
-			break;
-		}
-		num_fans++;
 	}
+
+	get_dbus_fan_parameters(bus_type, "FAN_OUTPUT_OBJ", &reponse_len, reponse_data);
+	for (i = 0; i<reponse_len; i++)
+		register_fan_services(bus_type, fan_slot, reponse_data[i]);
 
 	/* If we had success in adding the providers, request for a bus name. */
 	if(rc >= 0) {

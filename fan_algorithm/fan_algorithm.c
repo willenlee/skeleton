@@ -490,7 +490,7 @@ static int initial_fan_config(sd_bus *bus)
 
 	get_dbus_fan_parameters(bus, "FAN_INPUT_OBJ", &reponse_len, reponse_data);
 	g_FanInputObjPath.size = reponse_len;
-	for (i = 0; i<reponse_len; i++) {
+	for (i = 0; i<reponse_len; i+=2) {
 		strcpy(g_FanInputObjPath.path[i], reponse_data[i]);
 	}
 	get_dbus_fan_parameters(bus, "FAN_DBUS_INTF_LOOKUP#FAN_INPUT_OBJ", &reponse_len, reponse_data);
