@@ -9,7 +9,8 @@ GDBUS_APPS = bmcctl \
 	     pwrbutton \
 	     rstbutton \
 	     idbutton \
-	     cable-led
+	     cable-led \
+	     op-pwrctl-sthelens
 
 SUBDIRS = hacks \
 	  libopenbmc_intf \
