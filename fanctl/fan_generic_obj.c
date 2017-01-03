@@ -150,20 +150,16 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
 
 	/* Route the user action to appropriate handlers. */
 	if(strcmp(fan_function, "getValue") == 0) {
-		int fan_speed = 0;
 		//int pwm_falling =  sys_pwm_read(pwm_idex, EM_PWM_CMD_FALLING);
 		int pwm_rising =  sys_pwm_read(pwm_idex, EM_PWM_CMD_RISING);
-		fan_speed =(int) (((double)pwm_rising/PWM_MAX_UNIT) * (double)100) ;
-		return sd_bus_reply_method_return(msg, "i", fan_speed);
+		return sd_bus_reply_method_return(msg, "i", pwm_rising);
 	} else if(strcmp(fan_function, "setValue") == 0) {
 		int fan_speed = 0;
-		int pwm_value;
 
 		/* Extract values into 'ss' ( string, string) */
 		rc = sd_bus_message_read(msg, "i", &fan_speed);
-		pwm_value = (int) (((double)fan_speed/100) * (double)PWM_MAX_UNIT) ;
 		sys_pwm_write(pwm_idex, EM_PWM_CMD_FALLING, 0x00);
-		sys_pwm_write(pwm_idex, EM_PWM_CMD_RISING, pwm_value);
+		sys_pwm_write(pwm_idex, EM_PWM_CMD_RISING, fan_speed);
 	} else {
 		fprintf(stderr,"Invalid FAN function:[%s]\n",fan_function);
 	}
@@ -179,7 +175,7 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
 static const sd_bus_vtable fan_control_vtable[] = {
 	SD_BUS_VTABLE_START(0),
 	SD_BUS_METHOD("getValue", "", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
-	SD_BUS_METHOD("setValue", "i", "", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
+	SD_BUS_METHOD("setValue", "i", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
 	SD_BUS_VTABLE_END,
 };
 
