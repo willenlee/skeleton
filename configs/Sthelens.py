@@ -386,6 +386,7 @@ MISC_SENSORS = {
 #   FAN_DBUS_INTF_LOOKUP: {keys:[dbus bus name, dbus interface name]}
 #   CHASSIS_POWER_STATE: set chassis power state object path
 #   FAN_INPUT_OBJ: set fan input object path
+#       - ["fan tach obj path", "pwm index mapping with fan tach"]
 #   FAN_OUTPUT_OBJ: set fan out object path , eg: hwmon control fan speed or directly use pwm control pwm
 #   OPEN_LOOP_PARAM: set openloop parameter
 #       - paramA
@@ -439,27 +440,27 @@ FAN_ALGORITHM_CONFIG = {
     'CHASSIS_POWER_STATE': ['/org/openbmc/control/chassis0'],
     'FAN_INPUT_OBJ':
         [
-            "/org/openbmc/control/fan/fan_tacho0",
-            "/org/openbmc/control/fan/fan_tacho1",
-            "/org/openbmc/control/fan/fan_tacho2",
-            "/org/openbmc/control/fan/fan_tacho3",
-            "/org/openbmc/control/fan/fan_tacho4",
-            "/org/openbmc/control/fan/fan_tacho5",
-            "/org/openbmc/control/fan/fan_tacho6",
-            "/org/openbmc/control/fan/fan_tacho7",
-            "/org/openbmc/control/fan/fan_tacho8",
-            "/org/openbmc/control/fan/fan_tacho9",
-            "/org/openbmc/control/fan/fan_tacho10",
-            "/org/openbmc/control/fan/fan_tacho11",
+            "/org/openbmc/control/fan/fan_tacho1", "pwm1",
+            "/org/openbmc/control/fan/fan_tacho2", "pwm2",
+            "/org/openbmc/control/fan/fan_tacho3", "pwm3",
+            "/org/openbmc/control/fan/fan_tacho4", "pwm4",
+            "/org/openbmc/control/fan/fan_tacho5", "pwm5",
+            "/org/openbmc/control/fan/fan_tacho6", "pwm6",
+            "/org/openbmc/control/fan/fan_tacho7", "pwm1",
+            "/org/openbmc/control/fan/fan_tacho8", "pwm2",
+            "/org/openbmc/control/fan/fan_tacho9", "pwm3",
+            "/org/openbmc/control/fan/fan_tacho10", "pwm4",
+            "/org/openbmc/control/fan/fan_tacho11", "pwm5",
+            "/org/openbmc/control/fan/fan_tacho12", "pwm6",
         ],
     'FAN_OUTPUT_OBJ':
         [
-            "/org/openbmc/control/fan/fan0",
             "/org/openbmc/control/fan/fan1",
             "/org/openbmc/control/fan/fan2",
             "/org/openbmc/control/fan/fan3",
             "/org/openbmc/control/fan/fan4",
             "/org/openbmc/control/fan/fan5",
+            "/org/openbmc/control/fan/fan6",
         ],
     'OPEN_LOOP_PARAM':
         [
