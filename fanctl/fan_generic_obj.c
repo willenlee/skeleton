@@ -25,10 +25,10 @@ typedef enum {
 	EM_TACH_CMD_SOURCE, //set fan tach source
 } EM_PWM_NODE_CMD;
 
-#define FAN_DBUS_OBJ_ROOT "/org/openbmc/control/fan"
+#define FAN_DBUS_OBJ_ROOT "/org/openbmc/sensors/fan"
 #define FAN_DBUS_OBJ_FORMAT "fan%d"
 #define FAN_TACH_DBUS_OBJ_FORMAT "fan_tacho%d"
-#define FAN_DBUS "org.openbmc.control.fan"
+#define FAN_DBUS "org.openbmc.sensors.fan"
 #define FAN_INTFERFACE "org.openbmc.Fan"
 
 #define PWM_MAX_UNIT (255)
@@ -43,6 +43,8 @@ static EM_PWM_IDX g_fan_map_pwm_tab[] = {
 	EM_PWM_IDX_3,  //fan3 map to pwm3
 	EM_PWM_IDX_4,  //fan4 map to pwm4
 	EM_PWM_IDX_5,  //fan5 map to pwm5
+	EM_PWM_IDX_6,  //fan6 map to pwm6
+	EM_PWM_IDX_7,  //fan7 map to pwm7
 };
 
 static char g_pwm_cmd_map_sys_tab[][20] = {
@@ -195,13 +197,13 @@ static const sd_bus_vtable fan_control_vtable[] = {
 	SD_BUS_VTABLE_END,
 };
 
-
 static int get_dbus_fan_parameters(sd_bus *bus , char *request_param , int *reponse_len, char reponse_data[50][200])
 {
 	sd_bus_error bus_error = SD_BUS_ERROR_NULL;
 	sd_bus_message *response = NULL;
 	int rc = 0;
 	const char*  response_param;
+	
 
 	*reponse_len = 0; //clear reponse_len
 
@@ -256,7 +258,6 @@ register_fan_services(sd_bus *bus_type, sd_bus_slot *fan_slot, char *fan_object)
 				      FAN_INTFERFACE, /* interface name */
 				      fan_control_vtable,
 				      NULL);
-
 	if(rc < 0) {
 		fprintf(stderr, "Failed to add object to dbus: %s\n", strerror(-rc));
 		return rc;
