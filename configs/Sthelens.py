@@ -18,7 +18,6 @@ SYSTEM_STATES = [
 	'BMC_READY',
 	'HOST_POWERING_ON',
 	'HOST_POWERED_ON',
-	'INVENTORY_UPLOADED',
 	'HOST_BOOTING',
 	'HOST_BOOTED',
 	'HOST_POWERED_OFF',
@@ -29,51 +28,21 @@ EXIT_STATE_DEPEND = {
 		'/org/openbmc/sensors': 0,
 	},
 	'BMC_STARTING' : {
-#		'/org/openbmc/control/power0' : 0,
-#		'/org/openbmc/control/host0' : 0,
-#		'/org/openbmc/control/flash/bios' : 0,
-#		'/org/openbmc/sensors/speed/fan5': 0,
 		'/org/openbmc/inventory/system/chassis/io_board' : 0,
 	},
 	'BMC_STARTING2' : {
-#		'/org/openbmc/control/fans' : 0,
 		'/org/openbmc/control/chassis0': 0,
 	},
 }
 
 ## method will be called when state is entered
 ENTER_STATE_CALLBACK = {
-	'INVENTORY_UPLOADED' : {
-		'boot' : {
-			'bus_name'    : 'org.openbmc.control.Host',
-			'obj_name'    : '/org/openbmc/control/host0',
-			'interface_name' : 'org.openbmc.control.Host',
-		},
-		'setOn' : {
-			'bus_name'   : 'org.openbmc.control.led',
-			'obj_name'   : '/org/openbmc/control/led/identify',
-			'interface_name' : 'org.openbmc.Led',
-		}
-	},
-	'HOST_POWERED_OFF' : {
-		'setOff' : {
-			'bus_name'   : 'org.openbmc.control.led',
-			'obj_name'   : '/org/openbmc/control/led/identify',
-			'interface_name' : 'org.openbmc.Led',
-		}
-
-	},
 	'BMC_READY' : {
 		'setBlinkSlow' : {
 			'bus_name'   : 'org.openbmc.control.led',
 			'obj_name'   : '/org/openbmc/control/led/heartbeat',
 			'interface_name' : 'org.openbmc.Led',
 		},
-		'init' : {
-			'bus_name'   : 'org.openbmc.control.Flash',
-			'obj_name'   : '/org/openbmc/control/flash/bios',
-			'interface_name' : 'org.openbmc.Flash',
-		}
 	}
 }
 
@@ -90,19 +59,6 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'inventory_items.py',
 		'args'            : [ SYSTEM_NAME ]
-	},
-	'inventory_upload' : {
-		'system_state'    : 'HOST_POWERED_ON',
-		'start_process'   : True,
-		'monitor_process' : False,
-		'process_name'    : 'goto_system_state.py',
-		'args'            : [ 'INVENTORY_UPLOADED', 'inventory_upload.py' ]
-	},
-	'pcie_present' : {
-		'system_state'    : 'INVENTORY_UPLOADED',
-		'start_process'   : True,
-		'monitor_process' : False,
-		'process_name'    : 'pcie_slot_present.exe',
 	},
 	'fan_control' : {
 		'system_state'    : 'BMC_STARTING2',
@@ -134,7 +90,7 @@ APPS = {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,
 		'monitor_process' : True,
-		'process_name' : 'power_control.exe',
+		'process_name' : 'power_control_sthelens.exe',
 		'args' : [ '3000', '10' ]
 	},
 	'power_button' : {
