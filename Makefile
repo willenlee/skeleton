@@ -12,9 +12,9 @@ GDBUS_APPS = bmcctl \
 	     cable-led
 
 SUBDIRS = hacks \
+	  libopenbmc_intf \
 	  ledctl \
 	  fanctl \
-	  libopenbmc_intf \
 	  pychassisctl \
 	  pydownloadmgr \
 	  pyfanctl \
