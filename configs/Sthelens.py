@@ -231,6 +231,12 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'fan_generic_obj.exe',
 	},
+	'gpu_core' : {
+		'system_state'    : 'BMC_READY',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'gpu_core.exe',
+	},
 }
 
 CACHED_INTERFACES = {
@@ -286,6 +292,14 @@ def convertGpio(name):
 	return base+offset
 
 SENSOR_MONITOR_CONFIG = [
+	['/org/openbmc/sensors/gpu/gpu1_temp', { 'object_path' : '/tmp/gpu/gpu1_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu3_temp', { 'object_path' : '/tmp/gpu/gpu3_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu4_temp', { 'object_path' : '/tmp/gpu/gpu4_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu5_temp', { 'object_path' : '/tmp/gpu/gpu5_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu6_temp', { 'object_path' : '/tmp/gpu/gpu6_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu7_temp', { 'object_path' : '/tmp/gpu/gpu7_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
+	['/org/openbmc/sensors/gpu/gpu8_temp', { 'object_path' : '/tmp/gpu/gpu8_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
 	['/org/openbmc/sensors/fan/fan1', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm1_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
 	['/org/openbmc/sensors/fan/fan2', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm2_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
 	['/org/openbmc/sensors/fan/fan3', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm3_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],

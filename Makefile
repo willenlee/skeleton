@@ -29,7 +29,8 @@ SUBDIRS = hacks \
 	  pysystemmgr \
 	  pytools \
 	  fan_algorithm \
-	  info
+	  info \
+	  gpu
 
 REVERSE_SUBDIRS = $(shell echo $(SUBDIRS) $(GDBUS_APPS) | tr ' ' '\n' | tac |tr '\n' ' ')
 
