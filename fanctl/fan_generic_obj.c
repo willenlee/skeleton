@@ -117,15 +117,7 @@ sys_pwm_read(EM_PWM_IDX pwm_idex, EM_PWM_NODE_CMD pwm_cmd, char*prefix)
 		return -1;
 	}
 	ret_len = fread(buf, 1, 100, fp);
-	switch (pwm_cmd) {
-	case EM_PWM_CMD_FALLING:
-	case EM_PWM_CMD_RISING:
-		sscanf(buf, "%x", &retValue);
-		break;
-	default:
-		sscanf(buf, "%d", &retValue);
-		break;
-	}
+	sscanf(buf, "%d", &retValue);
 	fclose(fp);
 
 	return retValue;

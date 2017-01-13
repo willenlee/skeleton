@@ -46,11 +46,6 @@ class Hwmons():
 			with open(filename, 'r') as f:
 				for line in f:
 					val = line.rstrip('\n')
-			if not val.isdigit():
-				if filename.find("pwm")>=0:
-					val = str(int(val.split(":")[0].strip(), 16))
-				else:
-					val = "-1"
 		except (OSError, IOError):
 			print "Cannot read attributes:", filename
 		return val
