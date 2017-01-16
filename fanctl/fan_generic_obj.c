@@ -25,10 +25,10 @@ typedef enum {
 	EM_TACH_CMD_SOURCE, //set fan tach source
 } EM_PWM_NODE_CMD;
 
-#define FAN_DBUS_OBJ_ROOT "/org/openbmc/sensors/fan"
+#define FAN_DBUS_OBJ_ROOT "/org/openbmc"
 #define FAN_DBUS_OBJ_FORMAT "fan%d"
 #define FAN_TACH_DBUS_OBJ_FORMAT "fan_tacho%d"
-#define FAN_DBUS "org.openbmc.sensors.fan"
+#define FAN_DBUS "org.openbmc"
 #define FAN_INTFERFACE "org.openbmc.Fan"
 
 #define PWM_MAX_UNIT (255)

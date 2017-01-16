@@ -300,12 +300,12 @@ SENSOR_MONITOR_CONFIG = [
 	['/org/openbmc/sensors/gpu/gpu6_temp', { 'object_path' : '/tmp/gpu/gpu6_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
 	['/org/openbmc/sensors/gpu/gpu7_temp', { 'object_path' : '/tmp/gpu/gpu7_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
 	['/org/openbmc/sensors/gpu/gpu8_temp', { 'object_path' : '/tmp/gpu/gpu8_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C'}],
-	['/org/openbmc/sensors/fan/fan1', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm1_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-	['/org/openbmc/sensors/fan/fan2', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm2_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-	['/org/openbmc/sensors/fan/fan3', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm3_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-	['/org/openbmc/sensors/fan/fan4', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm4_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-	['/org/openbmc/sensors/fan/fan5', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm5_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-	['/org/openbmc/sensors/fan/fan6', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm6_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan1', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm1_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan2', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm2_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan3', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm3_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan4', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm4_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan5', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm5_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
+	['/org/openbmc/control/fan/fan6', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/pwm6_falling','poll_interval' : 10000,'scale' : 1,'value' : 0}],
 	['/org/openbmc/sensors/fan/fan_tacho1', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/tacho1_rpm','poll_interval' : 10000,'scale' : 1,'units' : 'rpm','value' : 0}],
 	['/org/openbmc/sensors/fan/fan_tacho2', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/tacho2_rpm','poll_interval' : 10000,'scale' : 1,'units' : 'rpm','value' : 0}],
 	['/org/openbmc/sensors/fan/fan_tacho3', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/tacho3_rpm','poll_interval' : 10000,'scale' : 1,'units' : 'rpm','value' : 0}],
@@ -424,8 +424,8 @@ FAN_ALGORITHM_CONFIG = {
     'FAN_DBUS_INTF_LOOKUP':
     {
         'CHASSIS_POWER_STATE': ['org.openbmc.control.Chassis', 'org.openbmc.control.Chassis'],
-        'FAN_INPUT_OBJ' : ['org.openbmc.sensors.fan', 'org.openbmc.Fan'],
-        'FAN_OUTPUT_OBJ' : ['org.openbmc.sensors.fan', 'org.openbmc.Fan'],
+        'FAN_INPUT_OBJ' : ['org.openbmc', 'org.openbmc.Fan'],
+        'FAN_OUTPUT_OBJ' : ['org.openbmc', 'org.openbmc.Fan'],
         'OPEN_LOOP_GROUPS_1' : [],
         'CLOSE_LOOP_GROUPS_1' : [],
         'CLOSE_LOOP_GROUPS_2' : [],
@@ -449,12 +449,12 @@ FAN_ALGORITHM_CONFIG = {
         ],
     'FAN_OUTPUT_OBJ':
         [
-            "/org/openbmc/sensors/fan/fan1",
-            "/org/openbmc/sensors/fan/fan2",
-            "/org/openbmc/sensors/fan/fan3",
-            "/org/openbmc/sensors/fan/fan4",
-            "/org/openbmc/sensors/fan/fan5",
-            "/org/openbmc/sensors/fan/fan6",
+            "/org/openbmc/control/fan/fan1",
+            "/org/openbmc/control/fan/fan2",
+            "/org/openbmc/control/fan/fan3",
+            "/org/openbmc/control/fan/fan4",
+            "/org/openbmc/control/fan/fan5",
+            "/org/openbmc/control/fan/fan6",
         ],
     'OPEN_LOOP_PARAM':
         [
