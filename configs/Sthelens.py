@@ -60,12 +60,6 @@ APPS = {
 		'process_name'    : 'inventory_items.py',
 		'args'            : [ SYSTEM_NAME ]
 	},
-	'fan_control' : {
-		'system_state'    : 'BMC_STARTING2',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'fan_control.py',
-	},
 	'hwmon' : {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,
@@ -219,12 +213,6 @@ APPS = {
 		'process_name'    : 'sync_inventory_items.py',
 		'args'            : ['-t','DAUGHTER_CARD','-n','io_board','-p','Custom Field 2','-s','mac'],
     },
-	'fan_ctl' : {
-		'system_state'    : 'BMC_STARTING',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'fan_generic_obj.exe',
-	},
 	'gpu_core' : {
 		'system_state'    : 'BMC_READY',
 		'start_process'   : True,
@@ -418,8 +406,8 @@ FAN_ALGORITHM_CONFIG = {
     'FAN_DBUS_INTF_LOOKUP':
     {
         'CHASSIS_POWER_STATE': ['org.openbmc.control.Chassis', 'org.openbmc.control.Chassis'],
-        'FAN_INPUT_OBJ' : ['org.openbmc', 'org.openbmc.Fan'],
-        'FAN_OUTPUT_OBJ' : ['org.openbmc', 'org.openbmc.Fan'],
+        'FAN_INPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'FAN_OUTPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
         'OPEN_LOOP_GROUPS_1' : [],
         'CLOSE_LOOP_GROUPS_1' : [],
         'CLOSE_LOOP_GROUPS_2' : [],
