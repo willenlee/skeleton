@@ -29,7 +29,8 @@ SUBDIRS = hacks \
 	  pytools \
 	  fan_algorithm \
 	  info \
-	  gpu
+	  gpu \
+	  node-init-sthelens
 
 REVERSE_SUBDIRS = $(shell echo $(SUBDIRS) $(GDBUS_APPS) | tr ' ' '\n' | tac |tr '\n' ' ')
 

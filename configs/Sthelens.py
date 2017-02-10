@@ -219,6 +219,12 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'gpu_core.exe',
 	},
+	'node_init_sthelens' : {
+		'system_state'    : 'BASE_APPS',
+		'start_process'   : True,
+		'monitor_process' : False,
+		'process_name'    : 'node_init_sthelens.exe',
+	},
 }
 
 CACHED_INTERFACES = {
