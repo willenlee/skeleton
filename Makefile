@@ -12,6 +12,7 @@ GDBUS_APPS = bmcctl \
 SUBDIRS = fanctl \
 	  ledctl \
 	  libopenbmc_intf \
+	  libopenbmc_sdbus \
 	  pychassisctl \
 	  pydownloadmgr \
 	  pyflashbmc \
@@ -21,6 +22,7 @@ SUBDIRS = fanctl \
 	  pysensormgr \
 	  pystatemgr \
 	  pysystemmgr \
+	  fan_algorithm \
 	  pytools
 
 REVERSE_SUBDIRS = $(shell echo $(SUBDIRS) $(GDBUS_APPS) | tr ' ' '\n' | tac |tr '\n' ' ')
