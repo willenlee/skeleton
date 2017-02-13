@@ -343,6 +343,10 @@ GPIO_CONFIG['PE_MEZZB_PRSNT_N'] = \
         {'gpio_pin': 'P7', 'direction': 'in'}
 GPIO_CONFIG['CHECKSTOP'] = \
         {'gpio_pin': 'F7', 'direction': 'falling'}
+
+SENSOR_MONITOR_CONFIG = [
+]
+
 HWMON_CONFIG = {
     '0-0064': {
         'names': {
@@ -382,3 +386,49 @@ MISC_SENSORS = {
 }
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
+
+# Set fan_algorithm config
+#   FAN_DBUS_INTF_LOOKUP: {keys:[dbus bus name, dbus interface name]}
+#   CHASSIS_POWER_STATE: set chassis power state object path
+#   FAN_INPUT_OBJ: set fan input object path
+#   FAN_OUTPUT_OBJ: set fan out object path , eg: hwmon control fan speed or directly use pwm control pwm
+#   OPEN_LOOP_PARAM: set openloop parameter
+#       - paramA
+#       - paramB
+#       - paramC
+#       - Low_Amb
+#       - Up_Amb
+#       - Low_Speed
+#       - High_Speed
+#   OPEN_LOOP_GROUPS_1: set openloop object path
+#   CLOSE_LOOP_PARAM_1: set closeloop parameter
+#       - g_Kp
+#       - g_Ki
+#       - g_Kd
+#       - g_CPUVariable
+#       - g_DIMMVariable
+#       - sensor_tracking
+#       - highest warning temp
+#   CLOSE_LOOP_GROUPS_1: set closeloop  group001 object path, eg: CPU0/CPU1
+#   CLOSE_LOOP_PARAM_2: set closeloop parameter
+#       - g_Kp
+#       - g_Ki
+#       - g_Kd
+#       - g_CPUVariable
+#       - g_DIMMVariable
+#       - sensor_tracking
+#       - highest warning temp
+#   CLOSE_LOOP_GROUPS_2: set closeloop  group002 object path, eg: DIMM
+#   FAN_LED_OFF: set fan led command: off
+#   FAN_LED_PORT0_ALL_BLUE: set fan led port0 command: all blue
+#   FAN_LED_PORT1_ALL_BLUE: set fan led port1 command: all blue
+#   FAN_LED_PORT0_ALL_RED: set fan led port0 command: all red
+#   FAN_LED_PORT1_ALL_RED: set fan led port1 command: all red
+#   PORT0_FAN_LED_RED_MASK: set fan led port0 register mask with red
+#   PORT0_FAN_LED_BLUE_MASK: set fan led port0 register mask with blue
+#   PORT1_FAN_LED_RED_MASK: set fan led port1 register mask with red
+#   PORT1_FAN_LED_BLUE_MASK: set fan led port1 register mask with blue
+#   FAN_LED_I2C_BUS: set fan led i2c bus
+#   FAN_LED_I2C_SLAVE_ADDRESS: set fan led i2c slave address
+FAN_ALGORITHM_CONFIG = {
+}
