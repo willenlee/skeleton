@@ -55,10 +55,9 @@ class Hwmons():
             with open(filename, 'r') as f:
                 for line in f:
                     val = line.rstrip('\n')
-            if self.is1WireTempSensor(filename) == True:
-                val_s = val
-                val_split = val_s.split("t=")
-                val = val_split[1]
+            if "SENSOR_MONITOR_FUNC_PTR_TAB" in dir(System) and filename in System.SENSOR_MONITOR_FUNC_PTR_TAB:
+                if 'parse_attribute_func_ptr' in System.SENSOR_MONITOR_FUNC_PTR_TAB[filename]:
+                    val = System.SENSOR_MONITOR_FUNC_PTR_TAB[filename]['parse_attribute_func_ptr'](val)
         except (OSError, IOError):
             print "Cannot read attributes:", filename
         return val
@@ -72,16 +71,13 @@ class Hwmons():
             raw_value = int(self.readAttribute(attribute))
             obj = bus.get_object(SENSOR_BUS, objpath, introspect=False)
             intf = dbus.Interface(obj, HwmonSensor.IFACE_NAME)
-            if self.isAdcSensor(attribute) == True:
-                raw_value = raw_value + 1
-                if attribute.find("adc0_value") >= 0:
-                    raw_value = raw_value * 0.00731
-                elif attribute.find("adc1_value") >= 0:
-                    raw_value = raw_value * 0.0034
-                elif attribute.find("adc2_value") >= 0:
-                    raw_value = raw_value * 0.0042
-                else:
-                    raw_value = raw_value * 0.0017
+            if "SENSOR_MONITOR_FUNC_PTR_TAB" in dir(System) and attribute in System.SENSOR_MONITOR_FUNC_PTR_TAB: 
+                if 'accurate_value_func_ptr' in System.SENSOR_MONITOR_FUNC_PTR_TAB[attribute]:
+                    func_params = []
+                    if 'accurate_value_func_ptr_params' in System.SENSOR_MONITOR_FUNC_PTR_TAB[attribute]:
+                        func_params = System.SENSOR_MONITOR_FUNC_PTR_TAB[attribute]['accurate_value_func_ptr_params']
+                    raw_value = System.SENSOR_MONITOR_FUNC_PTR_TAB[attribute]['accurate_value_func_ptr'](func_params ,raw_value)
+
             rtn = intf.setByPoll(raw_value)
             if rtn[0]:
                 self.writeAttribute(attribute, rtn[1])
@@ -125,20 +121,6 @@ class Hwmons():
             gobject.timeout_add(
                 hwmon['poll_interval'], self.poll, objpath, hwmon_path)
 
-    def isAdcSensor(self, object_path):
-        if object_path == None or object_path == "":
-            return False
-        if object_path.find("ast_adc") >= 0:
-            return True
-        return False
-
-    def is1WireTempSensor(self, object_path):
-        if object_path == None or object_path == "":
-            return False
-        if object_path.find("w1_bus_master") >= 0:
-            return True
-        return False
-
     def addSensorMonitorObject(self):
         if "SENSOR_MONITOR_CONFIG" not in dir(System):
             return
@@ -152,11 +134,9 @@ class Hwmons():
                 continue
 
             hwmon_path = hwmon['object_path']
-            if self.is1WireTempSensor(hwmon_path) == True:
-                sub_dir_cmd = "cat  " +  hwmon_path + "w1_master_slaves"
-                sub_dir = subprocess.check_output(sub_dir_cmd, shell=True)
-                sub_dir = sub_dir.rstrip('\n').rstrip()
-                hwmon_path = hwmon_path + sub_dir + "/w1_slave"
+            if "SENSOR_MONITOR_FUNC_PTR_TAB" in dir(System) and hwmon_path in System.SENSOR_MONITOR_FUNC_PTR_TAB:
+                if 'indetify_objectpath_func_ptr' in System.SENSOR_MONITOR_FUNC_PTR_TAB[hwmon_path]:
+                    hwmon_path = System.SENSOR_MONITOR_FUNC_PTR_TAB[hwmon_path]['indetify_objectpath_func_ptr'](hwmon_path)
 
             if (self.sensors.has_key(objpath) == False):
                 ## register object with sensor manager
@@ -178,11 +158,9 @@ class Hwmons():
                     if (IFACE_LOOKUP.has_key(prop)):
                         intf.Set(IFACE_LOOKUP[prop],prop,hwmon[prop])
 
-                if self.isAdcSensor(hwmon_path) == True:
-                    if 'enable' in hwmon:
-                        s_path = hwmon_path.replace("value", "en")
-                        s_cmd = "echo  " + str(hwmon['enable']) + "  >  " + s_path
-                        os.system(s_cmd)
+                if "SENSOR_MONITOR_FUNC_PTR_TAB" in dir(System) and hwmon_path in System.SENSOR_MONITOR_FUNC_PTR_TAB:
+                    if 'enable_func_ptr' in System.SENSOR_MONITOR_FUNC_PTR_TAB[hwmon_path]:
+                        System.SENSOR_MONITOR_FUNC_PTR_TAB[hwmon_path]['enable_func_ptr'](hwmon_path, str(hwmon['enable']))
                 self.sensors[objpath]=True
                 gobject.timeout_add(hwmon['poll_interval'],self.poll,objpath,hwmon_path)
 
