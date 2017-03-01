@@ -1,3 +1,3 @@
 BINS=node_init_sthelens
-include ../gdbus.mk
+include ../sdbus.mk
 include ../rules.mk
