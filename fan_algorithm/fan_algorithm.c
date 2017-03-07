@@ -684,6 +684,7 @@ static int initial_fan_config(sd_bus *bus)
 
 		t_fan_obj =(struct st_fan_obj_path_info *) malloc(sizeof(struct st_fan_obj_path_info));
 
+		t_fan_obj->size = reponse_len;
 		for (i = 0; i<reponse_len ; i++)
 			strcpy(t_fan_obj->path[i], reponse_data[i]);
 
