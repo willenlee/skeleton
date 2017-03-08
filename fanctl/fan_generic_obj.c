@@ -151,7 +151,7 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
 	}
 
 	/* Route the user action to appropriate handlers. */
-	if(strcmp(fan_function, "getValue") == 0) {
+	if(strcmp(fan_function, "getValue_Fan") == 0) {
 		if (strncmp(fan_name, "fan_tacho", strlen("fan_tacho")) == 0) {
 			int fan_index = get_fan_index(fan_name, FAN_TACH_DBUS_OBJ_FORMAT);
 			int tach_reading =  sys_pwm_read(fan_index, EM_TACH_CMD_RPM, "tacho");
@@ -162,7 +162,7 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
 			int pwm_reading =  sys_pwm_read(pwm_idex, EM_PWM_CMD_FALLING, "pwm");
 			return sd_bus_reply_method_return(msg, "i", pwm_reading);
 		}
-	} else if(strcmp(fan_function, "setValue") == 0) {
+	} else if(strcmp(fan_function, "setValue_Fan") == 0) {
 		int fan_speed = 0;
 		int fan_index = get_fan_index(fan_name, FAN_DBUS_OBJ_FORMAT);
 		int pwm_idex = g_fan_map_pwm_tab[fan_index];
@@ -184,8 +184,8 @@ pwm_fan_function_router(sd_bus_message *msg, void *user_data,
  */
 static const sd_bus_vtable fan_control_vtable[] = {
 	SD_BUS_VTABLE_START(0),
-	SD_BUS_METHOD("getValue", "", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
-	SD_BUS_METHOD("setValue", "i", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
+	SD_BUS_METHOD("getValue_Fan", "", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
+	SD_BUS_METHOD("setValue_Fan", "i", "i", &pwm_fan_function_router, SD_BUS_VTABLE_UNPRIVILEGED),
 	SD_BUS_VTABLE_END,
 };
 
@@ -195,7 +195,6 @@ static int get_dbus_fan_parameters(sd_bus *bus , char *request_param , int *repo
 	sd_bus_message *response = NULL;
 	int rc = 0;
 	const char*  response_param;
-	
 
 	*reponse_len = 0; //clear reponse_len
 
@@ -301,7 +300,7 @@ start_fan_services()
 	get_dbus_fan_parameters(bus_type, "FAN_INPUT_OBJ", &reponse_len, reponse_data);
 	for (i = 0; i<reponse_len; i++) {
 		if (i%2 == 0) {
-			register_fan_services(bus_type, fan_slot, reponse_data[i]);
+			//register_fan_services(bus_type, fan_slot, reponse_data[i]);
 			//Enable fan tach
 			char *fan_name = NULL;
 			fan_name = strrchr(reponse_data[i], '/');
