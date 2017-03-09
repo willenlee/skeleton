@@ -16,6 +16,7 @@ SUBDIRS = hacks \
 	  libopenbmc_intf \
 	  libopenbmc_sdbus \
 	  ledctl \
+	  fanctl \
 	  pychassisctl \
 	  pydownloadmgr \
 	  pyfanctl \
