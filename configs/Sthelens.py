@@ -542,7 +542,7 @@ FAN_ALGORITHM_CONFIG = {
             '0.35',
             '-0.015',
             '0.4',
-            '-10',
+            '20',
             '85',
         ],
     'CLOSE_LOOP_GROUPS_1':
