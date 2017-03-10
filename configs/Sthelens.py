@@ -485,7 +485,7 @@ FAN_ALGORITHM_CONFIG = {
     {
         'CHASSIS_POWER_STATE': ['org.openbmc.control.Chassis', 'org.openbmc.control.Chassis'],
         'FAN_INPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
-        'FAN_OUTPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'FAN_OUTPUT_OBJ' : ['org.openbmc', 'org.openbmc.Fan'],
         'OPEN_LOOP_GROUPS_1' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
         'CLOSE_LOOP_GROUPS_1' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
         'CLOSE_LOOP_GROUPS_2' : [],
