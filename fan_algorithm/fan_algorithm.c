@@ -77,6 +77,7 @@ static unsigned char g_FanLed_SlaveAddr = 0;
 static int g_FanSpeed = 0;
 static int g_Openloopspeed = 0;
 static int g_Closeloopspeed = 0;
+static unsigned int closeloop_first_time = 0;
 
 static int initial_fan_config(sd_bus *bus);
 
@@ -158,7 +159,6 @@ static int calculate_closeloop(struct st_closeloop_obj_data *sensor_data, int cu
 	double Kp = 0, Ki = 0, Kd = 0;
 	int cur_interal_Err = 0;
 	static int closeloop_fanspeed = 0;
-	static int closeloop_first_time = 0;
 
 	if (sensor_data == NULL)
 		return 0;
@@ -478,6 +478,8 @@ static int fan_control_algorithm_monitor(void)
 			}
 		} else {
 			FinalFanSpeed = 255;
+			closeloop_first_time = 0;
+			first_time_set = 0;
 			fan_led_port0 = FAN_LED_OFF;
 			fan_led_port1 = FAN_LED_OFF;
 		}
