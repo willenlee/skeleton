@@ -359,19 +359,6 @@ SENSOR_MONITOR_CONFIG = [
     ['/org/openbmc/sensors/CPU1_VDDQ1', { 'object_path' : '/sys/devices/platform/ast_adc.0/adc10_value','poll_interval' : 10000,'scale' : 1,'value' : 0, 'enable': 1}],
     ['/org/openbmc/sensors/CPU1_VDDQ2', { 'object_path' : '/sys/devices/platform/ast_adc.0/adc11_value','poll_interval' : 10000,'scale' : 1,'value' : 0, 'enable': 1}],
     ['/org/openbmc/sensors/P1V2AUX', { 'object_path' : '/sys/devices/platform/ast_adc.0/adc13_value','poll_interval' : 10000,'scale' : 1,'value' : 0, 'enable': 1}],
-    ['/org/openbmc/sensors/hwmon/voltage/P12V', { 'object_path' : '/sys/class/hwmon/hwmon0/in1_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P5V', { 'object_path' : '/sys/class/hwmon/hwmon0/in2_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P3V3', { 'object_path' : '/sys/class/hwmon/hwmon0/in3_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V8', { 'object_path' : '/sys/class/hwmon/hwmon0/in4_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V05', { 'object_path' : '/sys/class/hwmon/hwmon0/in5_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V0_SATA', { 'object_path' : '/sys/class/hwmon/hwmon0/in6_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P0V7_CPU0', { 'object_path' : '/sys/class/hwmon/hwmon0/in7_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P0V7_CPU1', { 'object_path' : '/sys/class/hwmon/hwmon0/in8_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V5_CPU', { 'object_path' : '/sys/class/hwmon/hwmon0/in9_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V0_CPU0', { 'object_path' : '/sys/class/hwmon/hwmon0/in10_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P1V0_CPU1', { 'object_path' : '/sys/class/hwmon/hwmon0/in11_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P0V8_CPU0', { 'object_path' : '/sys/class/hwmon/hwmon0/in12_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/hwmon/voltage/P0V8_CPU1', { 'object_path' : '/sys/class/hwmon/hwmon0/in13_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
 ]
 
 #args[0]: string, objectpath
@@ -482,6 +469,20 @@ HWMON_CONFIG = {
     },
     '0-0064': {
         'names': {
+        	'in1_input' : { 'object_path' : 'voltage/P12V','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in2_input' : { 'object_path' : 'voltage/P5V','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in3_input' : { 'object_path' : 'voltage/P3V3','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in4_input' : { 'object_path' : 'voltage/P1V8','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in5_input' : { 'object_path' : 'voltage/P1V05','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in6_input' : { 'object_path' : 'voltage/P1V0_SATA','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in7_input' : { 'object_path' : 'voltage/P0V7_CPU0','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in8_input' : { 'object_path' : 'voltage/P0V7_CPU1','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in9_input' : { 'object_path' : 'voltage/P1V5_CPU','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in10_input' : { 'object_path' : 'voltage/P1V0_CPU0','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in11_input' : { 'object_path' : 'voltage/P1V1_MEM0','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in12_input' : { 'object_path' : 'voltage/P1V0_CPU1','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in13_input' : { 'object_path' : 'voltage/P0V8_CPU0','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'in14_input' : { 'object_path' : 'voltage/P0V8_CPU1','poll_interval' : 10000,'scale' : 1,'units' : '' },
         },
         'labels': {
         },
