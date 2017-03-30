@@ -452,7 +452,7 @@ HWMON_CONFIG = {
 			'temp1_input' : { 'object_path' : 'temperature/ambient','poll_interval' : 5000,'scale' : -3,'units' : 'C' },
 		}
 	},
-    '6-002d' : {
+    '9-002d' : {
 		'names' : {
 			'pwm1' : { 'object_path' : 'speed/fan0','poll_interval' : 10000,'scale' : 1,'units' : '' },
 			'pwm2' : { 'object_path' : 'speed/fan1','poll_interval' : 10000,'scale' : 1,'units' : '' },
@@ -465,7 +465,7 @@ HWMON_CONFIG = {
 			'fan6_input' : { 'object_path' : 'tach/fan2H','poll_interval' : 10000,'scale' : 1,'units' : '' },
 		}
 	},
-	'6-002e' : {
+	'9-002e' : {
 		'names' : {
 			'pwm1' : { 'object_path' : 'speed/fan3','poll_interval' : 10000,'scale' : 1,'units' : '' },
 			'fan1_input' : { 'object_path' : 'tach/fan1L','poll_interval' : 10000,'scale' : 1,'units' : '' },
