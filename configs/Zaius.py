@@ -372,10 +372,6 @@ SENSOR_MONITOR_CONFIG = [
     ['/org/openbmc/sensors/hwmon/voltage/P1V0_CPU1', { 'object_path' : '/sys/class/hwmon/hwmon0/in11_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
     ['/org/openbmc/sensors/hwmon/voltage/P0V8_CPU0', { 'object_path' : '/sys/class/hwmon/hwmon0/in12_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
     ['/org/openbmc/sensors/hwmon/voltage/P0V8_CPU1', { 'object_path' : '/sys/class/hwmon/hwmon0/in13_input','poll_interval' : 10000,'scale' : 1,'value' : 0}],
-    ['/org/openbmc/sensors/FM_SENSOR_TEMP0', { 'object_path' : '/sys/devices/w1_bus_master1/','poll_interval' : 10000,'scale' : 1000,'value' : 0}],
-    ['/org/openbmc/sensors/FM_SENSOR_TEMP1', { 'object_path' : '/sys/devices/w1_bus_master2/','poll_interval' : 10000,'scale' : 1000,'value' : 0}],
-    ['/org/openbmc/sensors/FM_SENSOR_TEMP2', { 'object_path' : '/sys/devices/w1_bus_master3/','poll_interval' : 10000,'scale' : 1000,'value' : 0}],
-    ['/org/openbmc/sensors/FM_SENSOR_TEMP3', { 'object_path' : '/sys/devices/w1_bus_master4/','poll_interval' : 10000,'scale' : 1000,'value' : 0}],
 ]
 
 #args[0]: string, objectpath
@@ -407,37 +403,6 @@ def accurate_value_sensor_adc(*args):
         offset = param[1]
     raw_value = (raw_value+offset)*m
     return raw_value
-
-#args[0]: string, objectpath
-def indentify_objectpath_sensor_1wire(*args):
-    import subprocess
-
-    if args==None or len(args) != 1:
-        return ""
-    raw_objectpath = objectpath = args[0]
-    try:
-        sub_dir_cmd = "cat  " +  objectpath + "w1_master_slaves"
-        sub_dir = subprocess.check_output(sub_dir_cmd, shell=True)
-        sub_dir = sub_dir.rstrip('\n').rstrip()
-        objectpath = objectpath + sub_dir + "/w1_slave"
-        SENSOR_MONITOR_FUNC_PTR_TAB[objectpath] = {}
-        for key in SENSOR_MONITOR_FUNC_PTR_TAB[raw_objectpath]:
-            SENSOR_MONITOR_FUNC_PTR_TAB[objectpath][key] = SENSOR_MONITOR_FUNC_PTR_TAB[raw_objectpath][key]
-    except:
-        pass
-    return objectpath
-
-#args[0]: string, raw_attribute
-def parse_attribute_sensor_1wire(*args):
-    if args==None or len(args) != 1:
-        return ""
-    raw_attribute = args[0]
-    attribute = raw_attribute
-    try:
-        attribute = raw_attribute.split("t=")[1]
-    except:
-         pass
-    return attribute
 
 SENSOR_MONITOR_FUNC_PTR_TAB = {
     '/sys/devices/platform/ast_adc.0/adc0_value' : {
@@ -491,23 +456,6 @@ SENSOR_MONITOR_FUNC_PTR_TAB = {
     '/sys/devices/platform/ast_adc.0/adc13_value' : {
         'enable_func_ptr': enable_sensor_adc,
         'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0017 , 1],
-    },
-
-    '/sys/devices/w1_bus_master1/' : {
-        'indetify_objectpath_func_ptr': indentify_objectpath_sensor_1wire,
-        'parse_attribute_func_ptr' : parse_attribute_sensor_1wire,
-    },
-	'/sys/devices/w1_bus_master2/' : {
-        'indetify_objectpath_func_ptr': indentify_objectpath_sensor_1wire,
-        'parse_attribute_func_ptr' : parse_attribute_sensor_1wire,
-    },
-    '/sys/devices/w1_bus_master3/' : {
-        'indetify_objectpath_func_ptr': indentify_objectpath_sensor_1wire,
-        'parse_attribute_func_ptr' : parse_attribute_sensor_1wire,
-    },
-    '/sys/devices/w1_bus_master4/' : {
-        'indetify_objectpath_func_ptr': indentify_objectpath_sensor_1wire,
-        'parse_attribute_func_ptr' : parse_attribute_sensor_1wire,
     },
 }
 
