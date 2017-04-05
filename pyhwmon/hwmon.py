@@ -118,6 +118,14 @@ class Hwmons():
 
             self.sensors[objpath] = True
             self.hwmon_root[dpath].append(objpath)
+
+            if objsuf.find("speed")>=0 and 'value' in hwmon:
+                print objsuf + " set inital value"
+                obj = bus.get_object(SENSOR_BUS, objpath, introspect=False)
+                intf = dbus.Interface(obj, HwmonSensor.IFACE_NAME)
+                rtn = intf.setByPoll(hwmon['value'])
+                self.writeAttribute(hwmon_path, hwmon['value'])
+            
             gobject.timeout_add(
                 hwmon['poll_interval'], self.poll, objpath, hwmon_path)
 

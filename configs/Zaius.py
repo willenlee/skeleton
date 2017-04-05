@@ -456,9 +456,9 @@ HWMON_CONFIG = {
 	},
     '9-002d' : {
 		'names' : {
-			'pwm1' : { 'object_path' : 'speed/fan0','poll_interval' : 10000,'scale' : 1,'units' : '' },
-			'pwm2' : { 'object_path' : 'speed/fan1','poll_interval' : 10000,'scale' : 1,'units' : '' },
-			'pwm3' : { 'object_path' : 'speed/fan2','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'pwm1' : { 'object_path' : 'speed/fan0','poll_interval' : 10000,'scale' : 1,'units' : '' , 'value':255},
+			'pwm2' : { 'object_path' : 'speed/fan1','poll_interval' : 10000,'scale' : 1,'units' : '' , 'value':255},
+			'pwm3' : { 'object_path' : 'speed/fan2','poll_interval' : 10000,'scale' : 1,'units' : '' , 'value':255},
 			'fan1_input' : { 'object_path' : 'tach/fan5L','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
 			'fan2_input' : { 'object_path' : 'tach/fan5H','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
 			'fan3_input' : { 'object_path' : 'tach/fan4L','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
@@ -469,9 +469,9 @@ HWMON_CONFIG = {
 	},
 	'9-002e' : {
 		'names' : {
-			'pwm1' : { 'object_path' : 'speed/fan3','poll_interval' : 10000,'scale' : 1,'units' : '' },
-			'pwm2' : { 'object_path' : 'speed/fan4','poll_interval' : 10000,'scale' : 1,'units' : '' },
-			'pwm3' : { 'object_path' : 'speed/fan5','poll_interval' : 10000,'scale' : 1,'units' : '' },
+			'pwm1' : { 'object_path' : 'speed/fan3','poll_interval' : 10000,'scale' : 1,'units' : '', 'value':255 },
+			'pwm2' : { 'object_path' : 'speed/fan4','poll_interval' : 10000,'scale' : 1,'units' : '', 'value':255 },
+			'pwm3' : { 'object_path' : 'speed/fan5','poll_interval' : 10000,'scale' : 1,'units' : '', 'value':255 },
                         'fan1_input' : { 'object_path' : 'tach/fan2L','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
                         'fan2_input' : { 'object_path' : 'tach/fan2H','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
                         'fan3_input' : { 'object_path' : 'tach/fan1L','poll_interval' : 10000,'scale' : 1,'units' : 'rpm' },
