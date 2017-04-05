@@ -137,6 +137,78 @@ on_name_lost(GDBusConnection *connection,
 {
 }
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "i2c-dev.h"
+
+
+
+#define FAN_LED_OFF     0xFF
+#define FAN_LED_PORT0_ALL_BLUE  0xAA
+#define FAN_LED_PORT1_ALL_BLUE  0x55
+#define FAN_LED_PORT0_ALL_RED   0x55
+#define FAN_LED_PORT1_ALL_RED   0xAA
+#define PORT0_FAN_LED_RED_MASK  0x02
+#define PORT0_FAN_LED_BLUE_MASK	0x01
+#define PORT1_FAN_LED_RED_MASK  0x40
+#define PORT1_FAN_LED_BLUE_MASK	0x80
+
+
+
+
+static int i2c_open(int bus)
+{
+	int rc = 0, fd = -1;
+	char fn[32];
+
+	snprintf(fn, sizeof(fn), "/dev/i2c-%d", bus);
+	fd = open(fn, O_RDWR);
+	if (fd == -1) {
+		printf("--> Set Fan: Failed to open i2c device %s", fn);
+		return -1;
+	}
+	return fd;
+}
+
+
+#define CMD_OUTPUT_PORT_0 2
+#define PCA9535_ADDR 0x20
+static int SetFanLed(int fd, uint8_t port0, uint8_t port1)
+{
+	struct i2c_rdwr_ioctl_data data;
+	struct i2c_msg msg[1];
+	int rc = 0, use_pec = 0;
+	uint8_t write_bytes[3];
+
+//	fprintf(stderr,"SetFanLed: port0 = %02X,port1 = %02X\n",port0,port1);
+
+	memset(&msg, 0, sizeof(msg));
+
+	write_bytes[0] = CMD_OUTPUT_PORT_0;
+	write_bytes[1] = port0;
+	write_bytes[2] = port1;
+  
+	msg[0].addr = PCA9535_ADDR;
+	msg[0].flags = (use_pec) ? I2C_CLIENT_PEC : 0;
+	msg[0].len = sizeof(write_bytes);
+	msg[0].buf = write_bytes;
+
+	data.msgs = msg;
+	data.nmsgs = 1;
+	rc = ioctl(fd, I2C_RDWR, &data);
+	if (rc < 0) {
+		printf("SetFanLed: Failed to do raw io");
+		//close(fd);
+		return -1;
+	}
+
+	return 0;
+}
+
+
 gint
 main(gint argc, gchar *argv[])
 {
@@ -145,6 +217,16 @@ main(gint argc, gchar *argv[])
 	cmdline cmd;
 	cmd.argc = argc;
 	cmd.argv = argv;
+
+	int rc = 0;
+	int fd = -1;
+
+	fd = i2c_open(9);
+	if (fd != -1) {
+		printf("SetFanLed====\n");
+		SetFanLed(fd,FAN_LED_PORT0_ALL_BLUE,FAN_LED_PORT1_ALL_BLUE);
+		//close(fd);
+	}
 
 	guint id;
 	loop = g_main_loop_new(NULL, FALSE);
