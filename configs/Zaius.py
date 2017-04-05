@@ -451,7 +451,17 @@ SENSOR_MONITOR_FUNC_PTR_TAB = {
 HWMON_CONFIG = {
 	'0-004a' :	{
 		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/ambient','poll_interval' : 5000,'scale' : -3,'units' : 'C' },
+			'temp1_input' : { 'object_path' : 'temperature/ambient_mb','poll_interval' : 5000,'scale' : -3,'units' : 'C' },
+		}
+	},
+	'9-004a' :	{
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/ambient_fpdb','poll_interval' : 5000,'scale' : -3,'units' : 'C' },
+		}
+	},
+	'9-004f' :	{
+		'names' : {
+			'temp1_input' : { 'object_path' : 'temperature/ambient_bpx24','poll_interval' : 5000,'scale' : -3,'units' : 'C' },
 		}
 	},
     '9-002d' : {
