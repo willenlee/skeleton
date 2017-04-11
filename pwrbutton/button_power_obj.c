@@ -227,6 +227,7 @@ main(gint argc, gchar *argv[])
 		SetFanLed(fd,FAN_LED_PORT0_ALL_BLUE,FAN_LED_PORT1_ALL_BLUE);
 		//close(fd);
 	}
+    system("i2cset -y 9 0x20 6 0 w");
 
 	guint id;
 	loop = g_main_loop_new(NULL, FALSE);
