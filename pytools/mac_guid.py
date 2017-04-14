@@ -13,7 +13,7 @@ import uuid
 
 g_allchars = "".join(chr(a) for a in range(256))
 g_delchars = set(g_allchars) - set(string.hexdigits)
-g_eeprom_path = "/sys/bus/i2c/devices/6-0054/eeprom"
+g_eeprom_path = "/sys/devices/platform/ahb/ahb:apb/1e78a000.i2c/i2c-4/i2c-4/4-0050/eeprom"
 g_mac_offset = 0x2000
 g_guid_offset = 0x2010
 
@@ -33,10 +33,11 @@ def calChecksum(cal_data, data_len):
 
   return sum
 
-def writeMAC():
-  macaddr = raw_input("Please input MAC Address->")
-  macaddr = checkMAC(macaddr)
-  print("Your MAC:",macaddr)
+def writeMAC(macaddr):
+  if macaddr == None:
+    macaddr = raw_input("Please input MAC Address->")
+    macaddr = checkMAC(macaddr)
+    print("Your MAC:",macaddr)
   mac =[]
   write_mac=[]
   for i in range( 0, 12 ):
@@ -80,15 +81,16 @@ def writeGUID():
 def genGUID():
   print uuid.uuid1()
 
-def readMAC():
+def readMAC(count):
   f=open(g_eeprom_path, 'r')
   f.seek(g_mac_offset, 0)
-  mac = f.read(6)
+  mac = f.read(count)
   f.close()
   node = mac.encode('hex')
   blocks = [node[x:x+2] for x in xrange(0, len(node), 2)]
   macFormatted = ':'.join(blocks)
   print macFormatted
+  return macFormatted
 
 def readGUID():
   f=open(g_eeprom_path, 'r')
@@ -98,6 +100,17 @@ def readGUID():
   guid_hex = guid.encode('hex')
   print uuid.UUID(guid_hex)
 
+def fixMAC():
+  data = readMAC(7)
+  mac_addr_sp = data[:17].split(":")
+  checksum = int(data[18:], 16)
+  mac_addr = []
+  for i in range(len(mac_addr_sp)):
+    mac_addr.append(int(mac_addr_sp[i], 16))
+  calc_checksum = calChecksum(mac_addr, len(mac_addr))
+  if checksum != calc_checksum :
+    writeMAC("00:03:FF:00:00:00")
+
 def usage():
   return str('Usage: ' + sys.argv[0] + ' [--help]' + ' [--write-mac]' + ' [--write-guid]'
                                      + ' [--read-mac]' + ' [--read-guid]' + ' [--guid]\n'
@@ -106,7 +119,8 @@ def usage():
                                      + '--write-guid   : write version 1 uuid to eeprom. \n'
                                      + '--read-mac     : print mac address from eeprom. \n'
                                      + '--read-guid    : print guid from eerpom. \n'
-                                     + '--guid         : generate veriosn 1 uuid.')
+                                     + '--guid         : generate veriosn 1 uuid.'
+                                     + '--fix-mac      : inspect checksum. if checksum error, set default mac address: 00:03:FF:00:00:00')
 
 def main():
   try:
@@ -123,19 +137,22 @@ def main():
           print usage()
           sys.exit()
       elif opt == "--write-mac":
-          writeMAC()
+          writeMAC(None)
           sys.exit()
       elif opt == "--write-guid":
           writeGUID()
           sys.exit()
       elif opt == "--read-mac":
-          readMAC()
+          readMAC(6)
           sys.exit()
       elif opt == "--read-guid":
           readGUID()
           sys.exit()
       elif opt == "--guid":
           genGUID()
+          sys.exit()
+      elif opt == "--fix-mac":
+          fixMAC()
           sys.exit()
       else:
           assert False, "unhandled option"
