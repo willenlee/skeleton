@@ -109,7 +109,23 @@ def fixMAC():
     mac_addr.append(int(mac_addr_sp[i], 16))
   calc_checksum = calChecksum(mac_addr, len(mac_addr))
   if checksum != calc_checksum :
-    writeMAC("00:03:FF:00:00:00")
+    writeMAC("0003FF000000")
+    writeGUID()
+
+def fixGUID():
+  f=open(g_eeprom_path, 'r')
+  f.seek(g_guid_offset, 0)
+  data = f.read(17)
+  f.close()
+  data_hex = data.encode('hex')
+  guid_str = data_hex[:32]
+  checksum = int(data_hex[32:], 16)
+  guid = []
+  for i in range(16):
+    guid.append(int(guid_str[i*2:i*2+2], 16))
+  calc_checksum = calChecksum(guid, len(guid))
+  if checksum != calc_checksum:
+    writeGUID()
 
 def usage():
   return str('Usage: ' + sys.argv[0] + ' [--help]' + ' [--write-mac]' + ' [--write-guid]'
@@ -119,12 +135,13 @@ def usage():
                                      + '--write-guid   : write version 1 uuid to eeprom. \n'
                                      + '--read-mac     : print mac address from eeprom. \n'
                                      + '--read-guid    : print guid from eerpom. \n'
-                                     + '--guid         : generate veriosn 1 uuid.'
-                                     + '--fix-mac      : inspect checksum. if checksum error, set default mac address: 00:03:FF:00:00:00')
+                                     + '--guid         : generate veriosn 1 uuid.\n'
+                                     + '--fix-mac      : inspect checksum. if checksum error, set default mac address: 00:03:FF:00:00:00\n'
+                                     + '--fix-guid      : inspect checksum. if checksum error, set default guid')
 
 def main():
   try:
-      opts, args=getopt.getopt(sys.argv[1:], "h", ["help", "write-mac", "write-guid", "read-mac", "read-guid", "guid"])
+      opts, args=getopt.getopt(sys.argv[1:], "h", ["help", "write-mac", "write-guid", "read-mac", "read-guid", "guid", "fix-mac", "fix-guid"])
   except getopt.GetoptError as err:
       print usage()
       sys.exit(2)
@@ -153,6 +170,9 @@ def main():
           sys.exit()
       elif opt == "--fix-mac":
           fixMAC()
+          sys.exit()
+      elif opt == "--fix-guid":
+          fixGUID()
           sys.exit()
       else:
           assert False, "unhandled option"
