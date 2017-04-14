@@ -122,7 +122,7 @@ class Hwmons():
 								 "/org/openbmc/records/events",
 								 introspect=False)
 		event_intf = dbus.Interface(event_obj, "org.openbmc.recordlog")
-		event_intf.acceptBMCMessage('0', '0', sev, desc, str(sensortype), str(sensor_number), details, debug)
+		event_intf.acceptBMCMessage(sev, desc, str(sensortype), str(sensor_number), details, debug)
 
 		return True
 
