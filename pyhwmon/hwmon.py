@@ -32,6 +32,7 @@ IFACE_LOOKUP = {
 	'warning_lower' : SensorThresholds.IFACE_NAME,
 	'emergency_enabled' : SensorThresholds.IFACE_NAME,
 	'sensornumber': HwmonSensor.IFACE_NAME,
+	'sensor_name': HwmonSensor.IFACE_NAME,
 	'sensor_type': HwmonSensor.IFACE_NAME,
 	'reading_type': HwmonSensor.IFACE_NAME,
 	'min_reading': HwmonSensor.IFACE_NAME,
