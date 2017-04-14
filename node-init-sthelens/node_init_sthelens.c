@@ -24,5 +24,11 @@ main(int argc, char *argv[])
         printf("%s\n", buff_path);
         system(buff_path);
     }
+
+    /* fix-mac & fix-guid */
+    printf("fix-mac & fix-guid start");
+    system("/usr/sbin/mac_guid.py --fix-mac");
+    system("/usr/sbin/mac_guid.py --fix-guid");
+
     return 0;
 }
