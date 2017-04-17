@@ -7,7 +7,7 @@ HOME_PATH = './'
 CACHE_PATH = '/var/cache/obmc/'
 FLASH_DOWNLOAD_PATH = "/tmp"
 GPIO_BASE = 320
-SYSTEM_NAME = "StHelens"
+SYSTEM_NAME = "G50"
 
 def find_gpio_base(path="/sys/class/gpio/"):
     pattern = "gpiochip*"
