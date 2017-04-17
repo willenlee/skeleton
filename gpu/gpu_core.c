@@ -81,14 +81,14 @@ typedef struct {
 } gpu_device_mapping;
 
 gpu_device_mapping gpu_device_bus[MAX_GPU_NUM] = {
-	{16, 0x4e, EM_GPU_DEVICE_1},
-	{16, 0x4f, EM_GPU_DEVICE_3},
-	{17, 0x4e, EM_GPU_DEVICE_2},
-	{17, 0x4f, EM_GPU_DEVICE_4},
-	{18, 0x4e, EM_GPU_DEVICE_5},
-	{18, 0x4f, EM_GPU_DEVICE_7},
-	{19, 0x4e, EM_GPU_DEVICE_6},
-	{19, 0x4f, EM_GPU_DEVICE_8},
+	{17, 0x4e, EM_GPU_DEVICE_1},
+	{17, 0x4f, EM_GPU_DEVICE_3},
+	{18, 0x4e, EM_GPU_DEVICE_2},
+	{18, 0x4f, EM_GPU_DEVICE_4},
+	{19, 0x4e, EM_GPU_DEVICE_5},
+	{19, 0x4f, EM_GPU_DEVICE_7},
+	{20, 0x4e, EM_GPU_DEVICE_6},
+	{20, 0x4f, EM_GPU_DEVICE_8},
 };
 
 static int internal_gpu_access(int bus, __u8 slave,__u8 *write_buf, __u8 *read_buf)
@@ -112,11 +112,11 @@ static int internal_gpu_access(int bus, __u8 slave,__u8 *write_buf, __u8 *read_b
 		fprintf(stderr, "Failed to do iotcl I2C_SLAVE\n");
 		goto error_smbus_access;
 	}
-
+    PMBUS_DELAY;
 	if(i2c_smbus_write_block_data(fd, MBT_REG_CMD, 4, write_buf) < 0) {
 		goto error_smbus_access;
 	}
-
+    PMBUS_DELAY;
 	while(retry_gpu) {
 
 		if (i2c_smbus_read_block_data(fd, MBT_REG_CMD, cmd_reg) != 4) {
@@ -136,6 +136,7 @@ static int internal_gpu_access(int bus, __u8 slave,__u8 *write_buf, __u8 *read_b
 		PMBUS_DELAY;
 	}
 error_smbus_access:
+    PMBUS_DELAY;
 	close(fd);
 	return -1;
 }
@@ -171,7 +172,6 @@ static int function_get_gpu_info(int index)
 				G_gpu_data[gpu_device_bus[index].device_index].info_ready = 0;
 				return rc;
 			}
-
 		}
 		memroy_index = input_cmd_data[i][0];
 
