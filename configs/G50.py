@@ -397,6 +397,22 @@ SENSOR_MONITOR_CONFIG = [
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU6 Voltage Output', 'sensornumber' : '0x60', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus06/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon14/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU6 Power Output', 'sensornumber':'0x5F'}],
+	['/org/openbmc/control/cable_led/led0', { 'object_path' : '/sys/class/gpio/gpio234/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led1', { 'object_path' : '/sys/class/gpio/gpio235/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led2', { 'object_path' : '/sys/class/gpio/gpio242/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led3', { 'object_path' : '/sys/class/gpio/gpio243/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led4', { 'object_path' : '/sys/class/gpio/gpio250/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led5', { 'object_path' : '/sys/class/gpio/gpio251/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led6', { 'object_path' : '/sys/class/gpio/gpio258/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led7', { 'object_path' : '/sys/class/gpio/gpio259/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led8', { 'object_path' : '/sys/class/gpio/gpio266/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led9', { 'object_path' : '/sys/class/gpio/gpio267/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led10', { 'object_path' : '/sys/class/gpio/gpio274/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led11', { 'object_path' : '/sys/class/gpio/gpio275/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led12', { 'object_path' : '/sys/class/gpio/gpio282/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led13', { 'object_path' : '/sys/class/gpio/gpio283/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led14', { 'object_path' : '/sys/class/gpio/gpio290/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
+	['/org/openbmc/control/cable_led/led15', { 'object_path' : '/sys/class/gpio/gpio291/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
 ]
 
 HWMON_CONFIG = {
