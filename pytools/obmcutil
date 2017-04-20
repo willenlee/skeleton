@@ -29,7 +29,6 @@ def merge_interfaces(objs):
         for interface, properties in objs[op].items():
             merged.update(properties)
 
-        del objs[op]
         objs[op] = merged
 
 
@@ -172,7 +171,8 @@ method_name = ""
 property_name = ""
 
 sys.argv.pop(0)
-objinfo = dbus_objects[sys.argv.pop(0)]
+obj_name = sys.argv.pop(0)
+objinfo = dbus_objects[obj_name]
 
 if (objinfo.has_key('method')):
 	method_name = objinfo['method']
@@ -194,6 +194,16 @@ if (method_name != ""):
 		data = methd(*sys.argv)
 		fix_byte(data,None,None)	
 		pydata = json.loads(json.dumps(data))
+		if (obj_name == 'getsensors'):
+			remove_list = []
+			for sensor in pydata:
+				if pydata[sensor]['org.openbmc.HwmonSensor'].has_key('sensornumber') and \
+					pydata[sensor]['org.openbmc.HwmonSensor']['sensornumber'] != "":
+						continue
+				else:
+					remove_list.append(sensor)
+			for i in xrange(len(remove_list)):
+				del pydata[remove_list[i]]
 		if 'transform' in objinfo:
 			objinfo['transform'](pydata)
 		printDict("",pydata)
