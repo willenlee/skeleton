@@ -61,15 +61,44 @@ class Hwmons():
 		with open(filename, 'w') as f:
 			f.write(str(value)+'\n')
 
+	def readBmcHealthValue(self):
+		mac_result_path = "/tmp/fix_mac_result.txt"
+		guid_result_path = "/tmp/fix_guid_result.txt"
+		mac_result = "-1"
+		guid_result = "-1"
+		try:
+			with open(mac_result_path, 'r') as f:
+				for line in f:
+					mac_result = line.rstrip('\n')
+			with open(guid_result_path, 'r') as f:
+				for line in f:
+					guid_result = line.rstrip('\n')
+			if mac_result != "1" or guid_result != "1":
+				os.system("echo 1 > " + mac_result_path)
+				os.system("echo 1 > " + guid_result_path)
+				return 0xC
+		except (OSError, IOError):
+			return -1
+
+		return 0xFF
 
 	def poll(self,objpath,attribute):
 		try:
-			raw_value = int(self.readAttribute(attribute))
+			if attribute != '':
+				raw_value = int(self.readAttribute(attribute))
+			else:
+				if objpath == "/org/openbmc/sensors/bmc_health":
+					raw_value = self.readBmcHealthValue()
+					if raw_value == 0xC:
+						self.LogEventMessages(objpath, "Asserted", "0xC: No MAC address programmed or checksum error in EEPROM", "")
+				else:
+					raw_value = -1
 			obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
 			intf = dbus.Interface(obj,HwmonSensor.IFACE_NAME)
 			rtn = intf.setByPoll(raw_value)
 			if (rtn[0] == True):
-				self.writeAttribute(attribute,rtn[1])
+				if attribute != '':
+					self.writeAttribute(attribute,rtn[1])
 			intf_p = dbus.Interface(obj, dbus.PROPERTIES_IFACE)
 			threshold_state = intf_p.Get(SensorThresholds.IFACE_NAME, 'threshold_state')
 			if threshold_state != self.threshold_state[objpath]:
@@ -89,6 +118,31 @@ class Hwmons():
 			self.sensors.pop(objpath,None)
 			return False
 
+
+		return True
+
+	@dbus.service.method(HwmonSensor.IFACE_NAME,
+		in_signature='ssss', out_signature='i')
+	def LogEventMessages(self, objpath, event_dir,	desc = "", details = ""):
+
+		obj = bus.get_object(SENSOR_BUS, objpath, introspect=False)
+		intf = dbus.Interface(obj, dbus.PROPERTIES_IFACE)
+		sensortype = intf.Get(HwmonSensor.IFACE_NAME, 'sensor_type')
+		sensor_number = intf.Get(HwmonSensor.IFACE_NAME, 'sensornumber')
+		sensor_name = objpath.split('/').pop()
+
+		if event_dir == 'Asserted':
+			sev = "Critical"
+		else:
+			sev = "Information"
+
+		debug = dbus.ByteArray("")
+
+		event_obj = bus.get_object("org.openbmc.records.events",
+								 "/org/openbmc/records/events",
+								 introspect=False)
+		event_intf = dbus.Interface(event_obj, "org.openbmc.recordlog")
+		event_intf.acceptBMCMessage(sev, desc, str(sensortype), str(sensor_number), details, debug)
 
 		return True
 
@@ -167,7 +221,7 @@ class Hwmons():
 			objpath = System.SENSOR_MONITOR_CONFIG[i][0]
 			hwmon = System.SENSOR_MONITOR_CONFIG[i][1]
 
-			if 'object_path' not in hwmon or len(hwmon['object_path'])==0:
+			if 'object_path' not in hwmon:
 				print "Warnning[addSensorMonitorObject]: Not correct set [object_path]"
 				continue
 
