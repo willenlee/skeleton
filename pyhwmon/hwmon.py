@@ -81,7 +81,7 @@ class Hwmons():
 					event_dir = 'Asserted'
 
 				scale = intf_p.Get(HwmonSensor.IFACE_NAME, 'scale')
-				real_reading = raw_value * (10 ** scale)
+				real_reading = raw_value / scale
 				self.LogThresholdEventMessages(objpath, threshold_state, event_dir, real_reading)
 				self.threshold_state[objpath]  = threshold_state
 		except:
