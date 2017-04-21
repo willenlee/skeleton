@@ -48,5 +48,9 @@ main(int argc, char *argv[])
     system("/usr/sbin/mac_guid.py --fix-mac");
     system("/usr/sbin/mac_guid.py --fix-guid");
 
+    /* For firmware update feature: Create /var/home/ folder && link  between /run/initramfs and /var/home/wcs */
+    system("mkdir /var/home/");
+    system("ln -s /run/initramfs /var/home/wcs");
+
     return 0;
 }
