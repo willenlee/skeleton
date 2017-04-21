@@ -199,7 +199,7 @@ class Hwmons():
 			
 			## check if one of thresholds is defined to know
 			## whether to enable thresholds or not
-			if (hwmon.has_key('critical_upper')):
+			if (hwmon.has_key('critical_upper') or hwmon.has_key('critical_lower')):
 				intf.Set(SensorThresholds.IFACE_NAME,'thresholds_enabled',True)
 
 			for prop in hwmon.keys():
@@ -239,7 +239,7 @@ class Hwmons():
 
 				## check if one of thresholds is defined to know
 				## whether to enable thresholds or not
-				if (hwmon.has_key('critical_upper')):
+				if (hwmon.has_key('critical_upper') or hwmon.has_key('critical_lower')):
 					intf.Set(SensorThresholds.IFACE_NAME,'thresholds_enabled',True)
 
 				for prop in hwmon.keys():
@@ -247,6 +247,7 @@ class Hwmons():
 						intf.Set(IFACE_LOOKUP[prop],prop,hwmon[prop])
 
 				self.sensors[objpath]=True
+				self.threshold_state[objpath] = "NORMAL"
 				gobject.timeout_add(hwmon['poll_interval'],self.poll,objpath,hwmon_path)
 	
 	def scanDirectory(self):
