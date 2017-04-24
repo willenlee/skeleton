@@ -414,7 +414,7 @@ SENSOR_MONITOR_CONFIG = [
 	['/org/openbmc/control/cable_led/led14', { 'object_path' : '/sys/class/gpio/gpio290/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
 	['/org/openbmc/control/cable_led/led15', { 'object_path' : '/sys/class/gpio/gpio291/value','poll_interval' : 10000, 'scale' : 1,'units' : ''}],
 	['/org/openbmc/sensors/bmc_health', { 'object_path' : '' ,'poll_interval' : 10000, 'value' : -1,
-		'critical_lower':'', 'critical_upper':'', 'sensor_type':'0x28', 'reading_type':'0x70', 'sensor_name':'BMC Health', 'sensornumber':'0x82'}],
+		'sensor_type':'0x28', 'reading_type':'0x70', 'sensor_name':'BMC Health', 'sensornumber':'0x82'}],
 ]
 
 HWMON_CONFIG = {
