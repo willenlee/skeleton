@@ -9,6 +9,10 @@ import dbus.service
 import dbus.mainloop.glib
 import obmc.dbuslib.propertycacher as PropertyCacher
 from obmc.dbuslib.bindings import get_dbus, DbusProperties, DbusObjectManager
+from obmc.sensors import HwmonSensor as HwmonSensor
+from obmc.sensors import SensorThresholds as SensorThresholds
+from obmc.events import EventManager, Event
+import obmc_system_config as System
 
 import mac_guid
 
@@ -17,6 +21,50 @@ DBUS_INTERFACE = 'org.freedesktop.DBus.Properties'
 SENSOR_VALUE_INTERFACE = 'org.openbmc.SensorValue'
 
 g_bmchealth_obj_path = "/org/openbmc/sensors/bmc_health"
+
+_EVENT_MANAGER = EventManager()
+
+def LogEventBmcHealthMessages(event_dir, evd1, evd2, evd3):
+    bus = get_dbus()
+    objpath = g_bmchealth_obj_path
+    obj = bus.get_object(DBUS_NAME, objpath, introspect=False)
+    intf = dbus.Interface(obj, dbus.PROPERTIES_IFACE)
+    sensortype = intf.Get(HwmonSensor.IFACE_NAME, 'sensor_type')
+    sensor_number = intf.Get(HwmonSensor.IFACE_NAME, 'sensornumber')
+    sensor_name = objpath.split('/').pop()
+
+    if event_dir == 'Asserted':
+        sev = "Critical"
+    else:
+        sev = "Information"
+
+    desc = sensor_name + ":"
+    details = ""
+    logid = 0
+    if 'LOG_EVENT_CONFIG' in dir(System):
+        for log_item in System.LOG_EVENT_CONFIG:
+            if log_item['EVD1'].lower() == evd1.lower() and log_item['EVD2'].lower() == evd2.lower() \
+              and log_item['EVD3'].lower() == evd3.lower():
+                desc+="EVD1:" + log_item['EVD1'] + ","
+                desc+="EVD2:" + log_item['EVD2'] + ","
+                desc+="EVD3:" + log_item['EVD3'] + ":"
+                desc+=log_item['health_indicator']
+                if log_item['description'] != '':
+                    desc+="-" + log_item['description']
+                details = log_item['detail']
+                debug = dbus.ByteArray("")
+
+                #prepare to send log event:
+                #create & init new event class
+                log = Event(sev, desc, str(sensortype), str(sensor_number), details, debug)
+                #add new event log
+                logid=_EVENT_MANAGER.add_log(log)
+                break
+
+    if logid == 0:
+        return False
+    else:
+        return True
 
 def bmchealth_set_value(val):
     try:
@@ -120,6 +168,7 @@ def bmchealth_fix_and_check_mac():
     ret = 0
     if fix_mac_status == 0 or fix_guid_status == 0:
         ret = bmchealth_set_value(0xC)
+        LogEventBmcHealthMessages("Asserted", "0xC", "", "" )
     print "bmchealth: bmchealth_fix_and_check_mac : " + str(ret)
     return ret
 
