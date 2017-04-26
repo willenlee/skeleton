@@ -375,38 +375,38 @@ SENSOR_MONITOR_CONFIG = [
 	['/org/openbmc/sensors/fan/fan_tacho12', { 'object_path' : '/sys/devices/platform/ast_pwm_tacho.0/tacho12_rpm','poll_interval' : 10000,'scale' : 1,'units' : 'rpm','value' : 0,
 		'critical_lower': 3800, 'sensor_type':'0x04', 'reading_type':'0x01', 'sensor_name':'Fan Tach 12', 'sensornumber':'0x1C'}],
 	['/org/openbmc/sensors/pmbus/pmbus01/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon9/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU1 Temp 2', 'sensornumber':'0x52'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU1 Temp 2', 'sensornumber':'0x52'}],
 	['/org/openbmc/sensors/pmbus/pmbus01/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon9/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU1 Voltage Output', 'sensornumber' : '0x51', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus01/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon9/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU1 Power Output', 'sensornumber':'0x50'}],
 	['/org/openbmc/sensors/pmbus/pmbus02/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon10/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU2 Temp 2', 'sensornumber':'0x55'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU2 Temp 2', 'sensornumber':'0x55'}],
 	['/org/openbmc/sensors/pmbus/pmbus02/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon10/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU2 Voltage Output', 'sensornumber' : '0x54', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus02/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon10/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU2 Power Output', 'sensornumber':'0x53'}],
 
 	['/org/openbmc/sensors/pmbus/pmbus03/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon11/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU3 Temp 2', 'sensornumber':'0x58'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU3 Temp 2', 'sensornumber':'0x58'}],
 	['/org/openbmc/sensors/pmbus/pmbus03/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon11/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU3 Voltage Output', 'sensornumber' : '0x57', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus03/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon11/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU3 Power Output', 'sensornumber':'0x56'}],
 	['/org/openbmc/sensors/pmbus/pmbus04/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon12/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU4 Temp 2', 'sensornumber':'0x5B'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU4 Temp 2', 'sensornumber':'0x5B'}],
 	['/org/openbmc/sensors/pmbus/pmbus04/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon12/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU4 Voltage Output', 'sensornumber' : '0x5A', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus04/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon12/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU4 Power Output', 'sensornumber':'0x59'}],
 	['/org/openbmc/sensors/pmbus/pmbus05/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon13/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU5 Temp 2', 'sensornumber':'0x5E'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU5 Temp 2', 'sensornumber':'0x5E'}],
 	['/org/openbmc/sensors/pmbus/pmbus05/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon13/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU5 Voltage Output', 'sensornumber' : '0x5D', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus05/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon13/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
 		'critical_upper':1760, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU5 Power Output', 'sensornumber':'0x5C'}],
 	['/org/openbmc/sensors/pmbus/pmbus06/temp_02', { 'object_path' : '/sys/class/hwmon/hwmon14/temp2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'C','value' : 0,
-		'critical_lower':30, 'critical_upper':56, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU6 Temp 2', 'sensornumber':'0x61'}],
+		'critical_upper':95, 'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU6 Temp 2', 'sensornumber':'0x61'}],
 	['/org/openbmc/sensors/pmbus/pmbus06/Voltage_vout', { 'object_path' : '/sys/class/hwmon/hwmon14/in2_input','poll_interval' : 10000,'scale' : 1000,'units' : 'V','value' : 0,
 		'sensor_type':'0x09', 'reading_type':'0x01', 'sensor_name':'PSU6 Voltage Output', 'sensornumber' : '0x60', 'critical_upper' : 14.25, 'critical_lower' : 10.5, 'min_reading' : '0', 'max_reading' : '20'}],
 	['/org/openbmc/sensors/pmbus/pmbus06/Power_pout', { 'object_path' : '/sys/class/hwmon/hwmon14/power2_input','poll_interval' : 10000,'scale' : 1000000,'units' : 'W','value' : 0,
@@ -435,81 +435,81 @@ HWMON_CONFIG = {
 	'0-0010' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC1_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x23',
-				'sensor_name':'HSC1 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC1 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC1_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x24',
-				'sensor_name':'HSC1 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC1 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0011' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC2_STBY_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x25',
-				'sensor_name':'HSC2 STBY VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC2 STBY VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC2_STBY_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x26',
-				'sensor_name':'HSC2 STBY Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC2 STBY Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0040' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC3_GPU1_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x27',
-				'sensor_name':'HSC3 GPU1 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC3 GPU1 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC3_GPU1_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x28',
-				'sensor_name':'HSC3 GPU1 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC3 GPU1 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0041' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC4_GPU2_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x29',
-				'sensor_name':'HSC4 GPU2 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC4 GPU2 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC4_GPU2_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x2A',
-				'sensor_name':'HSC4 GPU2 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC4 GPU2 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0042' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC5_GPU3_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x2B',
-				'sensor_name':'HSC5 GPU3 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC5 GPU3 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC5_GPU3_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x2C',
-				'sensor_name':'HSC5 GPU3 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC5 GPU3 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0043' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC6_GPU4_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x2D',
-				'sensor_name':'HSC6 GPU4 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC6 GPU4 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC6_GPU4_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x2E',
-				'sensor_name':'HSC6 GPU4 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC6 GPU4 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0044' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC7_GPU5_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x2F',
-				'sensor_name':'HSC7 GPU5 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC7 GPU5 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC7_GPU5_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x30',
-				'sensor_name':'HSC7 GPU5 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC7 GPU5 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0045' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC8_GPU6_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x31',
-				'sensor_name':'HSC8 GPU6 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC8 GPU6 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC8_GPU6_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x32',
-				'sensor_name':'HSC8 GPU6 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC8 GPU6 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0046' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC9_GPU7_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x33',
-				'sensor_name':'HSC9 GPU7 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC9 GPU7 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC9_GPU7_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x34',
-				'sensor_name':'HSC9 GPU7 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC9 GPU7 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'0-0047' :  {
 		'names' : {
 			'in3_input' : { 'object_path' : 'HSC/HSC10_GPU8_VOUT','poll_interval' : 5000,'scale' : 1000,'units' : 'V', 'sensor_type' : '0x02', 'sensornumber' : '0x35',
-				'sensor_name':'HSC10 GPU8 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_lower':10.6, 'critical_upper':13.8, 'sensor_name':'HSC10 GPU8 VOUT', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 			'temp1_input' : { 'object_path' : 'HSC/HSC10_GPU8_TMP','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x36',
-				'sensor_name':'HSC10 GPU8 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
+				'critical_upper':125, 'sensor_name':'HSC10 GPU8 Temp', 'reading_type' : '0x01', 'emergency_enabled' : False , 'min_reading':'0', 'max_reading':'20' },
 		}
 	},
 	'21-0048' :  {
