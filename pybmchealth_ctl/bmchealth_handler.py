@@ -10,6 +10,25 @@ import dbus.mainloop.glib
 import obmc.dbuslib.propertycacher as PropertyCacher
 from obmc.dbuslib.bindings import get_dbus, DbusProperties, DbusObjectManager
 
+import mac_guid
+
+DBUS_NAME = 'org.openbmc.Sensors'
+DBUS_INTERFACE = 'org.freedesktop.DBus.Properties'
+SENSOR_VALUE_INTERFACE = 'org.openbmc.SensorValue'
+
+g_bmchealth_obj_path = "/org/openbmc/sensors/bmc_health"
+
+def bmchealth_set_value(val):
+    try:
+        b_bus = get_dbus()
+        b_obj= b_bus.get_object(DBUS_NAME, g_bmchealth_obj_path)
+        b_interface = dbus.Interface(b_obj,  DBUS_INTERFACE)
+        b_interface.Set(SENSOR_VALUE_INTERFACE, 'value', val)
+    except:
+        print "bmchealth_set_value Error!!!"
+        return -1
+    return 0
+
 def bmchealth_check_network():
     carrier_file_path = "/sys/class/net/eth0/carrier"
     operstate_file_path = "/sys/class/net/eth0/operstate"
@@ -31,7 +50,6 @@ def bmchealth_check_network():
                 g_dhcp_status = int(line.rstrip('\n'))
     except:
         pass
-
     try:
         with open(record_down_file_path, 'r') as f:
             for line in f:
@@ -41,7 +59,6 @@ def bmchealth_check_network():
 
     org_dhcp_status = g_dhcp_status
     org_down_status = g_net_down_status
-
     try:
         cmd_data = subprocess.check_output(check_ipaddr_command, shell=True)
         if cmd_data.find(check_ipaddr_keywords) >=0:
@@ -87,16 +104,30 @@ def bmchealth_check_network():
     if org_dhcp_status != g_dhcp_status:
         with open(record_dhcp_file_path, 'w') as f:
             f.write(str(g_dhcp_status))
-
     if org_down_status != g_net_down_status:
         with open(record_down_file_path, 'w') as f:
             f.write(str(g_net_down_status))
-
-
     return True
+
+def bmchealth_fix_and_check_mac():
+    print "fix-mac & fix-guid start"
+    fix_mac_status = mac_guid.fixMAC()
+    fix_guid_status = mac_guid.fixGUID()
+
+    print "bmchealth: check mac status:" + str(fix_mac_status)
+    print "bmchealth: check guid status:" + str(fix_guid_status)
+    #check bmchealth macaddress
+    ret = 0
+    if fix_mac_status == 0 or fix_guid_status == 0:
+        ret = bmchealth_set_value(0xC)
+    print "bmchealth: bmchealth_fix_and_check_mac : " + str(ret)
+    return ret
 
 if __name__ == '__main__':
     mainloop = gobject.MainLoop()
+    #set bmchealth default value
+    bmchealth_set_value(0)
+    bmchealth_fix_and_check_mac()
     gobject.timeout_add(1000,bmchealth_check_network)
     print "bmchealth_handler control starting"
     mainloop.run()
