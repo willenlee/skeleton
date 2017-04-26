@@ -258,6 +258,12 @@ APPS = {
                 'monitor_process' : True,
                 'process_name'    : 'pcie-device-temperature.exe',
         },
+	'bmchealth_service' : {
+                'system_state'    : 'BMC_READY',
+                'start_process'   : True,
+                'monitor_process' : True,
+                'process_name'    : 'bmchealth_handler.py',
+	},
 }
 
 CACHED_INTERFACES = {
