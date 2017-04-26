@@ -48,7 +48,7 @@ class Hwmons():
 		gobject.timeout_add(DIR_POLL_INTERVAL, self.scanDirectory)
 
 	def readAttribute(self,filename):
-		val = "-1"
+		val = "N/A"
 		try:
 			with open(filename, 'r') as f:
 				for line in f:
@@ -78,21 +78,27 @@ class Hwmons():
 				os.system("echo 1 > " + guid_result_path)
 				return 0xC
 		except (OSError, IOError):
-			return -1
+			return "N/A"
 
 		return 0xFF
 
 	def poll(self,objpath,attribute):
 		try:
 			if attribute != '':
-				raw_value = int(self.readAttribute(attribute))
+				try:
+					raw_value = int(self.readAttribute(attribute))
+				except:
+					raw_value = "N/A"
 			else:
 				if objpath == "/org/openbmc/sensors/bmc_health":
 					raw_value = self.readBmcHealthValue()
 					if raw_value == 0xC:
 						self.LogEventMessages(objpath, "Asserted", "0xC: No MAC address programmed or checksum error in EEPROM", "")
 				else:
-					raw_value = -1
+					raw_value = "N/A"
+			print str(objpath) +' ' +  str(raw_value) +'\n'
+			if raw_value == "N/A":
+				return False
 			obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
 			intf = dbus.Interface(obj,HwmonSensor.IFACE_NAME)
 			rtn = intf.setByPoll(raw_value)
@@ -103,16 +109,16 @@ class Hwmons():
 			threshold_state = intf_p.Get(SensorThresholds.IFACE_NAME, 'threshold_state')
 			if threshold_state != self.threshold_state[objpath]:
 				if threshold_state == 'NORMAL':
-					threshold_type = self.threshold_state[objpath]
+					origin_threshold_type = self.threshold_state[objpath]
 					event_dir = 'Deasserted'
 				else:
-					threshold_type = threshold_state
+					origin_threshold_type = threshold_state
 					event_dir = 'Asserted'
 
+				self.threshold_state[objpath]  = threshold_state
 				scale = intf_p.Get(HwmonSensor.IFACE_NAME, 'scale')
 				real_reading = raw_value / scale
-				self.LogThresholdEventMessages(objpath, threshold_state, event_dir, real_reading)
-				self.threshold_state[objpath]  = threshold_state
+				self.LogThresholdEventMessages(objpath, threshold_state, origin_threshold_type, event_dir, real_reading)
 		except:
 			print "HWMON: Attibute no longer exists: "+attribute
 			self.sensors.pop(objpath,None)
@@ -146,7 +152,7 @@ class Hwmons():
 
 		return True
 
-	def LogThresholdEventMessages(self, objpath, threshold_type, event_dir, reading):
+	def LogThresholdEventMessages(self, objpath, threshold_type, origin_threshold_type, event_dir, reading):
 
 		obj = bus.get_object(SENSOR_BUS, objpath, introspect=False)
 		intf = dbus.Interface(obj, dbus.PROPERTIES_IFACE)
@@ -158,10 +164,18 @@ class Hwmons():
 		#Get event messages
 		if threshold_type == 'UPPER_CRITICAL':
 			threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_upper')
-			desc = sensor_name+' '+threshold_type_str+' going high-'+event_dir+" | Reading "+str(reading)+", Threshold "+str(threshold)
-		else:
+			desc = sensor_name+' '+threshold_type_str+' going high-'+event_dir+": Reading "+str(reading)+", Threshold "+str(threshold)
+		elif threshold_type == 'LOWER_CRITICAL':
 			threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_lower')
-			desc = sensor_name+' '+threshold_type_str+' going low-'+event_dir+":Reading "+str(reading)+", Threshold "+str(threshold)
+			desc = sensor_name+' '+threshold_type_str+' going low-'+event_dir+": Reading "+str(reading)+", Threshold "+str(threshold)
+		else:
+			threshold = 'N/A'
+			if origin_threshold_type == 'UPPER_CRITICAL':
+				threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_upper')
+			if origin_threshold_type == 'LOWER_CRITICAL':
+				threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_lower')
+			print str(threshold) + ' back to normal\n'
+			desc = sensor_name+' '+threshold_type_str+' '+event_dir+" from "+str(origin_threshold_type)+": Reading "+str(reading)+", Threshold "+str(threshold)
 
 		#Get Severity
 		if event_dir == 'Asserted':
@@ -196,6 +210,8 @@ class Hwmons():
 			obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
 			intf = dbus.Interface(obj,dbus.PROPERTIES_IFACE)
 			intf.Set(HwmonSensor.IFACE_NAME,'filename',hwmon_path)
+			# init value as N/A
+			intf.Set(SensorValue.IFACE_NAME,'value','N/A')
 			
 			## check if one of thresholds is defined to know
 			## whether to enable thresholds or not
@@ -236,6 +252,8 @@ class Hwmons():
 				obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
 				intf = dbus.Interface(obj,dbus.PROPERTIES_IFACE)
 				intf.Set(HwmonSensor.IFACE_NAME,'filename',hwmon_path)
+				# init value as N/A
+				intf.Set(SensorValue.IFACE_NAME,'value','N/A')
 
 				## check if one of thresholds is defined to know
 				## whether to enable thresholds or not
