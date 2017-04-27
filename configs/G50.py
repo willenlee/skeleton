@@ -703,3 +703,10 @@ FAN_ALGORITHM_CONFIG = {
     'FAN_LED_I2C_SLAVE_ADDRESS': [],
 }
 
+
+
+LOG_EVENT_CONFIG = [
+	{'EVD1': '0x1', 'EVD2':'0x1', 'EVD3':'', 'health_indicator':'Network Error', 'description':'Link down', 'detail': ''},
+	{'EVD1': '0x1', 'EVD2':'0x2', 'EVD3':'', 'health_indicator':'Network Error', 'description':'DHCP failure', 'detail': ''},
+	{'EVD1': '0xC', 'EVD2':'', 'EVD3':'', 'health_indicator':'No MAC address programmed', 'description':'', 'detail': ''},
+]
