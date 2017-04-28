@@ -138,6 +138,8 @@ def bmchealth_check_network():
         if g_dhcp_status == 1:
             print "bmchealth_check_network:  DHCP Fail"
             g_dhcp_status = 0
+            bmchealth_set_value(0x1)
+            LogEventBmcHealthMessages("Asserted", "0x1", "0x2", "" )
     else:
         g_dhcp_status = 1
 
@@ -146,6 +148,8 @@ def bmchealth_check_network():
         if g_net_down_status == 1:
             print "bmchealth_check_network:  network down Fail"
             g_net_down_status = 0
+            bmchealth_set_value(0x1)
+            LogEventBmcHealthMessages("Asserted", "0x1", "0x1", "" )
     else:
         g_net_down_status = 1
 
