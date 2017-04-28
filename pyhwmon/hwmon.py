@@ -70,7 +70,6 @@ class Hwmons():
 					raw_value = "N/A"
 			else:
 				raw_value = "N/A"
-			print str(objpath) +' ' +  str(raw_value) +'\n'
 			if raw_value == "N/A":
 				return False
 			obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
@@ -81,11 +80,11 @@ class Hwmons():
 			intf_p = dbus.Interface(obj, dbus.PROPERTIES_IFACE)
 			threshold_state = intf_p.Get(SensorThresholds.IFACE_NAME, 'threshold_state')
 			if threshold_state != self.threshold_state[objpath]:
+				origin_threshold_type = self.threshold_state[objpath]
+				self.threshold_state[objpath]  = threshold_state
 				if threshold_state == 'NORMAL':
-					origin_threshold_type = self.threshold_state[objpath]
 					event_dir = 'Deasserted'
 				else:
-					origin_threshold_type = threshold_state
 					event_dir = 'Asserted'
 
 				self.threshold_state[objpath]  = threshold_state
@@ -110,18 +109,17 @@ class Hwmons():
 		#Get event messages
 		if threshold_type == 'UPPER_CRITICAL':
 			threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_upper')
-			desc = sensor_name+' '+threshold_type_str+' going high-'+event_dir+": Reading "+str(reading)+", Threshold "+str(threshold)
+			desc = sensor_name+' '+threshold_type_str+' going high-'+event_dir+": Reading "+str(reading)+", Threshold: "+str(threshold)
 		elif threshold_type == 'LOWER_CRITICAL':
 			threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_lower')
-			desc = sensor_name+' '+threshold_type_str+' going low-'+event_dir+": Reading "+str(reading)+", Threshold "+str(threshold)
+			desc = sensor_name+' '+threshold_type_str+' going low-'+event_dir+": Reading "+str(reading)+", Threshold: "+str(threshold)
 		else:
 			threshold = 'N/A'
 			if origin_threshold_type == 'UPPER_CRITICAL':
 				threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_upper')
 			if origin_threshold_type == 'LOWER_CRITICAL':
 				threshold = intf.Get(SensorThresholds.IFACE_NAME, 'critical_lower')
-			print str(threshold) + ' back to normal\n'
-			desc = sensor_name+' '+threshold_type_str+' '+event_dir+" from "+str(origin_threshold_type)+": Reading "+str(reading)+", Threshold "+str(threshold)
+			desc = sensor_name+' '+threshold_type_str+' '+event_dir+" from "+str(origin_threshold_type)+": Reading "+str(reading)+", Threshold: "+str(threshold)
 
 		#Get Severity
 		if event_dir == 'Asserted':
