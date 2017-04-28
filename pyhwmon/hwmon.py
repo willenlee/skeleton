@@ -197,7 +197,10 @@ class Hwmons():
 				intf = dbus.Interface(obj,dbus.PROPERTIES_IFACE)
 				intf.Set(HwmonSensor.IFACE_NAME,'filename',hwmon_path)
 				# init value as N/A
-				intf.Set(SensorValue.IFACE_NAME,'value','N/A')
+				val = 'N/A'
+				if hwmon.has_key('value'):
+					val = hwmon['value']
+				intf.Set(SensorValue.IFACE_NAME,'value', val)
 
 				## check if one of thresholds is defined to know
 				## whether to enable thresholds or not
