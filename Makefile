@@ -1,7 +1,6 @@
 GDBUS_APPS = bmcctl \
 	     op-flasher \
 	     op-pwrctl \
-	     pciedetect \
 	     pwrbutton \
 	     idbutton \
 	     cable-led \
