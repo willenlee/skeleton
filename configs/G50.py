@@ -95,12 +95,6 @@ APPS = {
 		'process_name'    : 'sensor_manager2.py',
 		'args'            : [ SYSTEM_NAME ]
 	},
-	'host_watchdog' : {
-		'system_state'    : 'BMC_STARTING',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'host_watchdog.exe',
-	},
 	'power_control' : {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,
@@ -114,29 +108,11 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'button_power.exe',
 	},
-        'reset_button' : {
-                'system_state'    : 'BMC_STARTING',
-                'start_process'   : True,
-                'monitor_process' : True,
-                'process_name'    : 'button_reset.exe',
-        },
-	'host_checkstop' : {
-		'system_state'    : 'BMC_STARTING',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'host_checkstop.exe',
-	},
 	'led_control' : {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,
 		'monitor_process' : True,
 		'process_name'    : 'led_controller.exe',
-	},
-	'flash_control' : {
-		'system_state'    : 'BMC_STARTING',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'flash_bios.exe',
 	},
 	'bmc_flash_control' : {
 		'system_state'    : 'BMC_STARTING',
@@ -150,12 +126,6 @@ APPS = {
 		'monitor_process' : True,
 		'process_name'    : 'download_manager.py',
 		'args'            : [ SYSTEM_NAME ]
-	},
-	'host_control' : {
-		'system_state'    : 'BMC_STARTING',
-		'start_process'   : True,
-		'monitor_process' : True,
-		'process_name'    : 'control_host.exe',
 	},
 	'chassis_control' : {
 		'system_state'    : 'BMC_STARTING2',

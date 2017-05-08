@@ -1,13 +1,8 @@
 GDBUS_APPS = bmcctl \
-	     flashbios \
-	     hostcheckstop \
-	     hostwatchdog \
 	     op-flasher \
-	     op-hostctl \
 	     op-pwrctl \
 	     pciedetect \
 	     pwrbutton \
-	     rstbutton \
 	     idbutton \
 	     cable-led \
 	     op-pwrctl-sthelens
