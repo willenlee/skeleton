@@ -222,6 +222,13 @@ APPS = {
 		'monitor_process' : False,
 		'process_name'    : 'node_init_sthelens.exe',
 	},
+    #MSFT ask to hide in M1 release
+    #'pcie-device-temperature' : {
+    #        'system_state'    : 'BMC_READY',
+    #        'start_process'   : True,
+    #        'monitor_process' : True,
+    #        'process_name'    : 'pcie-device-temperature.exe',
+    #},
 	'bmchealth_service' : {
                 'system_state'    : 'BMC_READY',
                 'start_process'   : True,
