@@ -95,6 +95,12 @@ APPS = {
 		'process_name'    : 'sensor_manager2.py',
 		'args'            : [ SYSTEM_NAME ]
 	},
+	'host_watchdog' : {
+		'system_state'    : 'BMC_STARTING',
+		'start_process'   : True,
+		'monitor_process' : True,
+		'process_name'    : 'host_watchdog.exe',
+	},
 	'power_control' : {
 		'system_state'    : 'BMC_STARTING',
 		'start_process'   : True,
