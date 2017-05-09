@@ -1,5 +1,4 @@
 GDBUS_APPS = bmcctl \
-	     hostwatchdog \
 	     op-flasher \
 	     op-pwrctl \
 	     pwrbutton \
