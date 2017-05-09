@@ -28,7 +28,6 @@ SUBDIRS = hacks \
 	  info \
 	  gpu \
 	  node-init-sthelens \
-	  pcie-device-temperature \
 	  pybmchealth_ctl  \
 	  pex9797_ctl
 
