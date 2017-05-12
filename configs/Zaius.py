@@ -309,7 +309,7 @@ ID_LOOKUP = {
         0x11 : '<inventory_root>/system/chassis/motherboard/refclock',
         0x12 : '<inventory_root>/system/chassis/motherboard/pcieclock',
         0x13 : '<inventory_root>/system/chassis/motherboard/todclock',
-        0x02 : '/org/openbmc/sensors/host/OperatingSystemStatus',
+        0x05 : '/org/openbmc/sensors/host/OperatingSystemStatus',
         0x04 : '<inventory_root>/system/chassis/motherboard/pcielink',
     },
     'GPIO_PRESENT' : {}
@@ -538,7 +538,7 @@ GPIO_CONFIGS = {
 MISC_SENSORS = {
     0x07 : { 'class' : 'BootCountSensor' },
     0x03 : { 'class' : 'BootProgressSensor' },
-    0x02 : { 'class' : 'OperatingSystemStatusSensor' },
+    0x05 : { 'class' : 'OperatingSystemStatusSensor' },
 }
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
