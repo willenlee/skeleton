@@ -412,19 +412,19 @@ SENSOR_MONITOR_FUNC_PTR_TAB = {
     },
     '/sys/devices/platform/ast_adc.0/adc4_value' : {
         'enable_func_ptr': enable_sensor_adc,
-        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0017 , 1],
+        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0035 , 1],
     },
     '/sys/devices/platform/ast_adc.0/adc5_value' : {
         'enable_func_ptr': enable_sensor_adc,
-        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0017 , 1],
+        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0035 , 1],
     },
     '/sys/devices/platform/ast_adc.0/adc6_value' : {
         'enable_func_ptr': enable_sensor_adc,
-        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0017 , 1],
+        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0035 , 1],
     },
     '/sys/devices/platform/ast_adc.0/adc7_value' : {
         'enable_func_ptr': enable_sensor_adc,
-        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0017 , 1],
+        'accurate_value_func_ptr':accurate_value_sensor_adc, 'accurate_value_func_ptr_params':[0.0035 , 1],
     },
     '/sys/devices/platform/ast_adc.0/adc8_value' : {
         'enable_func_ptr': enable_sensor_adc,
