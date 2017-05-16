@@ -587,4 +587,58 @@ MISC_SENSORS = {
 #   FAN_LED_I2C_BUS: set fan led i2c bus
 #   FAN_LED_I2C_SLAVE_ADDRESS: set fan led i2c slave address
 FAN_ALGORITHM_CONFIG = {
+    'FAN_DBUS_INTF_LOOKUP':
+    {
+        'CHASSIS_POWER_STATE': ['org.openbmc.control.Chassis', 'org.openbmc.control.Chassis'],
+        'FAN_INPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'FAN_OUTPUT_OBJ' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'OPEN_LOOP_GROUPS_1' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_1' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_2' : ['org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+    },
+
+    'CHASSIS_POWER_STATE': ['/org/openbmc/control/chassis0'],
+    'FAN_INPUT_OBJ':
+        [
+            "/org/openbmc/sensors/tach/fan0L", "pwm1",
+            "/org/openbmc/sensors/tach/fan0H", "pwm2",
+            "/org/openbmc/sensors/tach/fan1L", "pwm3",
+            "/org/openbmc/sensors/tach/fan1H", "pwm4",
+            "/org/openbmc/sensors/tach/fan2L", "pwm5",
+            "/org/openbmc/sensors/tach/fan2H", "pwm6",
+            "/org/openbmc/sensors/tach/fan3L", "pwm1",
+            "/org/openbmc/sensors/tach/fan3H", "pwm2",
+            "/org/openbmc/sensors/tach/fan4L", "pwm3",
+            "/org/openbmc/sensors/tach/fan4H", "pwm4",
+            "/org/openbmc/sensors/tach/fan5L", "pwm5",
+            "/org/openbmc/sensors/tach/fan5H", "pwm6",
+        ],
+    'FAN_OUTPUT_OBJ':
+        [
+            "/org/openbmc/sensors/speed/fan0",
+            "/org/openbmc/sensors/speed/fan1",
+            "/org/openbmc/sensors/speed/fan2",
+            "/org/openbmc/sensors/speed/fan3",
+            "/org/openbmc/sensors/speed/fan4",
+            "/org/openbmc/sensors/speed/fan5",
+        ],
+    'OPEN_LOOP_PARAM':[],
+    'OPEN_LOOP_GROUPS_1':[],
+    'CLOSE_LOOP_PARAM_1' :[],
+    'CLOSE_LOOP_GROUPS_1':[],
+
+    'FAN_LED_OFF': ["0xFF"],
+    'FAN_LED_PORT0_ALL_BLUE': ["0xAA"],
+    'FAN_LED_PORT1_ALL_BLUE': ["0x55"],
+    'FAN_LED_PORT0_ALL_RED': ["0x55"],
+    'FAN_LED_PORT1_ALL_RED': ["0xAA"],
+    'PORT0_FAN_LED_RED_MASK': ["0x02"],
+    'PORT0_FAN_LED_BLUE_MASK': ["0x01"],
+    'PORT1_FAN_LED_RED_MASK': ["0x40"],
+    'PORT1_FAN_LED_BLUE_MASK': ["0x80"],
+    
+    'FAN_LED_SPEED_LIMIT': ["30"],
+
+    'FAN_LED_I2C_BUS': ["/dev/i2c-9"],
+    'FAN_LED_I2C_SLAVE_ADDRESS': [0x20],
 }
