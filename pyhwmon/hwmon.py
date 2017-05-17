@@ -224,12 +224,23 @@ class Hwmons():
 
         return True
 
+def monitor_bmc_status_led():
+    try:
+        cmd_data = subprocess.check_output("obmcutil state", shell=True)
+        if cmd_data.find("BMCState.Ready") >=0:
+            os.system("devmem 0x1e780000 32  0xf8ffc6ba")
+            return False
+    except:
+        pass
+    return True
 
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     bus = get_dbus()
     root_sensor = Hwmons(bus)
     mainloop = gobject.MainLoop()
+
+    gobject.timeout_add(1000,monitor_bmc_status_led)
 
     print "Starting HWMON sensors"
     mainloop.run()
