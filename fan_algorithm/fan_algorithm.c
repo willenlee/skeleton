@@ -163,41 +163,83 @@ static int freeall_fan_obj(struct st_fan_obj_path_info **header)
 	}
 }
 
-static int set_fanled(uint8_t port0, uint8_t port1, int use_pec)
+static int i2c_open(int bus)
+{
+	int rc = 0, fd = -1;
+	char fn[32];
+
+	snprintf(fn, sizeof(fn), "/dev/i2c-%d", bus);
+	fd = open(fn, O_RDWR);
+	if (fd == -1) {
+		printf("--> Set Fan: Failed to open i2c device %s", fn);
+		return -1;
+	}
+	return fd;
+}
+
+
+#define PCA9535_ADDR 0x20
+static int set_fanled( uint8_t port0, uint8_t port1)
 {
 	struct i2c_rdwr_ioctl_data data;
 	struct i2c_msg msg[1];
+	int rc = 0, use_pec = 0;
 	uint8_t write_bytes[3];
-	int fd = -1;
+	int fd;
+	static int flag_fanled_enable = 0;
 
-	if (strlen(g_FanLed_I2CBus)<=0)
-		return -1;
-
-	fd = open(g_FanLed_I2CBus, O_RDWR);
-	if (fd != -1) {
-		LOG_ERR(errno, "Failed to open i2c device %s", g_FanLed_I2CBus);
-		close(fd);
+	fd = i2c_open(9);
+	if (fd == -1)
+	{
+		printf("%s, %d  fd Error: %d\n", __FUNCTION__, __LINE__, fd);
 		return -1;
 	}
+
+//	fprintf(stderr,"SetFanLed: port0 = %02X,port1 = %02X\n",port0,port1);
 
 	memset(&msg, 0, sizeof(msg));
 
 	write_bytes[0] = CMD_OUTPUT_PORT_0;
 	write_bytes[1] = port0;
 	write_bytes[2] = port1;
-
-	msg[0].addr = g_FanLed_SlaveAddr;
+  
+	msg[0].addr = PCA9535_ADDR;
 	msg[0].flags = (use_pec) ? I2C_CLIENT_PEC : 0;
 	msg[0].len = sizeof(write_bytes);
 	msg[0].buf = write_bytes;
 
 	data.msgs = msg;
 	data.nmsgs = 1;
-	if (ioctl(fd, I2C_RDWR, &data) < 0) {
-		LOG_ERR(errno, "Failed to do raw io");
+	rc = ioctl(fd, I2C_RDWR, &data);
+	if (rc < 0) {
+		printf("SetFanLed: Failed to do raw io");
 		close(fd);
 		return -1;
 	}
+
+	if (flag_fanled_enable == 0) {
+		memset(&msg, 0, sizeof(msg));
+		write_bytes[0] = 6;
+		write_bytes[1] = 0;
+	  
+		msg[0].addr = PCA9535_ADDR;
+		msg[0].flags = (use_pec) ? I2C_CLIENT_PEC : 0;
+		msg[0].len = 2;
+		msg[0].buf = write_bytes;
+
+		data.msgs = msg;
+		data.nmsgs = 1;
+		rc = ioctl(fd, I2C_RDWR, &data);
+		if (rc < 0) {
+			printf("SetFanLed: Failed to do raw io: flag_fanled_enable");
+			close(fd);
+			return -1;
+		}
+		
+		flag_fanled_enable = 1;
+	}
+
+	close(fd);
 
 	return 0;
 }
@@ -516,7 +558,7 @@ static int fan_control_algorithm_monitor(void)
 
 		if (Power_state == 1 ) {
 
-			current_fanspeed = get_max_sensor_reading_Fan(bus, &g_FanSpeedObjPath);
+			current_fanspeed = get_max_sensor_reading(bus, &g_FanSpeedObjPath);
 			g_fan_para_shm->current_speed = current_fanspeed;
 			printf("[FAN_ALGORITHM][Current FanSpeed value] :%d\n", current_fanspeed);
 			if (current_fanspeed <0)
@@ -617,7 +659,7 @@ static int fan_control_algorithm_monitor(void)
 			fan_led_port1 = FAN_LED_OFF;
 		}
 
-		set_fanled(fan_led_port0,fan_led_port1, 0);
+		set_fanled(fan_led_port0,fan_led_port1);
 
 		if (g_fan_para_shm != NULL) {
 			if (FinalFanSpeed < g_fan_para_shm->min_fanspeed)
@@ -632,7 +674,7 @@ static int fan_control_algorithm_monitor(void)
 						g_FanSpeedObjPath.service_bus,
 						g_FanSpeedObjPath.path[i],			// Object path
 						g_FanSpeedObjPath.service_inf,
-						"setValue_Fan",
+						"setValue",
 						&bus_error,
 						&response,
 						"i",
