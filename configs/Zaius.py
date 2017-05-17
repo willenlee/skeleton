@@ -251,7 +251,7 @@ ID_LOOKUP = {
         0xf5 : '<inventory_root>/system/chassis/motherboard/dimm26',
         0xf3 : '<inventory_root>/system/chassis/motherboard/dimm25',
         0xf1 : '<inventory_root>/system/chassis/motherboard/dimm24',
-        0xff : '<inventory_root>/system/chassis/motherboard/dimm31',
+        0xbf : '<inventory_root>/system/chassis/motherboard/dimm31',
         0xfd : '<inventory_root>/system/chassis/motherboard/dimm30',
         0xfb : '<inventory_root>/system/chassis/motherboard/dimm29',
         0xf9 : '<inventory_root>/system/chassis/motherboard/dimm28',
