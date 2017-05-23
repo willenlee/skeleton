@@ -23,6 +23,8 @@ SENSOR_VALUE_INTERFACE = 'org.openbmc.SensorValue'
 
 g_bmchealth_obj_path = "/org/openbmc/sensors/bmc_health"
 g_recovery_count = [0,0,0,0,0,0,0,0]
+g_dhcp_status = 1
+g_net_down_status = 1
 
 _EVENT_MANAGER = EventManager()
 
@@ -97,28 +99,13 @@ def bmchealth_check_network():
     operstate_file_path = "/sys/class/net/eth0/operstate"
     check_ipaddr_command ="ifconfig eth0"
     check_ipaddr_keywords = "inet addr"
-    record_dhcp_file_path = "/tmp/bmchealth_record_dhcp_status.txt"
-    record_down_file_path = "/tmp/bmchealth_record_down_status.txt"
 
     carrier = ""    #0 or 1
     operstate = ""  #up or down
     ipaddr = ""
 
-    g_dhcp_status = 1
-    g_net_down_status = 1
-
-    try:
-        with open(record_dhcp_file_path, 'r') as f:
-            for line in f:
-                g_dhcp_status = int(line.rstrip('\n'))
-    except:
-        pass
-    try:
-        with open(record_down_file_path, 'r') as f:
-            for line in f:
-                g_net_down_status = int(line.rstrip('\n'))
-    except:
-        pass
+    global g_dhcp_status
+    global g_net_down_status
 
     org_dhcp_status = g_dhcp_status
     org_down_status = g_net_down_status
@@ -168,12 +155,9 @@ def bmchealth_check_network():
     else:
         g_net_down_status = 1
 
-    if org_dhcp_status != g_dhcp_status:
-        with open(record_dhcp_file_path, 'w') as f:
-            f.write(str(g_dhcp_status))
-    if org_down_status != g_net_down_status:
-        with open(record_down_file_path, 'w') as f:
-            f.write(str(g_net_down_status))
+    if g_dhcp_status == 1 and g_net_down_status == 1:
+        bmchealth_set_value(0x0)
+
     return True
 
 def bmchealth_fix_and_check_mac():
@@ -184,12 +168,10 @@ def bmchealth_fix_and_check_mac():
     print "bmchealth: check mac status:" + str(fix_mac_status)
     print "bmchealth: check guid status:" + str(fix_guid_status)
     #check bmchealth macaddress
-    ret = 0
+
     if fix_mac_status == 0 or fix_guid_status == 0:
-        ret = bmchealth_set_value(0xC)
         LogEventBmcHealthMessages(0xC)
-    print "bmchealth: bmchealth_fix_and_check_mac : " + str(ret)
-    return ret
+    return True
 
 def bmchealth_check_watchdog():
     print "check watchdog timeout start"
@@ -249,7 +231,6 @@ def bmchealth_check_watchdog():
         f.write(str(watchdog2_timeout_counter))
         f.close()
         print "Log watchdog expired event"
-        bmchealth_set_value(0x3)
         LogEventBmcHealthMessages(0x3)
     return True
 
@@ -266,7 +247,6 @@ def bmchealth_check_i2c():
                     current_recovery_count = int(f.readline())
                     if current_recovery_count > g_recovery_count[num]:
                         print "Log i2c recovery event"
-                        bmchealth_set_value(0xA)
                         LogEventBmcHealthMessages(0xA, bus_id, error_code )
                         g_recovery_count[num] = current_recovery_count
             except:
