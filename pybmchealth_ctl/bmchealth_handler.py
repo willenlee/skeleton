@@ -247,7 +247,7 @@ def bmchealth_check_i2c():
                     current_recovery_count = int(f.readline())
                     if current_recovery_count > g_recovery_count[num]:
                         print "Log i2c recovery event"
-                        LogEventBmcHealthMessages(0xA, bus_id, error_code )
+                        LogEventBmcHealthMessages(0xA, bus_id, 0x1)
                         g_recovery_count[num] = current_recovery_count
             except:
                 print "[bmchealth_check_i2c]exception !!!"
