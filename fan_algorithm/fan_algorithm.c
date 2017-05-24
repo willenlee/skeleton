@@ -221,10 +221,11 @@ static int set_fanled( uint8_t port0, uint8_t port1)
 		memset(&msg, 0, sizeof(msg));
 		write_bytes[0] = 6;
 		write_bytes[1] = 0;
+		write_bytes[2] = 0;
 	  
 		msg[0].addr = PCA9535_ADDR;
 		msg[0].flags = (use_pec) ? I2C_CLIENT_PEC : 0;
-		msg[0].len = 2;
+		msg[0].len = 3;
 		msg[0].buf = write_bytes;
 
 		data.msgs = msg;
@@ -235,6 +236,8 @@ static int set_fanled( uint8_t port0, uint8_t port1)
 			close(fd);
 			return -1;
 		}
+
+		system("i2cset -y 9 0x20 6 0 w");
 		
 		flag_fanled_enable = 1;
 	}
@@ -623,23 +626,29 @@ static int fan_control_algorithm_monitor(void)
 				fan_led_port0 = FAN_LED_PORT0_ALL_BLUE;
 				fan_led_port1 = FAN_LED_PORT1_ALL_BLUE;
 			}
-			for(i=0; i<g_FanInputObjPath.size; i++) {
-				rc = get_sensor_reading(bus, g_FanInputObjPath.path[i], &Fan_tach, &g_FanInputObjPath);
+			int fan_in_index = 0;
+			int fan_mask = 0x0;
+			for(i=0, fan_in_index=0; fan_in_index<g_FanInputObjPath.size; i++, fan_in_index+=2) {
+				rc = get_sensor_reading(bus, g_FanInputObjPath.path[fan_in_index], &Fan_tach, &g_FanInputObjPath);
 				if (rc < 0)
 					Fan_tach = 0;
 
 				if (Fan_tach == 0) {
 					FinalFanSpeed = 255;
-					if (i <= 3) { //FAN 1 & 2
-						offset = i / 2 * 2;
-						fan_led_port1 &= ~(PORT1_FAN_LED_RED_MASK >> offset); //turn on red led
-						fan_led_port1 |= PORT1_FAN_LED_BLUE_MASK >> offset; //turn off blue led
-					} else { //FAN 3~6
-						offset = (i - 4) / 2 * 2;
-						fan_led_port0 &= ~(PORT0_FAN_LED_RED_MASK << offset); //turn on red led
-						fan_led_port0 |= PORT0_FAN_LED_BLUE_MASK << offset; //turn off blue led
+					if (i < 6) { //FAN1~FAN3
+						offset = (i / 2)*2;
+						offset = 6 - offset;
+						fan_mask = 0x3<<offset;
+						fan_led_port1 = fan_led_port1 & ~(fan_mask);
+						fan_led_port1 = fan_led_port1 | (PORT1_FAN_LED_RED_MASK<<offset);
+					} else { //FAN4~FAN6
+						offset = ((i-6) / 2)*2;
+						offset = offset + 2;
+						fan_mask = 0x3<<offset;
+						fan_led_port0 = fan_led_port0 & ~(fan_mask);
+						fan_led_port0 = fan_led_port0 | (PORT0_FAN_LED_RED_MASK<<offset);
 					}
-				} else {
+				}else {
 					fan_presence[i/2] = 1;
 				}
 			}
@@ -994,6 +1003,9 @@ static void inital_fan_pid_shm()
 
 int main(int argc, char *argv[])
 {
+         //TODO: workaround for fan algorithm service starting time
+        //      to aviod fan algorithm to get dbus fail
+	sleep(90);
 	inital_fan_pid_shm();
 	return fan_control_algorithm_monitor();
 }
