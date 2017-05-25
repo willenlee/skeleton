@@ -496,50 +496,50 @@ def _add_bmc_health_sensor(configs, sensornumber):
     configs.append(config)
 
 SENSOR_MONITOR_CONFIG = []
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 1, '0x41')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 2, '0x42')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 3, '0x43')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 4, '0x44')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 5, '0x45')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 6, '0x46')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 7, '0x47')
-_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 8, '0x48')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 1, '0x1D')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 2, '0x1E')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 3, '0x1F')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 4, '0x20')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 5, '0x21')
-_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 6, '0x22')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 1, '0x11')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 2, '0x12')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 3, '0x13')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 4, '0x14')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 5, '0x15')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 6, '0x16')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 7, '0x17')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 8, '0x18')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 9, '0x19')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 10, '0x1A')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 11, '0x1B')
-_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 12, '0x1C')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 1, '0x52', '8-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 1, '0x51', '8-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 1, '0x50', '8-0058')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 2, '0x55', '9-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 2, '0x54', '9-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 2, '0x53', '9-0058')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 3, '0x58', '10-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 3, '0x57', '10-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 3, '0x56', '10-0058')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 4, '0x5B', '11-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 4, '0x5A', '11-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 4, '0x59', '11-0058')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 5, '0x5E', '12-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 5, '0x5D', '12-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 5, '0x5C', '12-0058')
-_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 6, '0x61', '13-0058')
-_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 6, '0x60', '13-0058')
-_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 6, '0x5F', '13-0058')
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 1, 0x41)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 2, 0x42)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 3, 0x43)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 4, 0x44)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 5, 0x45)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 6, 0x46)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 7, 0x47)
+_add_gpu_temperature_sensor(SENSOR_MONITOR_CONFIG, 8, 0x48)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 1, 0x1D)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 2, 0x1E)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 3, 0x1F)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 4, 0x20)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 5, 0x21)
+_add_fan_pwm_sensor(SENSOR_MONITOR_CONFIG, 6, 0x22)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 1, 0x11)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 2, 0x12)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 3, 0x13)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 4, 0x14)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 5, 0x15)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 6, 0x16)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 7, 0x17)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 8, 0x18)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 9, 0x19)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 10, 0x1A)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 11, 0x1B)
+_add_fan_tach_sensor(SENSOR_MONITOR_CONFIG, 12, 0x1C)
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 1, 0x52, '8-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 1, 0x51, '8-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 1, 0x50, '8-0058')
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 2, 0x55, '9-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 2, 0x54, '9-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 2, 0x53, '9-0058')
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 3, 0x58, '10-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 3, 0x57, '10-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 3, 0x56, '10-0058')
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 4, 0x5B, '11-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 4, 0x5A, '11-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 4, 0x59, '11-0058')
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 5, 0x5E, '12-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 5, 0x5D, '12-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 5, 0x5C, '12-0058')
+_add_psu_temperature_sensor(SENSOR_MONITOR_CONFIG, 6, 0x61, '13-0058')
+_add_psu_voltage_sensor(SENSOR_MONITOR_CONFIG, 6, 0x60, '13-0058')
+_add_psu_power_sensor(SENSOR_MONITOR_CONFIG, 6, 0x5F, '13-0058')
 _add_cable_led(SENSOR_MONITOR_CONFIG, 0, 234)
 _add_cable_led(SENSOR_MONITOR_CONFIG, 1, 235)
 _add_cable_led(SENSOR_MONITOR_CONFIG, 2, 242)
@@ -560,7 +560,7 @@ _add_pex9797(SENSOR_MONITOR_CONFIG, 0, 0x37)
 _add_pex9797(SENSOR_MONITOR_CONFIG, 1, 0x38)
 _add_pex9797(SENSOR_MONITOR_CONFIG, 2, 0x39)
 _add_pex9797(SENSOR_MONITOR_CONFIG, 3, 0x3A)
-_add_bmc_health_sensor(SENSOR_MONITOR_CONFIG, '0x82')
+_add_bmc_health_sensor(SENSOR_MONITOR_CONFIG, 0x82)
 
 HWMON_CONFIG = {
     '0-0010' :  {
@@ -571,7 +571,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x23',
+                'sensornumber' : 0x23,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC1 VOUT',
@@ -587,7 +587,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x24',
+                'sensornumber' : 0x24,
                 'critical_upper':125,
                 'sensor_name':'HSC1 Temp',
                 'reading_type' : '0x01',
@@ -606,7 +606,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x25',
+                'sensornumber' : 0x25,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC2 STBY VOUT',
@@ -622,7 +622,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x26',
+                'sensornumber' : 0x26,
                 'critical_upper':125,
                 'sensor_name':'HSC2 STBY Temp',
                 'reading_type' : '0x01',
@@ -641,7 +641,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x27',
+                'sensornumber' : 0x27,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC3 GPU1 VOUT',
@@ -657,7 +657,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x28',
+                'sensornumber' : 0x28,
                 'critical_upper':125,
                 'sensor_name':'HSC3 GPU1 Temp',
                 'reading_type' : '0x01',
@@ -676,7 +676,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x29',
+                'sensornumber' : 0x29,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC4 GPU2 VOUT',
@@ -692,7 +692,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x2A',
+                'sensornumber' : 0x2A,
                 'critical_upper':125,
                 'sensor_name':'HSC4 GPU2 Temp',
                 'reading_type' : '0x01',
@@ -711,7 +711,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x2B',
+                'sensornumber' : 0x2B,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC5 GPU3 VOUT',
@@ -727,7 +727,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x2C',
+                'sensornumber' : 0x2C,
                 'critical_upper':125,
                 'sensor_name':'HSC5 GPU3 Temp',
                 'reading_type' : '0x01',
@@ -746,7 +746,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x2D',
+                'sensornumber' : 0x2D,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC6 GPU4 VOUT',
@@ -762,7 +762,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x2E',
+                'sensornumber' : 0x2E,
                 'critical_upper':125,
                 'sensor_name':'HSC6 GPU4 Temp',
                 'reading_type' : '0x01',
@@ -781,7 +781,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x2F',
+                'sensornumber' : 0x2F,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC7 GPU5 VOUT',
@@ -797,7 +797,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x30',
+                'sensornumber' : 0x30,
                 'critical_upper':125,
                 'sensor_name':'HSC7 GPU5 Temp',
                 'reading_type' : '0x01',
@@ -816,7 +816,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x31',
+                'sensornumber' : 0x31,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC8 GPU6 VOUT',
@@ -832,7 +832,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x32',
+                'sensornumber' : 0x32,
                 'critical_upper':125,
                 'sensor_name':'HSC8 GPU6 Temp',
                 'reading_type' : '0x01',
@@ -851,7 +851,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x33',
+                'sensornumber' : 0x33,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC9 GPU7 VOUT',
@@ -867,7 +867,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x34',
+                'sensornumber' : 0x34,
                 'critical_upper':125,
                 'sensor_name':'HSC9 GPU7 Temp',
                 'reading_type' : '0x01',
@@ -886,7 +886,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'V',
                 'sensor_type' : '0x02',
-                'sensornumber' : '0x35',
+                'sensornumber' : 0x35,
                 'critical_lower':10.6,
                 'critical_upper':13.8,
                 'sensor_name':'HSC10 GPU8 VOUT',
@@ -902,7 +902,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x36',
+                'sensornumber' : 0x36,
                 'critical_upper':125,
                 'sensor_name':'HSC10 GPU8 Temp',
                 'reading_type' : '0x01',
@@ -986,7 +986,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x01',
+                'sensornumber' : 0x01,
                 'sensor_name':'Inlet Temp 5',
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
@@ -1003,7 +1003,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x02',
+                'sensornumber' : 0x02,
                 'sensor_name':'Inlet Temp 6',
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
@@ -1020,7 +1020,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x03',
+                'sensornumber' : 0x03,
                 'sensor_name':'Inlet Temp 7',
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
@@ -1037,7 +1037,7 @@ HWMON_CONFIG = {
                 'scale' : 1000,
                 'units' : 'C',
                 'sensor_type' : '0x01',
-                'sensornumber' : '0x04',
+                'sensornumber' : 0x04,
                 'sensor_name':'Inlet Temp 8',
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
