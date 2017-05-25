@@ -411,7 +411,7 @@ def _add_psu_temperature_sensor(configs, index, sensornumber, bus_number):
         'sensor_name': 'PSU%d Temp 2' % index,
         'sensor_type': '0x09',
         'sensornumber': sensornumber,
-        'standby_monitor': True,
+        'standby_monitor': False,
         'units': 'C',
         'value': 0,
         }]
@@ -432,7 +432,7 @@ def _add_psu_voltage_sensor(configs, index, sensornumber, bus_number):
         'sensor_name': 'PSU%d Voltage Output' % index,
         'sensor_type': '0x09',
         'sensornumber': sensornumber,
-        'standby_monitor': True,
+        'standby_monitor': False,
         'units': 'V',
         'value': 0,
         }]
@@ -450,7 +450,7 @@ def _add_psu_power_sensor(configs, index, sensornumber, bus_number):
         'sensor_name': 'PSU%d Power Output' % index,
         'sensor_type': '0x09',
         'sensornumber': sensornumber,
-        'standby_monitor': True,
+        'standby_monitor': False,
         'units': 'W',
         'value': 0,
         }]
@@ -925,7 +925,7 @@ HWMON_CONFIG = {
                 'sensor_name':'',
                 'reading_type' : '0x01',
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -941,7 +941,7 @@ HWMON_CONFIG = {
                 'sensor_name':'',
                 'reading_type' : '0x01',
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -957,7 +957,7 @@ HWMON_CONFIG = {
                 'sensor_name':'',
                 'reading_type' : '0x01',
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -974,7 +974,7 @@ HWMON_CONFIG = {
                 'reading_type' : '0x01',
                 'emergency_enabled' : True,
                 'offset':-7,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 }, #Thermal team suggest temp4 (-7) offset
         }
     },
@@ -991,7 +991,7 @@ HWMON_CONFIG = {
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -1008,7 +1008,7 @@ HWMON_CONFIG = {
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -1025,7 +1025,7 @@ HWMON_CONFIG = {
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
@@ -1042,7 +1042,7 @@ HWMON_CONFIG = {
                 'reading_type' : '0x01',
                 'critical_upper' : 37,
                 'emergency_enabled' : True,
-                'standby_monitor': True,
+                'standby_monitor': False,
                 },
         }
     },
