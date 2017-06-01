@@ -10,7 +10,8 @@ GDBUS_APPS = bmcctl \
 SDBUS_APPS = gpu \
 	     pex9797_ctl \
 	     ocslock_ctl \
-	     pmbus
+	     pmbus \
+	     psu_fwupdate_ctl
 
 SUBDIRS = hacks \
 	  libopenbmc_intf \
