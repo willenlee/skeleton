@@ -1,7 +1,7 @@
 #!/usr/bin/python -u
 
 import sys
-import subprocess32
+import subprocess
 import gobject
 import dbus
 import dbus.service
@@ -200,9 +200,9 @@ class SystemManager(DbusProperties,DbusObjectManager):
 			try:
 				print "Starting process: "+" ".join(cmdline)+": "+name
 				if (app['monitor_process'] == True):
-					app['popen'] = subprocess32.Popen(cmdline)
+					app['popen'] = subprocess.Popen(cmdline)
 				else:
-					subprocess32.Popen(cmdline)
+					subprocess.Popen(cmdline)
 					
 			except Exception as e:
 				## TODO: error
@@ -277,7 +277,6 @@ class SystemManager(DbusProperties,DbusObjectManager):
 		
 
 if __name__ == '__main__':
-    os.system("ln -s /usr/lib/python2.7/site-packages/subprocess32.py /usr/lib/python2.7/site-packages/subprocess.py")
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     bus = get_dbus()
     name = dbus.service.BusName(DBUS_NAME,bus)
