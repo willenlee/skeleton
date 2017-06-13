@@ -14,6 +14,7 @@ SDBUS_APPS = gpu \
 SUBDIRS = hacks \
 	  libopenbmc_intf \
 	  libopenbmc_sdbus \
+	  libocs_semlock \
 	  ledctl \
 	  fanctl \
 	  fan_tool \
