@@ -9,6 +9,7 @@ GDBUS_APPS = bmcctl \
 
 SDBUS_APPS = gpu \
 	     pex9797_ctl \
+	     ocslock_ctl \
 	     pmbus
 
 SUBDIRS = hacks \
