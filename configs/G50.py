@@ -1277,7 +1277,7 @@ BMC_LOGEVENT_CONFIG = {
 	    'Timestamp': 0,
 	    'Generator Id': 0x20,
 	    'Evm Rev': 0x04,
-	    'Event Dir': 0x70,
+	    'Event Type': 0x70,
 	    'Event Data Table': {
 			'Network Error': {
 				'Severity': 'Critical',
@@ -1328,7 +1328,7 @@ BMC_LOGEVENT_CONFIG = {
         'Timestamp': 0,
         'Generator Id': 0x20,
         'Evm Rev': 0x04,
-        'Event Dir': 0x6F,
+        'Event Type': 0x6F,
         'Event Data Table': {
             'Entity Presence': {
                 'Severity': 'Critical',
@@ -1344,7 +1344,7 @@ BMC_LOGEVENT_CONFIG = {
 		'Timestamp': 0,
 		'Generator Id': 0x20,
 		'Evm Rev': 0x04,
-		'Event Dir': 0x6F,
+		'Event Type': 0x6F,
 		'Event Data Table': {
 			'Management Subsystem Health': {
 				'Severity': 'Critical',
