@@ -52,7 +52,13 @@ $(GDBUS_APPS): libopenbmc_intf
 	$(MAKE) -C $@ CFLAGS="-I ../$^" LDFLAGS="-L ../$^"
 
 $(SDBUS_APPS): libopenbmc_sdbus
-	$(MAKE) -C $@ CFLAGS="-I ../$^" LDFLAGS="-L ../$^"
+	$(MAKE) -C $@ CFLAGS="-I ../$<" LDFLAGS="-L ../$<"
+
+ocslock_ctl: libocs_semlock
+
+gpu: libocs_semlock
+
+pex9797_ctl: libocs_semlock
 
 install: subdirs
 	@for d in $(SUBDIRS) $(GDBUS_APPS) $(SDBUS_APPS); do \
