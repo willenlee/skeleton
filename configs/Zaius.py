@@ -344,6 +344,8 @@ GPIO_CONFIG['RESET_BUTTON'] = \
         {'gpio_pin': 'AA0', 'direction': 'both'}
 GPIO_CONFIG['PE_MEZZB_PRSNT_N'] = \
         {'gpio_pin': 'P7', 'direction': 'in'}
+GPIO_CONFIG['WOL_CONTROL'] = \
+        {'gpio_pin': 'F6', 'direction': 'falling'}
 GPIO_CONFIG['CHECKSTOP'] = \
         {'gpio_pin': 'F7', 'direction': 'falling'}
 

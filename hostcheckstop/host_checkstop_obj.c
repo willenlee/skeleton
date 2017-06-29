@@ -11,6 +11,8 @@ static const gchar* dbus_name = "org.openbmc.control.Checkstop";
 static GDBusObjectManagerServer *manager = NULL;
 
 GPIO checkstop = (GPIO){ "CHECKSTOP" };
+GPIO checkwol = (GPIO){ "WOL_CONTROL" };
+
 
 static bool
 is_host_booted(GDBusConnection* connection)
@@ -104,6 +106,42 @@ chassis_reboot(gpointer connection)
     return FALSE;
 }
 
+
+static gboolean
+chassis_poweron(gpointer connection)
+{
+    GDBusProxy *proxy;
+    GError *error;
+    GVariant *parm = NULL;
+    GVariant *result = NULL;
+	
+    printf("Host WOL, going to chassis_poweron\n");
+    error = NULL;
+    proxy = g_dbus_proxy_new_sync((GDBusConnection*)connection,
+        G_DBUS_PROXY_FLAGS_NONE,
+        NULL, /* GDBusInterfaceInfo* */
+        "org.openbmc.control.Chassis", /* name */
+        "/org/openbmc/control/chassis0", /* object path */
+        "org.openbmc.control.Chassis", /* interface name */
+        NULL, /* GCancellable */
+        &error);
+    g_assert_no_error(error);
+
+    error = NULL;
+    result = g_dbus_proxy_call_sync(proxy,
+        "powerOn",
+        NULL,
+        G_DBUS_CALL_FLAGS_NONE,
+        -1,
+        NULL,
+        &error);
+    g_assert_no_error(error);
+    g_variant_unref(result);
+
+    return FALSE;
+}
+
+
 static gboolean
 on_checkstop_interrupt(GIOChannel *channel,
         GIOCondition condition,
@@ -135,6 +173,43 @@ on_checkstop_interrupt(GIOChannel *channel,
     return TRUE;
 }
 
+static gboolean
+on_wol_interrupt(GIOChannel *channel,
+        GIOCondition condition,
+        gpointer connection)
+{
+    GError *error = 0;
+    gsize bytes_read = 0;
+    gchar buf[2];
+	int rc = 0;
+	uint8_t gpio = 0;
+    buf[1] = '\0';
+
+    g_io_channel_seek_position( channel, 0, G_SEEK_SET, 0 );
+    g_io_channel_read_chars(channel,
+            buf, 1,
+            &bytes_read,
+            &error );
+	
+    printf("checkstop wol: %s\n",buf);
+    if(checkwol.irq_inited) {
+		rc = gpio_open(&checkwol);
+   		if (rc == GPIO_OK) {
+        	rc = gpio_read(&checkwol, &gpio);
+			if (rc == GPIO_OK && (!gpio) ) {
+				g_timeout_add(1000, chassis_poweron, connection);
+			}
+    	}
+		gpio_close(&checkwol);
+    }
+    else {
+        checkwol.irq_inited = true;
+    }
+
+    return TRUE;
+}
+
+
 static void
 on_bus_acquired(GDBusConnection *connection,
         const gchar *name,
@@ -155,6 +230,13 @@ on_bus_acquired(GDBusConnection *connection,
     }
     if (rc != GPIO_OK) {
         printf("ERROR Checkstop: GPIO setup (rc=%d)\n", rc);
+    }
+	rc = gpio_init(connection, &checkwol);
+    if (rc == GPIO_OK) {
+        rc = gpio_open_interrupt(&checkwol, on_wol_interrupt, connection);
+    }
+    if (rc != GPIO_OK) {
+        printf("ERROR Checkstop: WOL GPIO setup (rc=%d)\n", rc);
     }
     g_dbus_object_manager_server_export(manager, G_DBUS_OBJECT_SKELETON(object));
 }
