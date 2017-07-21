@@ -58,7 +58,7 @@ static struct st_fan_parameter *g_fan_para_shm = NULL;
 
 void usage(const char *prog)
 {
-	printf("Usage: %s [options] <closeloop/openloop/pwm> [parameters..]\n", prog);
+	printf("Usage: %s [options] <closeloop/openloop/pwm> [parameters..]  V2 version\n", prog);
 	printf("\n  Options:\n"
 	       "\n\t-w 'write fan parameters':\n"
 	       "\t\t closeloop parameters settting:\n"
@@ -90,6 +90,39 @@ void usage(const char *prog)
 	       "\t\t %s  -r\n"
 	       , prog,prog, prog,prog,prog
 	      );
+}
+
+int read_file(char *path)
+{
+	FILE *fp1 = fopen(path,"r");
+	int val;
+	if(fp1 == NULL) 
+		return -1;
+	fscanf(fp1, "%d", &val);
+	if (val < 0)
+		val = 0;
+	fflush(fp1);
+	fclose(fp1);
+	return val;
+}
+
+void show_gpu_sensor_temp(void)
+{
+	int i = 1;
+	char path[100];
+	int val;
+	int val_mem;
+	printf("\n==== GPU SENSOR TEMP LIST=======\n");
+	for (i = 1; i<=8;i++)
+	{
+		sprintf(path, "/tmp/gpu/gpu%d_temp", i);
+		val = read_file(path);
+
+		sprintf(path, "/tmp/gpu/gpu%d_mem_temp", i);
+		val_mem = read_file(path);
+
+		printf("GPU %d temp:%d ; memory temp:%d\n", i, val, val_mem);
+	}
 }
 
 int
@@ -219,6 +252,8 @@ main(int argc, char * const argv[])
 
 		printf("[PWM Info] current fan speed:%d (%d~%d)\n",
 		       g_fan_para_shm->current_speed, g_fan_para_shm->min_fanspeed, g_fan_para_shm->max_fanspeed);
+
+		show_gpu_sensor_temp();
 	} else if (flag_wr == 1) {
 		if (fan_p.closeloop_param[0].Kp!=UNKNOW_VALUE || fan_p.closeloop_param[0].Ki!=UNKNOW_VALUE || fan_p.closeloop_param[0].Kd!=UNKNOW_VALUE || fan_p.closeloop_param[0].sensor_tracking!=UNKNOW_VALUE || fan_p.closeloop_param[0].sample_n != UNKNOW_VALUE) {
 			g_fan_para_shm->flag_closeloop = 3; //block wait

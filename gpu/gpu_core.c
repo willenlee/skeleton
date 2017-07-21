@@ -46,6 +46,7 @@ enum {
 
 struct gpu_data {
 	bool temp_ready;
+	bool temp_mem_ready;
 	__u8 temp;
 
 	bool info_ready;
@@ -197,10 +198,34 @@ static int function_get_gpu_info(int index)
 	return 0;
 }
 
+
+int access_gpu_data(int index, unsigned char* writebuf, unsigned char* readbuf)
+{
+	int retry_temp = 5;
+	int rc;
+	while(retry_temp >= 0) {
+		int flag_temp = 1;
+		if (retry_temp == 0)
+			flag_temp = 0;
+		rc = internal_gpu_access(gpu_device_bus[index].bus_no,gpu_device_bus[index].slave,writebuf,readbuf, flag_temp);
+		if (rc >=0)
+			return 0;
+		else if (rc == -2) {
+			unsigned char temp_nop_writebuf[4] = {0x00,0x0,0x0,0x80};
+			unsigned char readbuf_nop[4];
+			internal_gpu_access(gpu_device_bus[index].bus_no,gpu_device_bus[index].slave,temp_nop_writebuf,readbuf_nop, 0);
+		}
+		retry_temp-=1;
+	}
+	return -1;
+}
+
+
 int function_get_gpu_data(int index)
 {
 
 	unsigned char temp_writebuf[4] = {NV_CMD_GET_TEMP,0x0,0x0,0x80};
+	unsigned char temp_mem_writebuf[4] = {NV_CMD_GET_TEMP,0x5,0x0,0x80};
 	unsigned char readbuf[4];
 	int rc=0;
 	char gpu_path[128];
@@ -210,27 +235,31 @@ int function_get_gpu_data(int index)
 	int i=0;
 	FILE *fp;
 	/*get gpu temp data*/
-	int retry_temp = 5;
-	while(retry_temp >= 0) {
-		int flag_temp = 1;
-		if (retry_temp == 0)
-			flag_temp = 0;
-		rc = internal_gpu_access(gpu_device_bus[index].bus_no,gpu_device_bus[index].slave,temp_writebuf,readbuf, flag_temp);
-		if (rc >=0)
-			break;
-		else if (rc == -2) {
-			unsigned char temp_nop_writebuf[4] = {0x00,0x0,0x0,0x80};
-			unsigned char readbuf_nop[4];
-			internal_gpu_access(gpu_device_bus[index].bus_no,gpu_device_bus[index].slave,temp_nop_writebuf,readbuf_nop, 0);
-		}
-		retry_temp-=1;
-	}
+	rc = access_gpu_data(index, temp_writebuf, readbuf);
 	if(rc==0) {
+		int gpu_mem_temp = -1;
 		G_gpu_data[gpu_device_bus[index].device_index].temp_ready = 1;
 		G_gpu_data[gpu_device_bus[index].device_index].temp = readbuf[1];
+
+		rc = access_gpu_data(index, temp_mem_writebuf, readbuf);
+		sprintf(gpu_path, "%s%s%d%s", GPU_TEMP_PATH, "/gpu", gpu_device_bus[index].device_index+1,"_mem_temp");
+		if (rc == 0) {
+			gpu_mem_temp =  readbuf[1];
+			sprintf(sys_cmd, "echo %d > %s", readbuf[1], gpu_path);
+			system(sys_cmd);
+			G_gpu_data[gpu_device_bus[index].device_index].temp_mem_ready =1;
+		}
+		else
+		{
+			if(G_gpu_data[gpu_device_bus[index].device_index].temp_mem_ready ==1) {
+				sprintf(sys_cmd, "echo %d > %s", rc , gpu_path);
+				system(sys_cmd);
+			}
+			G_gpu_data[gpu_device_bus[index].device_index].temp_mem_ready =0;
+		}
 		/* write data to file */
 		sprintf(gpu_path, "%s%s%d%s", GPU_TEMP_PATH, "/gpu", gpu_device_bus[index].device_index+1,"_temp");
-		sprintf(sys_cmd, "echo %d > %s", readbuf[1], gpu_path);
+		sprintf(sys_cmd, "echo %d > %s", G_gpu_data[gpu_device_bus[index].device_index].temp, gpu_path);
 		system(sys_cmd);
 	} else {
 		if(G_gpu_data[gpu_device_bus[index].device_index].temp_ready) { /*if previous is ok*/
