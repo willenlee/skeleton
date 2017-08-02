@@ -258,6 +258,7 @@ if __name__ == '__main__':
         os.system("echo 283 > /sys/class/gpio/export")
         os.system("echo out > /sys/class/gpio/gpio283/direction")
         os.system("echo 511 > /sys/class/gpio/export")
+        os.system("devmem 0x1e6e20AC 32 0xff") #restore original multi-function for GPIOAC7
     except:
         pass
 	
