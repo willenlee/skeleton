@@ -14,6 +14,7 @@
 
 
 #define MAX_I2C_DEV_LEN 32
+#define PSU_PATH "/tmp/pmbus"
 
 enum {
 	EM_PSU_DEVICE_1 = 0,
@@ -342,6 +343,39 @@ static int write_psu_fwdata(int i2c_bus, int i2c_addr)
 	return 1;
 }
 
+static void create_psu_notify(int i2c_bus)
+{
+	FILE *fPtr;
+	char psu_path[128];
+	struct stat st = {0};
+
+	if (stat(PSU_PATH, & st) == -1) {
+		mkdir(PSU_PATH, 0777);
+	}
+
+	sprintf(psu_path, "%s/psu_bus_%d_updating", PSU_PATH, i2c_bus);
+	if( access( psu_path, F_OK ) == -1 ) {
+		fPtr = fopen(psu_path,"w");
+		fprintf(fPtr, "%d",i2c_bus);
+		fclose(fPtr);
+		usleep(2*1000*1000); //sleep 2 second for pmbus_scanner process inspect
+	}
+}
+
+static void delete_psu_notify(int i2c_bus)
+{
+	FILE *fPtr;
+	char psu_path[128];
+	char cmd[128];
+
+	sprintf(psu_path, "%s/psu_bus_%d_updating", PSU_PATH, i2c_bus);
+	if( access( psu_path, F_OK ) != -1 ) {
+		sprintf(cmd, "rm -rf %s", psu_path);
+		system(cmd);
+		usleep(2*1000*1000); //sleep 2 second for pmbus_scanner process inspect
+	}
+}
+
 static int start_psu_fwupdate(int psu_number)
 {
 	int i2c_bus;
@@ -351,6 +385,7 @@ static int start_psu_fwupdate(int psu_number)
 	i2c_bus = psu_device_bus[psu_number].bus_no;
 	i2c_addr = psu_device_bus[psu_number].slave;
 
+	create_psu_notify(i2c_bus);
 	disable_psu_bus_unbind(i2c_bus, i2c_addr);
 
 	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_CHECK_VER_CTL) < 0)
@@ -372,6 +407,8 @@ static int start_psu_fwupdate(int psu_number)
 
 error_psu_fwupdate:
 	enable_psu_bus_bind(i2c_bus, i2c_addr);
+
+	delete_psu_notify(i2c_bus);
 	return ret;
 }
 

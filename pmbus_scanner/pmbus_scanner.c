@@ -14,6 +14,17 @@
 #define PHYSICAL_I2C 8
 #define PMBUS_NUMBER 6
 
+#define PSU_UPDATE_NOTIFY_FILE_FORMAT "/tmp/pmbus/psu_bus_%d_updating"
+
+static int check_psu_updating_notify(int bus)
+{
+    char psu_updating_file[128];
+    sprintf(psu_updating_file, PSU_UPDATE_NOTIFY_FILE_FORMAT, bus);
+    if( access( psu_updating_file, F_OK ) != -1 )
+        return 1;
+    return 0;
+}
+
 int pmbus_scan()
 {
     char hwmon_path_device[256];
@@ -42,6 +53,8 @@ int pmbus_scan()
         for(i=0;i<PMBUS_NUMBER;i++) {
             /* Init pmbus node */
             bus = PHYSICAL_I2C + i;
+            if (check_psu_updating_notify(bus) == 1)
+                continue;
             sprintf(filename,"/dev/i2c-%d",bus);
             file = open(filename,O_RDWR);
             rc = ioctl(file, I2C_SLAVE, PMBUS_SLAVE_ADDR);
