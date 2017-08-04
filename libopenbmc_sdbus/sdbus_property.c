@@ -59,8 +59,11 @@ __set_dbus_property(sd_bus *bus, char *objpath, char *property_name, char *prope
 int
 set_dbus_property(sd_bus *bus, char *objpath, char *property_name, char *property_type, void *property_value, int property_identify)
 {
-	char temp_property_name[100];
-	sprintf(temp_property_name, "%s_%d", property_name, property_identify);
+	char temp_property_name[100] = {0};
+	if (property_identify == -1)
+		strcpy(temp_property_name, property_name);
+	else
+		sprintf(temp_property_name, "%s_%d", property_name, property_identify);
 	return __set_dbus_property(bus, objpath, temp_property_name, property_type, property_value);
 }
 

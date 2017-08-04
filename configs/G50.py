@@ -371,6 +371,7 @@ def _add_gpu_temperature_sensor(configs, index, sensornumber):
         'mapping': '/org/openbmc/control/gpu/slot%d' % index,
         'status_change_count': 0,
         'reading_error_count': 0,
+		'ready': 0,
         }
     if objpath in configs:
         configs[objpath].append(config)
@@ -571,6 +572,7 @@ def _add_pex9797(configs, index, sensornumber):
         'index': index,
         'status_change_count': 0,
         'reading_error_count': 0,
+        'ready': 0,
         }
     if objpath in configs:
         configs[objpath].append(config)

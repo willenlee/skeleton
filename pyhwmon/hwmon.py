@@ -51,6 +51,7 @@ IFACE_LOOKUP = {
 	'firmware_update': HwmonSensor.IFACE_NAME,
 	'severity_health': HwmonSensor.IFACE_NAME,
 	'extra_data': HwmonSensor.IFACE_NAME,
+	'ready': HwmonSensor.IFACE_NAME,
 }
 IFACE_MAPPING = {
 	'value': SensorValue.IFACE_NAME,
@@ -205,6 +206,19 @@ class Hwmons():
 		check_subsystem_health_obj_path = "/org/openbmc/sensors/management_subsystem_health"
 		if hwmon.has_key('mapping'):
 			if self.check_entity_mapping[hwmon['mapping']] == 1:
+				return True
+		if hwmon.has_key('ready') and hwmon['ready'] == 0:
+			plx_obj = bus.get_object(SENSOR_BUS,"/org/openbmc/sensors/pex/pex",introspect=False)
+			gpu_obj = bus.get_object(SENSOR_BUS,"/org/openbmc/sensors/gpu/gpu_temp",introspect=False)
+			plx_intf = dbus.Interface(plx_obj,dbus.PROPERTIES_IFACE)
+			gpu_intf = dbus.Interface(gpu_obj,dbus.PROPERTIES_IFACE)
+			plx_ready = plx_intf.Get(HwmonSensor.IFACE_NAME,'ready')
+			gpu_ready = gpu_intf.Get(HwmonSensor.IFACE_NAME,'ready')
+			if hwmon.has_key('mapping') and gpu_ready == 1:
+				hwmon['ready'] = 1
+			elif plx_ready == 1:
+				hwmon['ready'] = 1
+			else:
 				return True
 		if hwmon.has_key('sensornumber'):
 			if hwmon['sensornumber'] not in self.check_subsystem_health:

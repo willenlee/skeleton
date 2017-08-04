@@ -501,6 +501,29 @@ int  init_data_folder(int index)
 
 }
 
+static void notify_device_ready(char *obj_path)
+{
+    static int flag_notify_chk = 0;
+
+    int rc;
+    int val = 1;
+
+    if (flag_notify_chk == 1)
+        return ;
+
+    sd_bus *bus = NULL;
+    rc = sd_bus_open_system(&bus);
+    if(rc < 0) {
+        fprintf(stderr,"Error opening system bus.\n");
+        return ;
+    }
+    rc = set_dbus_property(bus, obj_path, "ready", "i", (void *) &val, -1);
+    if (rc >=0)
+        flag_notify_chk = 1;
+
+    sd_bus_flush_close_unref(bus);
+}
+
 void pex_data_scan()
 {
 	/* init the global data */
@@ -525,6 +548,7 @@ void pex_data_scan()
 			function_get_pex_udid_data(i);
 		}
 		sleep(1);
+		notify_device_ready("/org/openbmc/sensors/pex/pex");
 	}
 }
 

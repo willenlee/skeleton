@@ -241,6 +241,7 @@ int function_get_gpu_data(int index)
 		G_gpu_data[gpu_device_bus[index].device_index].temp_ready = 0;
 		return rc;
 	}
+
 	/*get gpu info data */
 	if(!G_gpu_data[gpu_device_bus[index].device_index].info_ready) {
 		rc=function_get_gpu_info(index);
@@ -278,6 +279,29 @@ int function_get_gpu_data(int index)
 	return rc;
 }
 
+static void notify_device_ready(char *obj_path)
+{
+    static int flag_notify_chk = 0;
+
+    int rc;
+    int val = 1;
+
+    if (flag_notify_chk == 1)
+        return ;
+
+    sd_bus *bus = NULL;
+    rc = sd_bus_open_system(&bus);
+    if(rc < 0) {
+        fprintf(stderr,"Error opening system bus.\n");
+        return ;
+    }
+    rc = set_dbus_property(bus, obj_path, "ready", "i", (void *) &val, -1);
+    if (rc >=0)
+        flag_notify_chk = 1;
+
+    sd_bus_flush_close_unref(bus);
+}
+
 void gpu_data_scan()
 {
 	/* init the global data */
@@ -311,6 +335,7 @@ void gpu_data_scan()
 			function_get_gpu_data(i);
 			sleep(1);
 		}
+		notify_device_ready("/org/openbmc/sensors/gpu/gpu_temp");
 	}
 }
 
