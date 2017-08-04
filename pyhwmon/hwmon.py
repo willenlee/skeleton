@@ -60,6 +60,7 @@ IFACE_MAPPING = {
 	'positive_hysteresis' : SensorThresholds.IFACE_NAME,
 	'negative_hysteresis' : SensorThresholds.IFACE_NAME,
 	'firmware_update': HwmonSensor.IFACE_NAME,
+	'severity_health': HwmonSensor.IFACE_NAME,
 }
 
 # The bit is not supported if not mentioned
@@ -403,12 +404,16 @@ class Hwmons():
 	def check_system_event(self, current_pgood):
 		try:
 			system_event_objpath = "/org/openbmc/sensors/system_event"
+			obj = bus.get_object(SENSOR_BUS,system_event_objpath,introspect=False)
+			intf = dbus.Interface(obj,dbus.PROPERTIES_IFACE)
 			if self.record_pgood != current_pgood:
 				result = {'logid':0}
 				if current_pgood == 1: #current poweroff->poweron condition
+					intf.Set(HwmonSensor.IFACE_NAME, 'severity_health', 'OK')
 					result = bmclogevent_ctl.BmcLogEventMessages(system_event_objpath, "System Event", \
 						"Asserted",  "System Event PowerOn", "System Event PowerOn")
 				elif current_pgood == 0: #current poweron->poweroff condition
+					intf.Set(HwmonSensor.IFACE_NAME, 'severity_health', 'Critical')
 					result = bmclogevent_ctl.BmcLogEventMessages(system_event_objpath, "System Event", \
 						"Asserted",  "System Event PowerOff", "System Event PowerOff")
 
