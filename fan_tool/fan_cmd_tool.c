@@ -125,6 +125,22 @@ void show_gpu_sensor_temp(void)
 	}
 }
 
+
+void show_fio_sensor_temp(void)
+{
+	int i = 1;
+	char path[100];
+	int val_fio_1, val_fio_2;
+	printf("\n==== FIO SENSOR TEMP LIST=======\n");
+	val_fio_1 = read_file("/sys/class/hwmon/hwmon1/temp1_input");
+	val_fio_2 = read_file("/sys/class/hwmon/hwmon2/temp1_input");
+
+	printf("FIO Temp: [%.2f  ,  %.2f]\n\n", 
+		(double) val_fio_1/1000,
+		(double) val_fio_2/1000);
+}
+
+
 int
 main(int argc, char * const argv[])
 {
@@ -254,6 +270,7 @@ main(int argc, char * const argv[])
 		       g_fan_para_shm->current_speed, g_fan_para_shm->min_fanspeed, g_fan_para_shm->max_fanspeed);
 
 		show_gpu_sensor_temp();
+		show_fio_sensor_temp();
 	} else if (flag_wr == 1) {
 		if (fan_p.closeloop_param[0].Kp!=UNKNOW_VALUE || fan_p.closeloop_param[0].Ki!=UNKNOW_VALUE || fan_p.closeloop_param[0].Kd!=UNKNOW_VALUE || fan_p.closeloop_param[0].sensor_tracking!=UNKNOW_VALUE || fan_p.closeloop_param[0].sample_n != UNKNOW_VALUE) {
 			g_fan_para_shm->flag_closeloop = 3; //block wait
