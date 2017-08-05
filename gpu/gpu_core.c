@@ -149,7 +149,7 @@ static int internal_gpu_access(int bus, __u8 slave,__u8 *write_buf, __u8 *read_b
 error_smbus_access:
 	PMBUS_DELAY;
 	close(fd);
-	return rc;
+	return (rc!=0? -1: 0);
 }
 
 static int function_get_gpu_info(int index)
