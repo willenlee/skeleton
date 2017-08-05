@@ -48,6 +48,7 @@ IFACE_LOOKUP = {
 	'standby_monitor': HwmonSensor.IFACE_NAME,
 	'firmware_update': HwmonSensor.IFACE_NAME,
 	'severity_health': HwmonSensor.IFACE_NAME,
+	'extra_data': HwmonSensor.IFACE_NAME,
 }
 IFACE_MAPPING = {
 	'value': SensorValue.IFACE_NAME,
@@ -221,6 +222,8 @@ class Hwmons():
 		return True
 
 	def check_throttle_state(self, objpath, attribute, hwmon):
+		obj = bus.get_object(SENSOR_BUS,objpath,introspect=False)
+		intf = dbus.Interface(obj,dbus.PROPERTIES_IFACE)
 		try:
 			power_consum = 0
 			power_consum += int(self.readAttribute(self.pmbus1_hwmon), 10)
@@ -233,6 +236,11 @@ class Hwmons():
 			power_LSB = hex(power_consum & 0xFF)
 			power_MSB = hex(power_consum >> 8)
 			raw_value = int(self.readAttribute(attribute), 16)
+			extra_refer_gpio = 1
+			if 'extra_data' in hwmon:
+				extra_refer_gpio = int(self.readAttribute(hwmon['extra_data']), 16)
+			if (extra_refer_gpio >=0):
+				raw_value &= extra_refer_gpio
 			if raw_value == 0 and self.throttle_state[objpath] == 0:
 				event_dir = 0
 				event_type = 0x3
@@ -248,6 +256,7 @@ class Hwmons():
 									event_dir | event_type, evd1, int(evd2, 16), int(evd3, 16))
 							self.event_manager.create(log)
 							self.throttle_state[objpath] = 1
+							intf.Set(SensorValue.IFACE_NAME, 'value', 1) #set value = 1 to notify system throttle is 'critical'
 			elif raw_value == 1 and self.throttle_state[objpath] == 1:
 				event_dir = 0
 				event_type = 0x3
@@ -263,6 +272,7 @@ class Hwmons():
 									event_dir | event_type, evd1, int(evd2, 16), int(evd3, 16))
 							self.event_manager.create(log)
 							self.throttle_state[objpath] = 0
+							intf.Set(SensorValue.IFACE_NAME, 'value', 0) #set value = 0 to notify system throttle is 'ok'
 
 		except Exception as e:
 			print str(e)
