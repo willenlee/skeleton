@@ -379,6 +379,32 @@ def _add_gpu_temperature_sensor(configs, index, sensornumber):
         configs[objpath] = []
         configs[objpath].append(config)
 
+def _add_virtual_gpu_mem_temperature_sensor(configs, index, sensornumber):
+    objpath = '/org/openbmc/sensors/gpu/gpu_mem_temp'
+    config = {
+        'critical_upper': 81,
+        'positive_hysteresis': 2,
+        'device_node': '/tmp/gpu/gpu%d_mem_temp' % index,
+        'object_path': 'sensors/gpu/gpu_mem_temp',
+        'poll_interval': 5000,
+        'reading_type': 0x01,
+        'scale': 1,
+        'sensor_name': 'GPU%d Memory Temp' % index,
+        'sensor_type': '0x01',
+        'sensornumber': sensornumber,
+        'standby_monitor': False,
+        'units': 'C',
+        'index': index,
+        'value': -1,
+        'status_change_count': 0,
+        'reading_error_count': 0,
+        }
+    if objpath in configs:
+        configs[objpath].append(config)
+    else:
+        configs[objpath] = []
+        configs[objpath].append(config)
+
 def _add_m2_temperature_sensor(configs, index, sensornumber):
     objpath = '/org/openbmc/sensors/M2/M2_TMP'
     config = {
@@ -994,6 +1020,16 @@ _add_session_audit(SENSOR_MONITOR_CONFIG, 0x8C)
 _add_system_event(SENSOR_MONITOR_CONFIG, 0x8D)
 
 
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 1, 0xa1)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 2, 0xa2)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 3, 0xa3)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 4, 0xa4)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 5, 0xa5)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 6, 0xa6)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 7, 0xa7)
+_add_virtual_gpu_mem_temperature_sensor(HWMON_SENSOR_CONFIG, 8, 0xa8)
+
+
 
 HWMON_CONFIG = {
     '21-0037' :  {
@@ -1049,7 +1085,7 @@ HWMON_CONFIG = {
             'temp1_input' : {
                 'object_path' : 'sensors/temperature/TMP4',
                 'poll_interval' : 5000,
-                'scale' : 1000,
+                'scale' : 1, #for thermal request, need to accurate decimal point for fan algorithm
                 'units' : 'C',
                 'sensor_type' : '0x01',
                 'sensornumber' : '',
@@ -1126,6 +1162,8 @@ FAN_ALGORITHM_CONFIG = {
             'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
         'CLOSE_LOOP_GROUPS_2' : [
             'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_3' : [
+            'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
     },
 
     'CHASSIS_POWER_STATE': ['/org/openbmc/control/chassis0'],
@@ -1187,6 +1225,21 @@ FAN_ALGORITHM_CONFIG = {
             "SensorNumberList", #notfity following setting about SensorNumberList
             "0x37", #base sensor number
             "4", #releate sensor list size
+        ],
+    'CLOSE_LOOP_PARAM_3' :
+        [
+            '0.35',
+            '-0.015',
+            '0.4',
+            '70',
+            '85',
+        ],
+    'CLOSE_LOOP_GROUPS_3':
+        [
+            "/org/openbmc/sensors/gpu/gpu_mem_temp",
+            "SensorNumberList", #notfity following setting about SensorNumberList
+            "0xa1", #base sensor number
+            "8", #releate sensor list size
         ],
 
     'FAN_LED_OFF': ["0xFF"],

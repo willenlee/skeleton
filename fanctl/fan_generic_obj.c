@@ -306,19 +306,18 @@ start_fan_services()
 	int reponse_len = 0;
 	char reponse_data[50][200];
 	int i;
-	int fan_index;
+	int fan_index=0, map_pwm_index=0;
 	int base_sensor_number = 0;
 	int size_sensor_list = 0;
 	get_dbus_fan_parameters(bus_type, "FAN_INPUT_OBJ", &reponse_len, reponse_data, &size_sensor_list, &base_sensor_number);
+	if (size_sensor_list>0)
+		reponse_len = size_sensor_list;
 	for (i = 0; i<reponse_len; i++) {
-		if (i%2 == 0) {
-			fan_index = i+1;
-		} else {
-			int pwm_source = (i%6)+1;
-			sys_pwm_write(fan_index, EM_TACH_CMD_SOURCE, pwm_source, "tacho");
-		}
+		 map_pwm_index = (i%6) + 1;
+		 fan_index = i + 1;
 		//Enable fan tach
-		sys_pwm_write(i+1, EM_FAN_CMD_EN, 1, "tacho");
+		sys_pwm_write(fan_index, EM_TACH_CMD_SOURCE, map_pwm_index, "tacho");
+		sys_pwm_write(fan_index, EM_FAN_CMD_EN, 1, "tacho");
 	}
 
 	get_dbus_fan_parameters(bus_type, "FAN_OUTPUT_OBJ", &reponse_len, reponse_data, &size_sensor_list, &base_sensor_number);

@@ -20,11 +20,12 @@ struct st_fan_closeloop_par {
 	double Kd;
 	int sensor_tracking;
 	int warning_temp;
-	int pid_value;
-	int closeloop_speed;
+	double pid_value;
+	double closeloop_speed;
 	int closeloop_sensor_reading;
 	int sample_n;
 };
+
 
 struct st_fan_parameter {
 	int flag_closeloop; //0: init ; 1:do nothing ; 2: changed; 3:lock waiting
@@ -208,7 +209,7 @@ main(int argc, char * const argv[])
 		for (i = 0 ; i<g_fan_para_shm->closeloop_count; i++)
 		{
 			closeloop = &(g_fan_para_shm->closeloop_param[i]);
-			printf("[Closeloop Info %d] sensor_reading:%d, kp:%f, Ki:%f, Kd:%f, target:%d, pid_value:%d, closeloop speed:%d\n",
+			printf("[Closeloop Info %d] sensor_reading:%d, kp:%f, Ki:%f, Kd:%f, target:%d, pid_value:%f, closeloop speed:%f\n",
 		    	   i, closeloop->closeloop_sensor_reading, closeloop->Kp, closeloop->Ki, closeloop->Kd,closeloop->sensor_tracking,
 		    	   closeloop->pid_value, closeloop->closeloop_speed);
 
