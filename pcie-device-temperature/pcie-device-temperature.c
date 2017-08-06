@@ -30,6 +30,34 @@ pcie_dev_mapping Mdot2[MAX_MDOT2_NUM] = {
     {29, 0x6a},
 };
 
+int detect_i2cdevice_slave(int fd, int slave_addr)
+{
+    int rc;
+    int retry = 20;
+    unsigned long funcs;
+
+    if (fd > 0) {
+        if (ioctl(fd, I2C_FUNCS, &funcs) < 0)
+            return -1;
+        else
+            if (ioctl(fd,I2C_SLAVE, slave_addr)<0)
+                return -1;
+    }
+    else
+        return -1;
+
+    while (retry > 0)
+    {
+        rc = i2c_smbus_write_quick(fd, I2C_SMBUS_WRITE);
+        if (rc>=0)
+            break;
+        usleep(500*1000);
+        retry-=1;
+    }
+    return rc;
+
+}
+
 int get_Mdot2_data(int index)
 {
     struct i2c_rdwr_ioctl_data data;
@@ -41,16 +69,9 @@ int get_Mdot2_data(int index)
 
     sprintf(filename,"/dev/i2c-%d", Mdot2[index].bus);
     /* open i2c device*/
-    fd = open(filename, O_RDWR);
-    if (fd == -1) {
+    fd = open(filename,O_RDWR);
+    if (detect_i2cdevice_slave(fd, Mdot2[index].slave_addr)<0)
         return -1;
-    }
-
-    /* open slave address */
-    if(ioctl(fd, I2C_SLAVE, Mdot2[index].slave_addr) < 0) {
-        close(fd);
-        return -1;
-    }
 
     memset(&msg, 0, sizeof(msg));
 
