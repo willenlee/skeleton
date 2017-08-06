@@ -53,6 +53,7 @@ typedef struct {
 
 typedef struct {
 	__u32 udid_count;
+	__u8 udid_sdbus_flag;
 	__u8 udid_data[PEX_UDID_LEN];
 } pex_device_udid;
 
@@ -72,10 +73,10 @@ typedef struct {
 } pex_device_mapping;
 
 pex_device_mapping pex_device_bus[MAX_PEX_NUM] = {
-	{16, 0x5d, EM_PEX_DEVICE_1, 0x37, 0x61, {0, {0}}, {0, {0}} },
-	{17, 0x5d, EM_PEX_DEVICE_2, 0x38, 0x61, {0, {0}}, {0, {0}} },
-	{18, 0x5d, EM_PEX_DEVICE_3, 0x39, 0x61, {0, {0}}, {0, {0}} },
-	{19, 0x5d, EM_PEX_DEVICE_4, 0x3A, 0x61, {0, {0}}, {0, {0}} },
+	{16, 0x5d, EM_PEX_DEVICE_1, 0x37, 0x61, {0, {0}}, {0, 0, {0}} },
+	{17, 0x5d, EM_PEX_DEVICE_2, 0x38, 0x61, {0, {0}}, {0, 0, {0}} },
+	{18, 0x5d, EM_PEX_DEVICE_3, 0x39, 0x61, {0, {0}}, {0, 0, {0}} },
+	{19, 0x5d, EM_PEX_DEVICE_4, 0x3A, 0x61, {0, {0}}, {0, 0, {0}} },
 };
 
 typedef struct {
@@ -295,7 +296,7 @@ void write_file_pex(int pex_idx, double data, char *sub_name)
 	system(sys_cmd);
 }
 
-void function_get_pex_temp_data(int pex_idx)
+int function_get_pex_temp_data(int pex_idx)
 {
 	pex_device_i2c_cmd *i2c_cmd;
 	int i2c_bus;
@@ -306,6 +307,7 @@ void function_get_pex_temp_data(int pex_idx)
 	int rx_len = 0;
 	unsigned int temp_sensor_data = 0;
 	double real_temp_data = 0.0;
+	int rc=-1;
 
 	i2c_bus = pex_device_bus[pex_idx].bus_no;
 	i2c_addr = pex_device_bus[pex_idx].slave;
@@ -349,9 +351,12 @@ void function_get_pex_temp_data(int pex_idx)
 	real_temp_data = calculate_pex_temp(temp_sensor_data);
 	write_file_pex(pex_idx, real_temp_data, "temp");
 
+	if ((int) real_temp_data >= 0)
+		rc = 0;
+
 error_i2c_access:
 	write_file_pex(pex_idx, real_temp_data, "temp");
-	return ;
+	return rc ;
 }
 
 int pex_set_dbus_property(int pex_idx, char *property_name, char *property_value)
@@ -439,6 +444,15 @@ void function_get_pex_udid_data(int pex_idx)
 	p_udid = &(pex_device_bus[pex_idx].udid);
 
 	if (p_udid->udid_count == PEX_UDID_LEN) {
+		if (p_udid->udid_sdbus_flag != 1) {
+			//set pex9797 dbus property
+			st = property_value;
+			for (i = 0; i<p_udid->udid_count; i++, st+=2) {
+				snprintf(st, 3, "%02x", p_udid->udid_data[i]);
+			}
+			if (pex_set_dbus_property(pex_idx, "UDID", property_value) >= 0)
+					p_udid->udid_sdbus_flag = 1;
+		}
 		return ;
 	}
 
@@ -459,8 +473,8 @@ void function_get_pex_udid_data(int pex_idx)
 	ret = i2c_raw_access(i2c_bus, i2c_addr, i2c_cmd->write_cmd.len,
 			     i2c_cmd->write_cmd.data, i2c_cmd->read_cmd.len, i2c_cmd->read_cmd.data);
 	if (ret < 0) {
-		fprintf(stderr, "Failed to do iotcl I2C_SLAVE, cmd:%d, ret:%d\n", i2c_cmd->cmd, ret);
-		return ;
+		fprintf(stderr, "Failed to do iotcl I2C, cmd:%d, ret:%d\n", i2c_cmd->cmd, ret);
+		goto out_pex_udid_data;
 	}
 
 	for(i = 0; i<i2c_cmd->read_cmd.len; i++)
@@ -472,9 +486,11 @@ void function_get_pex_udid_data(int pex_idx)
 		snprintf(st, 3, "%02x", p_udid->udid_data[i]);
 	}
 
+	p_udid->udid_sdbus_flag = 1;
 	if (pex_set_dbus_property(pex_idx, "UDID", property_value) < 0)
-		p_udid->udid_count = 0;
+		p_udid->udid_sdbus_flag = 0;
 
+out_pex_udid_data:
 	//use smbus protocol to disable smbus
 	i2c_cmd = &pex_device_cmd_tab[EM_PEX_CMD_DISABLE_SMBUS];
 	smbus_commmand_write(i2c_bus, i2c_addr, i2c_cmd->write_cmd.data, i2c_cmd->write_cmd.len, PEX_SMBUS_BLOCK_WRITE_CMD);
@@ -528,6 +544,7 @@ void pex_data_scan()
 {
 	/* init the global data */
 	int i = 0;
+	int rc;
 
 	/* create the file patch for dbus usage*/
 	/* check if directory is existed */
@@ -543,7 +560,9 @@ void pex_data_scan()
 	printf("pex9797 control starting!!!\n");
 	while(1) {
 		for(i=0; i<MAX_PEX_NUM; i++) {
-			function_get_pex_temp_data(i);
+			rc =  function_get_pex_temp_data(i);
+			if (rc < 0)
+				continue;
 			function_get_pex_serial_data(i);
 			function_get_pex_udid_data(i);
 		}
