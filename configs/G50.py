@@ -1217,6 +1217,18 @@ BMC_LOGEVENT_CONFIG = {
 					'DHCP Failure':	[0xA1, 0x2, None],
 				},
 			},
+			'Firmware Boot SPI Flash Primary': {
+				'Severity': 'OK',
+				'Event Data Information': {
+					'Firmware Boot SPI Flash Primary':	[0xA2, 0x1, None],
+				},
+			},
+			'Firmware Boot SPI Flash Secondary': {
+				'Severity': 'Critical',
+				'Event Data Information': {
+					'Firmware Boot SPI Flash Secondary':	[0xA2, 0x2, None],
+				},
+			},
 			'Hardware WDT expired': {
 				'Severity': 'Critical',
 				'Event Data Information': {

@@ -542,6 +542,21 @@ def bmchealth_check_alignment_traps():
             print "[bmchealth_check_alignment_traps]exception !!!"
     return True
 
+def bmchealth_check_boot_spi():
+    check_spi_command = "devmem 0x1e785030"
+    try:
+        watchdog_timeout_status = subprocess.check_output(check_spi_command, shell=True)
+        boot_spi = (  int(watchdog_timeout_status, 16) >> 1) & 0x1
+        if boot_spi == 0:
+            print "Log Boot SPI Primary"
+            LogEventBmcHealthMessages("Asserted", "Firmware Boot SPI Flash Primary")
+        elif boot_spi == 1:
+            print "Log Boot SPI Secondary"
+            LogEventBmcHealthMessages("Asserted", "Firmware Boot SPI Flash Secondary")
+    except:
+            print "[bmchealth_check_boot_spi]exception !!!"
+    return True
+
 if __name__ == '__main__':
     mainloop = gobject.MainLoop()
     #set bmchealth default value
@@ -552,6 +567,7 @@ if __name__ == '__main__':
     bmchealth_check_watchdog()
     bmchealth_check_bmc_reset() # Before check fwu, after check watchdog
     bmchealth_check_fw_update_complete()
+    bmchealth_check_boot_spi()
     gobject.timeout_add(1000,bmchealth_check_network)
     gobject.timeout_add(1000,bmchealth_check_fw_update_start)
     gobject.timeout_add(1000,bmchealth_check_i2c, 14)
