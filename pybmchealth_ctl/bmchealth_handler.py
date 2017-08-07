@@ -557,6 +557,24 @@ def bmchealth_check_boot_spi():
             print "[bmchealth_check_boot_spi]exception !!!"
     return True
 
+def bmchealth_check_ecc_errors():
+    check_ecc_error_command = "devmem 0x1e6e0050"
+
+    try:
+        ecc_status = subprocess.check_output(check_ecc_error_command, shell=True)
+        re_count = (  int(ecc_status, 16) >> 16) & 0xff
+        ue_count = (  int(ecc_status, 16) >> 12) & 0xf
+        if re_count+ue_count > 0:
+            print "Log DRAM ECC Errors"
+            LogEventBmcHealthMessages("Asserted", "DRAM ECC errors")
+            clear_ecc_counts_command = "devmem 0x1e6e0050 32 %d" % (int(ecc_status, 16) | (1<<31))
+            subprocess.check_output(clear_ecc_counts_command, shell=True)
+            reset_ecc_status_command = "devmem 0x1e6e0050 32 %d" % (int(ecc_status, 16))
+            subprocess.check_output(reset_ecc_status_command, shell=True)
+    except:
+            print "[bmchealth_check_ecc_errors]exception !!!"
+    return True
+
 if __name__ == '__main__':
     mainloop = gobject.MainLoop()
     #set bmchealth default value
@@ -577,6 +595,7 @@ if __name__ == '__main__':
     gobject.timeout_add(20000,bmchealth_check_empty_invalid_fru)
     gobject.timeout_add(1000,bmchealth_check_CPU_utilization)
     gobject.timeout_add(1000,bmchealth_check_alignment_traps)
+    gobject.timeout_add(1000,bmchealth_check_ecc_errors)
     print "bmchealth_handler control starting"
     mainloop.run()
 
