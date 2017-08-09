@@ -1306,6 +1306,12 @@ BMC_LOGEVENT_CONFIG = {
 					'Empty Invalid FRU':	[0xA4, 'fru_id', None],
 				},
 			},
+			'BMC Service Restarted': {
+				'Severity': 'Critical',
+				'Event Data Information': {
+					'BMC Service Restarted':	[0xA0, 'service_id_low', 'service_id_high'],
+				},
+			},
 		},
 	},
 	'Entity Presence': {
