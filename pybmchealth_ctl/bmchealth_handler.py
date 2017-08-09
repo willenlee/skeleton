@@ -14,6 +14,7 @@ from obmc.sensors import SensorThresholds as SensorThresholds
 import obmc_system_config as System
 import time
 import bmclogevent_ctl
+import httplib, urllib2, base64, ssl
 
 import mac_guid
 
@@ -540,6 +541,54 @@ def bmchealth_check_alignment_traps():
                 g_number_of_system = number_of_system
     except:
             print "[bmchealth_check_alignment_traps]exception !!!"
+
+def watch_redfish():
+    watchdog_file_path = "/var/lib/obmc/watch_redfish"
+    redfishAlive = False
+
+    ssl._create_default_https_context = ssl._create_unverified_context
+    req = urllib2.Request("https://127.0.0.1/redfish/v1")
+    base64string = base64.b64encode('%s:%s' % ('username', 'password'))
+    req.add_header("Authorization", "Basic %s" % base64string)
+    try:
+        resp = urllib2.urlopen(req, timeout=9)
+        #print '@@@ status = ' + resp.getcode()
+    except urllib2.HTTPError as e:
+        if e.code == 401:
+            redfishAlive = True
+    except urllib2.URLError as e:
+        return True
+    except httplib.BadStatusLine as e:
+        return True
+    except ssl.SSLError:
+        return True
+    except:
+        print 'Unexpected error:', sys.exc_info()[0]
+        return True
+    else:
+        redfishAlive = True
+
+    if redfishAlive == True and os.path.exists(watchdog_file_path):
+        os.remove(watchdog_file_path)
+
+    return True
+
+def watch_event_service():
+    watchdog_file_path = "/var/lib/obmc/watch_event_service"
+    try:
+        bmclogevent_ctl.bmclogevent_get_log_rollover()
+    except:
+        print 'Unexpected error:', sys.exc_info()[0]
+    else:
+        if os.path.exists(watchdog_file_path):
+            os.remove(watchdog_file_path)
+    return True
+
+def bmchealth_kick_watchdog():
+
+    watch_redfish()
+    watch_event_service()
+
     return True
 
 def bmchealth_check_boot_spi():
@@ -596,6 +645,7 @@ if __name__ == '__main__':
     gobject.timeout_add(1000,bmchealth_check_CPU_utilization)
     gobject.timeout_add(1000,bmchealth_check_alignment_traps)
     gobject.timeout_add(1000,bmchealth_check_ecc_errors)
+    gobject.timeout_add(10000,bmchealth_kick_watchdog)
     print "bmchealth_handler control starting"
     mainloop.run()
 

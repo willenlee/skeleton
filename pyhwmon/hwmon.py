@@ -25,6 +25,8 @@ SENSORS_OBJPATH = '/org/openbmc'
 SENSOR_PATH = '/org/openbmc/sensors'
 DIR_POLL_INTERVAL = 30000
 HWMON_PATH = '/sys/class/hwmon'
+KICK_WATCHDOG_INTERVAL = 10000
+WATCHDOG_FILE_PATH = "/var/lib/obmc/watch_hwmon"
 
 ## static define which interface each property is under
 ## need a better way that is not slow
@@ -104,6 +106,7 @@ class Hwmons():
 		self.pmbus6_hwmon = ""
 		self.record_pgood = 0
 		gobject.timeout_add(DIR_POLL_INTERVAL, self.scanDirectory)
+		gobject.timeout_add(KICK_WATCHDOG_INTERVAL, self.kickWatchdog)
 
 	def readAttribute(self,filename):
 		val = "-1"
@@ -923,6 +926,10 @@ class Hwmons():
 
 		return True
 
+	def kickWatchdog(self):
+		if os.path.exists(WATCHDOG_FILE_PATH):
+			os.remove(WATCHDOG_FILE_PATH)
+		return True
 
 if __name__ == '__main__':
 
