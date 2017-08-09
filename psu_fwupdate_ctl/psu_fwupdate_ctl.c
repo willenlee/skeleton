@@ -109,13 +109,13 @@ psu_device_i2c_cmd psu_device_cmd_tab[EM_PSU_CMD_MAX] = {
 	},
 	{
 		EM_PSU_CMD_CHECK_DATA_CTL,
-		{2, {0x01, 0xD2}},
+		{2, {0xD2}},
 		{4,{0x0}},
 		0
 	},
 	{
 		EM_PSU_CMD_REBOOT_PSU_CTL,
-		{3, {0x00, 0xD2, 0x03}},
+		{2, {0xD2, 0x03}},
 		{-1,{0x0}},
 		0
 	},
@@ -307,6 +307,7 @@ static int write_psu_fwdata(int i2c_bus, int i2c_addr)
 
 	psu_device_i2c_cmd *i2c_cmd;
 	i2c_cmd = &psu_device_cmd_tab[EM_PSU_CMD_WR_DATA_CTL];
+	int count = 0;
 	while (!feof(fPtr)) {
 		memset(data, 0, sizeof(data));
 		ret = fread(data, sizeof(data) -1 , 1, fPtr);
@@ -336,8 +337,13 @@ static int write_psu_fwdata(int i2c_bus, int i2c_addr)
 				fclose(fPtr);
 				return -1;
 			}
-			usleep(20*1000);
+			
 		}
+		if (count == 0)
+			usleep(1500*1000);
+		else
+			usleep(40*1000);
+		count+=1;
 	}
 	fclose(fPtr);
 	return 1;
@@ -388,20 +394,28 @@ static int start_psu_fwupdate(int psu_number)
 	create_psu_notify(i2c_bus);
 	disable_psu_bus_unbind(i2c_bus, i2c_addr);
 
-	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_CHECK_VER_CTL) < 0)
-		goto error_psu_fwupdate;
-	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_UNLOCK_PSU_CTL) < 0)
-		goto error_psu_fwupdate;
+	//if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_CHECK_VER_CTL) < 0)
+	//	goto error_psu_fwupdate;
+	//if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_UNLOCK_PSU_CTL) < 0)
+	//	goto error_psu_fwupdate;
 	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_WR_ISP_KEY_CTL) < 0)
 		goto error_psu_fwupdate;
+	usleep(100*1000);
 	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_BOOT_PSU_OS_CTL) < 0)
 		goto error_psu_fwupdate;
+	usleep(2000*1000);
 	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_RESTART_CTL) < 0)
 		goto error_psu_fwupdate;
+	usleep(4000*1000);
 	if (write_psu_fwdata(i2c_bus, i2c_addr) < 0)
 		goto error_psu_fwupdate;
+	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_CHECK_DATA_CTL) < 0)
+		goto error_psu_fwupdate;
+	usleep(250*1000);
+	
 	if (psu_i2c_raw_access(i2c_bus, i2c_addr, EM_PSU_CMD_REBOOT_PSU_CTL) < 0)
 		goto error_psu_fwupdate;
+	usleep(250*1000);
 
 	ret = 0;
 
