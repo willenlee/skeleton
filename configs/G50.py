@@ -1164,6 +1164,12 @@ FAN_ALGORITHM_CONFIG = {
             'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
         'CLOSE_LOOP_GROUPS_3' : [
             'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_4' : [
+            'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_5' : [
+            'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
+        'CLOSE_LOOP_GROUPS_6' : [
+            'org.openbmc.Sensors', 'org.openbmc.SensorValue'],
     },
 
     'CHASSIS_POWER_STATE': ['/org/openbmc/control/chassis0'],
@@ -1231,7 +1237,7 @@ FAN_ALGORITHM_CONFIG = {
             '0.35',
             '-0.015',
             '0.4',
-            '70',
+            '80',
             '85',
         ],
     'CLOSE_LOOP_GROUPS_3':
@@ -1240,6 +1246,51 @@ FAN_ALGORITHM_CONFIG = {
             "SensorNumberList", #notfity following setting about SensorNumberList
             "0xa1", #base sensor number
             "8", #releate sensor list size
+        ],
+    'CLOSE_LOOP_PARAM_4' :
+        [
+            '0.35',
+            '-0.015',
+            '0.4',
+            '75',
+            '85',
+        ],
+    'CLOSE_LOOP_GROUPS_4':
+        [
+            "/org/openbmc/sensors/temperature/FPGA1_TMP",
+            "SensorNumberList", #notfity following setting about SensorNumberList
+            "0x74", #base sensor number
+            "1", #releate sensor list size
+        ],
+    'CLOSE_LOOP_PARAM_5' :
+        [
+            '0.35',
+            '-0.015',
+            '0.4',
+            '75',
+            '85',
+        ],
+    'CLOSE_LOOP_GROUPS_5':
+        [
+            "/org/openbmc/sensors/temperature/FPGA2_TMP",
+            "SensorNumberList", #notfity following setting about SensorNumberList
+            "0x75", #base sensor number
+            "1", #releate sensor list size
+        ],
+    'CLOSE_LOOP_PARAM_6' :
+        [
+            '0.35',
+            '-0.015',
+            '0.4',
+            '64',
+            '85',
+        ],
+    'CLOSE_LOOP_GROUPS_6':
+        [
+            "/org/openbmc/sensors/M2/M2_TMP",
+            "SensorNumberList", #notfity following setting about SensorNumberList
+            "0x70", #base sensor number
+            "4", #releate sensor list size
         ],
 
     'FAN_LED_OFF': ["0xFF"],
