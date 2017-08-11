@@ -906,7 +906,7 @@ _add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 8, 0x32, 'HSC8 GPU6 Temp', '0-0
 _add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 9, 0x34, 'HSC9 GPU7 Temp', '0-0046', False)
 _add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 10, 0x36, 'HSC10 GPU8 Temp', '0-0047', False)
 _add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 1, 0x23, 'HSC1 VOUT', '0-0010', False)
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 2, 0x25, 'HSC2 STBY VOUT', '0-0010', True)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 2, 0x25, 'HSC2 STBY VOUT', '0-0011', True)
 _add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 3, 0x27, 'HSC3 GPU1 VOUT', '0-0040', False)
 _add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 4, 0x29, 'HSC4 GPU2 VOUT', '0-0041', False)
 _add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 5, 0x2b, 'HSC5 GPU3 VOUT', '0-0042', False)
