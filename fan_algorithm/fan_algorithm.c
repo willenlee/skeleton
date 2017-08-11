@@ -913,8 +913,9 @@ static int initial_fan_config(sd_bus *bus)
 		get_dbus_fan_parameters(bus, prefix_closeloop, &reponse_len, reponse_data, &size_sensor_list, &base_sensor_number);
 		if (size_sensor_list>0)
 			reponse_len = size_sensor_list;
-		if (reponse_len <= 2)
-			break;
+		else
+			if (reponse_len <= 2)
+				break;
 
 		t_fan_obj =(struct st_fan_obj_path_info *) malloc(sizeof(struct st_fan_obj_path_info));
 		t_fan_obj->size_sensor_list = size_sensor_list;
