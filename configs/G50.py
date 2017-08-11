@@ -672,7 +672,7 @@ def _add_psu_status_sensor(configs, index, sensornumber, bus_number):
         configs[objpath] = []
         configs[objpath].append(config)
 
-def _add_hsc_temperature_sensor(configs, index, sensornumber, sensor_name, bus_number):
+def _add_hsc_temperature_sensor(configs, index, sensornumber, sensor_name, bus_number, standby):
     objpath = '/org/openbmc/sensors/HSC/HSC_TMP'
     config = {
         'bus_number': bus_number,
@@ -687,7 +687,7 @@ def _add_hsc_temperature_sensor(configs, index, sensornumber, sensor_name, bus_n
         'sensor_type' : '0x01',
         'sensornumber': sensornumber,
         'index': index,
-        'standby_monitor': False,
+        'standby_monitor': standby,
         'emergency_enabled' : False,
         'units': 'C',
         'value': -1,
@@ -702,7 +702,7 @@ def _add_hsc_temperature_sensor(configs, index, sensornumber, sensor_name, bus_n
         configs[objpath] = []
         configs[objpath].append(config)
 
-def _add_hsc_voltage_sensor(configs, index, sensornumber, sensor_name, bus_number):
+def _add_hsc_voltage_sensor(configs, index, sensornumber, sensor_name, bus_number, standby):
     objpath = '/org/openbmc/sensors/HSC/HSC_VOUT'
     config = {
         'bus_number': bus_number,
@@ -717,7 +717,7 @@ def _add_hsc_voltage_sensor(configs, index, sensornumber, sensor_name, bus_numbe
         'sensor_type' : '0x02',
         'sensornumber': sensornumber,
         'index': index,
-        'standby_monitor': False,
+        'standby_monitor': standby,
         'emergency_enabled' : False,
         'units' : 'V',
         'value': -1,
@@ -895,26 +895,26 @@ _add_temp_sensor(HWMON_SENSOR_CONFIG, 8, 0x04, 'Inlet Temp 8', '21-004f')
 _add_temp_sensor(HWMON_SENSOR_CONFIG, 9, 0x05, 'FIO Inlet Temp 1', '0-0049')
 _add_temp_sensor(HWMON_SENSOR_CONFIG, 10, 0x06, 'FIO Inlet Temp 2', '0-004a')
 _add_temp_sensor(HWMON_SENSOR_CONFIG, 11, 0x07, 'CM Outlet Temp 1', '0-004b')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 1, 0x24, 'HSC1 Temp', '0-0010')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 2, 0x26, 'HSC2 STBY Temp', '0-0011')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 3, 0x28, 'HSC3 GPU1 Temp', '0-0040')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 4, 0x2a, 'HSC4 GPU2 Temp', '0-0041')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 5, 0x2c, 'HSC5 GPU3 Temp', '0-0042')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 6, 0x2e, 'HSC6 GPU4 Temp', '0-0043')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 7, 0x30, 'HSC7 GPU5 Temp', '0-0044')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 8, 0x32, 'HSC8 GPU6 Temp', '0-0045')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 9, 0x34, 'HSC9 GPU7 Temp', '0-0046')
-_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 10, 0x36, 'HSC10 GPU8 Temp', '0-0047')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 1, 0x23, 'HSC1 VOUT', '0-0010')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 2, 0x25, 'HSC2 STBY VOUT', '0-0010')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 3, 0x27, 'HSC3 GPU1 VOUT', '0-0040')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 4, 0x29, 'HSC4 GPU2 VOUT', '0-0041')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 5, 0x2b, 'HSC5 GPU3 VOUT', '0-0042')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 6, 0x2d, 'HSC6 GPU4 VOUT', '0-0043')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 7, 0x2f, 'HSC7 GPU5 VOUT', '0-0044')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 8, 0x31, 'HSC8 GPU6 VOUT', '0-0045')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 9, 0x33, 'HSC9 GPU7 VOUT', '0-0046')
-_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 10, 0x35, 'HSC10 GPU8 VOUT', '0-0047')
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 1, 0x24, 'HSC1 Temp', '0-0010', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 2, 0x26, 'HSC2 STBY Temp', '0-0011', True)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 3, 0x28, 'HSC3 GPU1 Temp', '0-0040', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 4, 0x2a, 'HSC4 GPU2 Temp', '0-0041', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 5, 0x2c, 'HSC5 GPU3 Temp', '0-0042', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 6, 0x2e, 'HSC6 GPU4 Temp', '0-0043', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 7, 0x30, 'HSC7 GPU5 Temp', '0-0044', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 8, 0x32, 'HSC8 GPU6 Temp', '0-0045', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 9, 0x34, 'HSC9 GPU7 Temp', '0-0046', False)
+_add_hsc_temperature_sensor(HWMON_SENSOR_CONFIG, 10, 0x36, 'HSC10 GPU8 Temp', '0-0047', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 1, 0x23, 'HSC1 VOUT', '0-0010', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 2, 0x25, 'HSC2 STBY VOUT', '0-0010', True)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 3, 0x27, 'HSC3 GPU1 VOUT', '0-0040', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 4, 0x29, 'HSC4 GPU2 VOUT', '0-0041', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 5, 0x2b, 'HSC5 GPU3 VOUT', '0-0042', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 6, 0x2d, 'HSC6 GPU4 VOUT', '0-0043', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 7, 0x2f, 'HSC7 GPU5 VOUT', '0-0044', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 8, 0x31, 'HSC8 GPU6 VOUT', '0-0045', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 9, 0x33, 'HSC9 GPU7 VOUT', '0-0046', False)
+_add_hsc_voltage_sensor(HWMON_SENSOR_CONFIG, 10, 0x35, 'HSC10 GPU8 VOUT', '0-0047', False)
 _add_gpu_temperature_sensor(HWMON_SENSOR_CONFIG, 1, 0x41)
 _add_gpu_temperature_sensor(HWMON_SENSOR_CONFIG, 2, 0x42)
 _add_gpu_temperature_sensor(HWMON_SENSOR_CONFIG, 3, 0x43)
