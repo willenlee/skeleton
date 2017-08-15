@@ -920,7 +920,7 @@ def _add_session_audit(configs, sensornumber):
         'object_path': 'sensors/session_audit',
         'poll_interval': 5000,
         'reading_type': 0x6F,
-        'sensor_name': 'Sensor audit',
+        'sensor_name': 'Session Audit',
         'sensor_type': '0x2a',
         'sensornumber': sensornumber,
         'standby_monitor': True,

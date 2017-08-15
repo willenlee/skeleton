@@ -309,7 +309,7 @@ class Hwmons():
 			for line in file:
 				idPosition = -1
 				fileString = line
-				idFilter = 'Accepted password for sysadmin'
+				idFilter = 'Accepted password for admin'
 				idPosition = fileString.find(idFilter)
 				if idPosition != -1:
 					event_dir = 0
@@ -321,7 +321,7 @@ class Hwmons():
 								event_dir | event_type, evd1, evd2, evd3)
 					self.event_manager.create(log)
 
-				idFilter = 'Failed password for sysadmin'
+				idFilter = 'Failed password for admin'
 				idPosition = fileString.find(idFilter)
 				if idPosition != -1:
 					event_dir = 0
