@@ -64,7 +64,7 @@ struct st_fan_closeloop_par {
 struct st_fan_parameter {
 	int flag_closeloop; //0: init ; 1:do nothing ; 2: changed; 3:lock waiting
 	int closeloop_count;
-	struct st_fan_closeloop_par closeloop_param[5];
+	struct st_fan_closeloop_par closeloop_param[8];
 
 	int flag_openloop; //0: init ; 1:do nothing ; 2: changed; 3:lock waiting
 	float g_ParamA;
@@ -1100,7 +1100,7 @@ static void inital_fan_pid_shm()
 		g_fan_para_shm->flag_openloop = 0;
 		g_fan_para_shm->max_fanspeed = 255;
 		g_fan_para_shm->min_fanspeed = 0;
-		for (i = 0 ; i<5; i++) {
+		for (i = 0 ; i<8; i++) {
 			g_fan_para_shm->closeloop_param[i].closeloop_sensor_reading = 0;
 			g_fan_para_shm->closeloop_param[i].sample_n = SAMPLING_N;
 		}

@@ -30,7 +30,7 @@ struct st_fan_closeloop_par {
 struct st_fan_parameter {
 	int flag_closeloop; //0: init ; 1:do nothing ; 2: changed; 3:lock waiting
 	int closeloop_count;
-	struct st_fan_closeloop_par closeloop_param[5];
+	struct st_fan_closeloop_par closeloop_param[8];
 
 	int flag_openloop; //0: init ; 1:do nothing ; 2: changed; 3:lock waiting
 	float g_ParamA;
