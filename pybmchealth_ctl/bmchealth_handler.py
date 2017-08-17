@@ -34,7 +34,6 @@ g_CPU_utilization = -1
 g_previous_total = 0
 g_previous_idle_cpu = 0
 g_number_of_system = -1
-g_watch_fail_count = 0
 
 #light: 1, light on; 0:light off
 def bmchealth_set_status_led(light):
@@ -544,6 +543,7 @@ def bmchealth_check_alignment_traps():
             print "[bmchealth_check_alignment_traps]exception !!!"
 
 def watch_redfish():
+    watchdog_file_path = "/var/lib/obmc/watch_redfish"
     redfishAlive = False
 
     ssl._create_default_https_context = ssl._create_unverified_context
@@ -557,70 +557,38 @@ def watch_redfish():
         if e.code == 401:
             redfishAlive = True
     except urllib2.URLError as e:
-        return False
+        return True
     except httplib.BadStatusLine as e:
-        return False
+        return True
     except ssl.SSLError:
-        return False
+        return True
     except:
         print 'Unexpected error:', sys.exc_info()[0]
-        return False
-    else:
         return True
+    else:
+        redfishAlive = True
+
+    if redfishAlive == True and os.path.exists(watchdog_file_path):
+        os.remove(watchdog_file_path)
 
     return True
 
 def watch_event_service():
+    watchdog_file_path = "/var/lib/obmc/watch_event_service"
     try:
         bmclogevent_ctl.bmclogevent_get_log_rollover()
     except:
         print 'Unexpected error:', sys.exc_info()[0]
-        return False
     else:
-        return True
-    return True
-
-def watch_hwmon():
-    watchdog_file_path = "/var/lib/obmc/watch_hwmon"
-    if os.path.exists(watchdog_file_path):
-        return False
-    else:
-        f = open(watchdog_file_path, 'w+')
-        f.close()
+        if os.path.exists(watchdog_file_path):
+            os.remove(watchdog_file_path)
     return True
 
 def bmchealth_kick_watchdog():
-    global g_watch_fail_count
 
-    success_count = 0
+    watch_redfish()
+    watch_event_service()
 
-    if watch_redfish() == True:
-        success_count += 1
-    else:
-        print '@@@ redfish fail!'
-    if watch_event_service() == True:
-        success_count += 1
-    else:
-        print '@@@ event service fail!'
-    if watch_hwmon() == True:
-        success_count += 1
-    else:
-        print '@@@ hwmon fail!'
-
-    if success_count != 3:
-        g_watch_fail_count += 1
-        print '@@@ fail count = ', g_watch_fail_count
-    else:
-        g_watch_fail_count = 0
-
-    if g_watch_fail_count > 11:
-        print '@@@ Force watchdog reset!!!'
-        try:
-            subprocess.check_output('devmem 0x1e785004 32 1', shell=True)
-            subprocess.check_output('devmem 0x1e785008 32 0x4755', shell=True)
-        except:
-            print "[bmchealth_kick_watchdog] exception!!!"
-            return False
     return True
 
 def bmchealth_check_boot_spi():
