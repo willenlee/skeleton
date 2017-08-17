@@ -564,7 +564,6 @@ class Hwmons():
 			except:
 				traceback.print_exc()
 				print "HWMON: Attibute no longer exists: "+hwmon['object_path']
-				self.sensors.pop(objpath,None)
 		return True
 
 	def poll(self,objpath,attribute,hwmon):
