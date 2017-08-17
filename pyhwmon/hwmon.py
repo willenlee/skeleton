@@ -212,8 +212,14 @@ class Hwmons():
 			gpu_obj = bus.get_object(SENSOR_BUS,"/org/openbmc/sensors/gpu/gpu_temp",introspect=False)
 			plx_intf = dbus.Interface(plx_obj,dbus.PROPERTIES_IFACE)
 			gpu_intf = dbus.Interface(gpu_obj,dbus.PROPERTIES_IFACE)
-			plx_ready = plx_intf.Get(HwmonSensor.IFACE_NAME,'ready')
-			gpu_ready = gpu_intf.Get(HwmonSensor.IFACE_NAME,'ready')
+
+			plx_ready = 0
+			gpu_ready = 0
+			try:
+				plx_ready = plx_intf.Get(HwmonSensor.IFACE_NAME,'ready')
+				gpu_ready = gpu_intf.Get(HwmonSensor.IFACE_NAME,'ready')
+			except:
+				pass
 			if hwmon.has_key('mapping') and gpu_ready == 1:
 				hwmon['ready'] = 1
 			elif plx_ready == 1:
