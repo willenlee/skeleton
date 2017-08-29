@@ -7,7 +7,7 @@ HOME_PATH = './'
 CACHE_PATH = '/var/cache/obmc/'
 FLASH_DOWNLOAD_PATH = "/tmp"
 GPIO_BASE = 320
-SYSTEM_NAME = "StHelens"
+SYSTEM_NAME = "Hgx1"
 
 def find_gpio_base(path="/sys/class/gpio/"):
     pattern = "gpiochip*"
@@ -308,7 +308,20 @@ def convertGpio(name):
     return base + offset
 
 SENSOR_MONITOR_CONFIG = [
+	['/org/openbmc/sensors/temperature/TMP_1', { 'object_path' : '/sys/class/hwmon/hwmon1/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 1', 'sensornumber':'0xa0'}],
+	['/org/openbmc/sensors/temperature/TMP_2', { 'object_path' : '/sys/class/hwmon/hwmon2/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 2', 'sensornumber':'0xa1'}],
+	['/org/openbmc/sensors/temperature/TMP_3', { 'object_path' : '/sys/class/hwmon/hwmon3/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 3', 'sensornumber':'0xa2'}],
+
 	['/org/openbmc/sensors/gpu/gpu1_temp', { 'object_path' : '/tmp/gpu/gpu1_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU1 Temp', 'sensornumber':'0x41'}],
+	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU1 Temp', 'sensornumber':'0x41'}],
+	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
+		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU1 Temp', 'sensornumber':'0x41'}],
+	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
 		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU1 Temp', 'sensornumber':'0x41'}],
 	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
 		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU2 Temp', 'sensornumber':'0x42'}],
