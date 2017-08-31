@@ -7,7 +7,7 @@ HOME_PATH = './'
 CACHE_PATH = '/var/cache/obmc/'
 FLASH_DOWNLOAD_PATH = "/tmp"
 GPIO_BASE = 320
-SYSTEM_NAME = "Hgx1"
+SYSTEM_NAME = "StHelens"
 
 def find_gpio_base(path="/sys/class/gpio/"):
     pattern = "gpiochip*"
@@ -308,13 +308,45 @@ def convertGpio(name):
     return base + offset
 
 SENSOR_MONITOR_CONFIG = [
-	['/org/openbmc/sensors/temperature/TMP_1', { 'object_path' : '/sys/class/hwmon/hwmon1/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
-		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 1', 'sensornumber':'0xa0'}],
-	['/org/openbmc/sensors/temperature/TMP_2', { 'object_path' : '/sys/class/hwmon/hwmon2/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
-		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 2', 'sensornumber':'0xa1'}],
-	['/org/openbmc/sensors/temperature/TMP_3', { 'object_path' : '/sys/class/hwmon/hwmon3/temp1_input','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
-		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'Temp 3', 'sensornumber':'0xa2'}],
-
+	['/org/openbmc/sensors/temperature/TMP9', { 
+							'object_path' : '/sys/class/hwmon/hwmon1/temp1_input',
+							'poll_interval' : 5000,
+							'scale' : 1,
+							'units' : 'C',
+							'critical_upper' : 46,
+							'critical_lower' : 25,
+							'sensor_type' : '0x01',
+							'reading_type' : '0x01',
+							'sensor_name' : 'FIO Temp 9',
+							'sensornumber' : '0x09'
+						}
+	],
+	['/org/openbmc/sensors/temperature/TMP10', {
+							'object_path' : '/sys/class/hwmon/hwmon2/temp1_input',
+							'poll_interval' : 5000,
+							'scale' : 1,
+							'units' : 'C',
+							'critical_upper' : 46,
+							'critical_lower' : 25,
+							'sensor_type' : '0x01',
+							'reading_type' : '0x01',
+							'sensor_name' : 'FIO Temp 10',
+							'sensornumber' :'0x0A'
+						}
+	],
+	['/org/openbmc/sensors/temperature/TMP11', {
+							'object_path' : '/sys/class/hwmon/hwmon3/temp1_input',
+							'poll_interval' : 5000,
+							'scale' : 1,
+							'units' : 'C',
+							'critical_upper' : 46,
+							'critical_lower' : 25,
+							'sensor_type' : '0x01',
+							'reading_type' : '0x01',
+							'sensor_name' : 'CM Temp 11',
+							'sensornumber' : '0x0B'
+						}
+	],
 	['/org/openbmc/sensors/gpu/gpu1_temp', { 'object_path' : '/tmp/gpu/gpu1_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
 		'sensor_type':'0x01', 'reading_type':'0x01', 'sensor_name':'GPU1 Temp', 'sensornumber':'0x41'}],
 	['/org/openbmc/sensors/gpu/gpu2_temp', { 'object_path' : '/tmp/gpu/gpu2_temp','poll_interval' : 5000,'scale' : 1,'units' : 'C', 'critical_upper':46, 'critical_lower':25,
@@ -497,54 +529,125 @@ SENSOR_MONITOR_CONFIG = [
 ]
 
 HWMON_CONFIG = {
-	'21-0048' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP1','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '',
-				'sensor_name':'', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-0049' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP2','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '',
-				'sensor_name':'', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004a' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP3','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '',
-				'sensor_name':'', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004b' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP4','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '',
-				'sensor_name':'', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004c' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP5','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x01',
-				'sensor_name':'Inlet Temp 5', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004d' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP6','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x02',
-				'sensor_name':'Inlet Temp 6', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004e' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP7','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x03',
-				'sensor_name':'Inlet Temp 7', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
-	'21-004f' :  {
-		'names' : {
-			'temp1_input' : { 'object_path' : 'temperature/TMP8','poll_interval' : 5000,'scale' : 1000,'units' : 'C', 'sensor_type' : '0x01', 'sensornumber' : '0x04',
-				'sensor_name':'Inlet Temp 8', 'reading_type' : '0x01', 'critical_upper' : 36, 'critical_lower' : 19, 'emergency_enabled' : True },
-		}
-	},
+		'21-0037' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP1',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x01',
+							'sensor_name': 'Inlet Temp 1',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}
+			},
+		'21-0049' :{'names' :{'temp1_input' :{ 
+							'object_path' : 'temperature/TMP2',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x02',
+							'sensor_name': 'Inlet Temp 2',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}
+			},
+		'21-004a' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP3',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x03',
+							'sensor_name': 'Inlet Temp 3',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}
+			},
+		'21-004b' :{'names' :{'temp1_input' :{ 
+							'object_path' : 'temperature/TMP4',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x04',
+							'sensor_name': 'Inlet Temp 4',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}			
+			},
+		'21-002a' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP5',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x05',
+							'sensor_name': 'Outlet Temp 5',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}			
+			},
+		'21-004d' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP6',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x06',
+							'sensor_name': 'Outlet Temp 6',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}	
+			},
+		'21-004e' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP7',
+							'poll_interval' : 5000,
+							'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x07',
+							'sensor_name': 'Outlet Temp 7',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}
+			},
+		'21-004f' :{'names' :{'temp1_input' :{
+							'object_path' : 'temperature/TMP8',
+							'poll_interval' : 5000,'scale' : 1000,
+							'units' : 'C',
+							'sensor_type' : '0x01',
+							'sensornumber' : '0x08',
+							'sensor_name': 'Outlet Temp 8',
+							'reading_type' : '0x01',
+							'critical_upper' : 36,
+							'critical_lower' : 19,
+							'emergency_enabled' : True
+							},
+					}
+			},
 }
 
 # Miscellaneous non-poll sensor with system specific properties.
