@@ -82,12 +82,12 @@ typedef struct {
 
 gpu_device_mapping gpu_device_bus[MAX_GPU_NUM] = {
 	{28, 0x4d, EM_GPU_DEVICE_1},
-	{29, 0x4d, EM_GPU_DEVICE_3},
-	{30, 0x4d, EM_GPU_DEVICE_2},
+	{29, 0x4d, EM_GPU_DEVICE_2},
+	{30, 0x4d, EM_GPU_DEVICE_3},
 	{31, 0x4d, EM_GPU_DEVICE_4},
 	{32, 0x4d, EM_GPU_DEVICE_5},
-	{33, 0x4d, EM_GPU_DEVICE_7},
-	{34, 0x4d, EM_GPU_DEVICE_6},
+	{33, 0x4d, EM_GPU_DEVICE_6},
+	{34, 0x4d, EM_GPU_DEVICE_7},
 	{35, 0x4d, EM_GPU_DEVICE_8},
 };
 
